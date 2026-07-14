@@ -1,0 +1,3388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-Gurukul · Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #E87722; --marigold: #F4A82C; --cream: #FFF8EE; --paper: #FDF6E8;
+  --paper-dark: #F5EBD3; --ink: #2B1810; --ink-soft: #5C4332; --leaf: #4A7C59;
+  --leaf-light: #E8F4EA; --berry: #B8385E; --berry-light: #FBE9EE; --gold: #D4A53A;
+  --sky: #5B8DB8; --sky-light: #E5F0F8; --shadow: rgba(43,24,16,0.12); --shadow-strong: rgba(43,24,16,0.25);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); font-family: 'Nunito', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle at 20% 30%, rgba(232,119,34,0.04) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(244,168,44,0.06) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+.container { max-width: 920px; margin: 0 auto; padding: 24px 20px 80px; position: relative; z-index: 1; }
+header.app-header { margin-bottom: 28px; padding: 24px 28px; background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 100%); border-radius: 24px; color: white; box-shadow: 0 8px 24px var(--shadow); position: relative; overflow: hidden; }
+header.app-header::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%); border-radius: 50%; }
+.header-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9; margin-bottom: 6px; }
+.header-title { font-family: 'Fraunces', serif; font-weight: 900; font-size: clamp(26px, 5vw, 38px); line-height: 1.15; letter-spacing: -0.5px; }
+.header-meta { margin-top: 10px; font-size: 14px; opacity: 0.95; font-weight: 600; }
+.header-author { margin-top: 6px; font-size: 14px; opacity: 0.85; font-weight: 500; font-style: italic; }
+.header-theme-pill { display: inline-block; margin-top: 12px; background: rgba(0,0,0,0.25); color: white; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; backdrop-filter: blur(4px); }
+.reset-btn { position: absolute; top: 16px; right: 16px; background: var(--ink); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 7px 14px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s ease; z-index: 2; }
+.reset-btn:hover { background: #1a0e07; border-color: white; transform: translateY(-1px); }
+.progress-bar { display: flex; gap: 8px; margin-bottom: 32px; }
+.progress-step { flex: 1; padding: 12px 8px; background: var(--paper-dark); border-radius: 12px; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-soft); cursor: pointer; transition: all 0.25s ease; border: 2px solid transparent; user-select: none; position: relative; }
+.progress-step:hover { background: var(--cream); border-color: var(--marigold); }
+.progress-step.active { background: var(--ink); color: var(--cream); }
+.progress-step.complete { background: var(--leaf); color: white; }
+.progress-step.locked { opacity: 0.5; cursor: not-allowed; }
+.progress-step.locked:hover { background: var(--paper-dark); border-color: transparent; }
+.progress-step.complete::after { content: '✓'; position: absolute; top: 4px; right: 6px; font-size: 11px; font-weight: 900; }
+.progress-step.locked::after { content: '🔒'; position: absolute; top: 4px; right: 6px; font-size: 10px; }
+.step-num { display: block; font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; }
+.stage-header { margin-bottom: 24px; }
+.stage-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(24px, 4vw, 32px); color: var(--ink); letter-spacing: -0.3px; margin-bottom: 6px; }
+.stage-description { color: var(--ink-soft); font-size: 15px; }
+.branches-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.branch-card { background: var(--cream); border: 2px solid var(--paper-dark); border-radius: 18px; padding: 24px 20px; cursor: pointer; transition: all 0.25s ease; text-align: center; position: relative; }
+.branch-card:hover { border-color: var(--marigold); transform: translateY(-3px); box-shadow: 0 6px 16px var(--shadow); }
+.branch-card.complete { border-color: var(--leaf); background: var(--leaf-light); }
+.branch-card.complete::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; background: var(--leaf); color: white; border-radius: 50%; line-height: 24px; font-weight: 900; font-size: 14px; }
+.branch-icon { font-size: 40px; margin-bottom: 12px; }
+.branch-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.branch-meta { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.branch-progress { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+.panel-container { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 20px; }
+.panel-dots { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+.panel-dot { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; min-width: 44px; }
+.panel-dot:hover { border-color: var(--marigold); }
+.panel-dot.current { background: var(--ink); color: var(--cream); }
+.panel-dot.answered { background: var(--leaf); color: white; }
+.panel-dot.current.answered { background: var(--ink); border-color: var(--leaf); border-width: 3px; }
+.panel-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--paper-dark); }
+.panel-counter { font-size: 12px; font-weight: 800; color: var(--saffron); letter-spacing: 1.5px; text-transform: uppercase; }
+.panel-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+.narration-text { font-size: 16px; line-height: 1.75; color: var(--ink); margin-bottom: 16px; }
+.narration-text .highlight-word { background: linear-gradient(180deg, transparent 60%, rgba(244,168,44,0.4) 60%); cursor: pointer; font-weight: 700; color: var(--ink); border-radius: 2px; transition: background 0.2s ease; position: relative; }
+.narration-text .highlight-word:hover { background: linear-gradient(180deg, transparent 30%, rgba(244,168,44,0.7) 30%); }
+.word-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--cream); padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; line-height: 1.4; width: max-content; max-width: 240px; text-align: center; z-index: 100; box-shadow: 0 6px 20px rgba(0,0,0,0.25); pointer-events: none; }
+.word-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--ink); }
+.tts-controls { display: flex; gap: 10px; align-items: center; background: var(--sky-light); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.tts-btn { background: var(--sky); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.tts-btn:hover { background: #4a7a9c; }
+.tts-btn.playing { background: var(--berry); animation: pulse 1.5s ease-in-out infinite; }
+.tts-status { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+.comprehension-check { background: var(--cream); border: 2px solid var(--marigold); border-radius: 16px; padding: 20px; margin-top: 16px; }
+.check-label { display: inline-block; background: var(--saffron); color: white; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.check-question { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+.options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.option-btn { background: white; border: 2px solid var(--paper-dark); padding: 12px 16px; border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit; font-size: 14px; color: var(--ink); transition: all 0.2s ease; width: 100%; display: flex; align-items: center; gap: 10px; }
+.option-btn:hover:not(:disabled) { border-color: var(--marigold); background: var(--paper); transform: translateX(2px); }
+.option-letter { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--paper-dark); border-radius: 8px; font-weight: 700; font-size: 12px; flex-shrink: 0; color: var(--ink-soft); }
+.option-btn.correct { background: var(--leaf-light); border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
+.option-btn.correct .option-letter { background: var(--leaf); color: white; }
+.option-btn.incorrect { background: var(--berry-light); border-color: var(--berry); color: var(--berry); }
+.option-btn.incorrect .option-letter { background: var(--berry); color: white; }
+.option-btn:disabled { cursor: default; }
+.feedback-box { margin-top: 12px; padding: 14px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; animation: slideDown 0.3s ease; }
+.feedback-box.hint { background: #FFF4D6; border-left: 4px solid var(--gold); color: var(--ink); }
+.feedback-box.explanation { background: var(--leaf-light); border-left: 4px solid var(--leaf); color: var(--ink); }
+.feedback-label { font-weight: 800; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.panel-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.vocab-group-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.vocab-group-tab { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 10px 18px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+.vocab-group-tab:hover { border-color: var(--marigold); }
+.vocab-group-tab.active { background: var(--saffron); color: white; }
+.vocab-card { height: 280px; cursor: pointer; perspective: 1000px; }
+.vocab-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1); transform-style: preserve-3d; }
+.vocab-card.flipped .vocab-card-inner { transform: rotateY(180deg); }
+.vocab-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; box-shadow: 0 4px 16px var(--shadow); overflow: hidden; }
+.vocab-face.front { background: var(--cream); border: 2px solid var(--paper-dark); align-items: center; justify-content: center; text-align: center; }
+.vocab-face.back { background: linear-gradient(135deg, var(--saffron), var(--marigold)); color: white; transform: rotateY(180deg); overflow-y: auto; text-align: left; }
+.vocab-card.complete .vocab-face.front { border-color: var(--leaf); background: var(--leaf-light); }
+.vocab-card.complete .vocab-face.front::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; background: var(--leaf); color: white; border-radius: 50%; line-height: 24px; font-weight: 900; font-size: 14px; }
+.vocab-word { font-family: 'Fraunces', serif; font-weight: 700; font-size: 30px; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.5px; }
+.vocab-source-tag { display: inline-block; background: var(--paper-dark); color: var(--ink-soft); padding: 2px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.vocab-flip-hint { margin-top: 12px; font-size: 11px; color: var(--ink-soft); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; }
+.vocab-meaning { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; line-height: 1.4; margin-bottom: 10px; }
+.vocab-example { font-size: 12px; line-height: 1.45; margin-bottom: 6px; opacity: 0.95; }
+.vocab-example-label { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 2px; display: block; }
+.spot-it-cta { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 10px; text-align: center; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.4); }
+.spot-it-cta:hover { background: rgba(255,255,255,0.3); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(43,24,16,0.7); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content { background: var(--cream); border-radius: 20px; padding: 28px; max-width: 480px; width: 100%; box-shadow: 0 12px 40px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
+.modal-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.modal-word { color: var(--saffron); font-style: italic; }
+.question-card { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); }
+.question-number { display: inline-block; background: var(--ink); color: var(--cream); font-family: 'Fraunces', serif; font-weight: 700; width: 36px; height: 36px; line-height: 36px; text-align: center; border-radius: 50%; font-size: 16px; margin-bottom: 12px; }
+.passage-excerpt { background: var(--paper); padding: 12px 16px; border-radius: 12px; border-left: 4px solid var(--sky); margin-bottom: 12px; font-style: italic; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
+.question-text { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+.question-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.btn { padding: 10px 18px; border-radius: 12px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary { background: var(--paper-dark); color: var(--ink); }
+.btn-secondary:hover:not(:disabled) { background: var(--marigold); color: white; }
+.btn-primary { background: var(--saffron); color: white; box-shadow: 0 4px 12px rgba(232,119,34,0.3); }
+.btn-primary:hover:not(:disabled) { background: var(--ink); transform: translateY(-2px); }
+.btn-success { background: var(--leaf); color: white; box-shadow: 0 4px 12px rgba(74,124,89,0.3); }
+.btn-success:hover:not(:disabled) { background: #3a6248; transform: translateY(-2px); }
+.stage-nav { margin-top: 32px; display: flex; justify-content: space-between; gap: 12px; }
+.placeholder-card { background: var(--cream); border: 2px dashed var(--paper-dark); border-radius: 20px; padding: 48px 32px; text-align: center; color: var(--ink-soft); }
+.placeholder-icon { font-size: 60px; margin-bottom: 16px; opacity: 0.5; }
+.placeholder-title { font-family: 'Fraunces', serif; font-size: 22px; color: var(--ink); margin-bottom: 8px; }
+.placeholder-detail { font-size: 14px; line-height: 1.6; max-width: 480px; margin: 0 auto; }
+.loading-screen, .error-screen { text-align: center; padding: 48px 20px; }
+.spinner { width: 48px; height: 48px; border: 4px solid var(--paper-dark); border-top-color: var(--saffron); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-screen { background: var(--berry-light); border: 2px solid var(--berry); color: var(--berry); border-radius: 16px; }
+/* === STAGE 0: DEEP DIVE REFERENCE === */
+.deep-dive-trigger { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, var(--sky) 0%, #3d6d8f 100%); color: white; border: none; padding: 20px 28px; border-radius: 18px; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.25s ease; margin-bottom: 28px; width: 100%; box-shadow: 0 4px 16px rgba(91,141,184,0.3); }
+.deep-dive-trigger:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(91,141,184,0.4); }
+.deep-dive-trigger .dd-icon { font-size: 36px; }
+.deep-dive-trigger .dd-text { text-align: left; }
+.deep-dive-trigger .dd-title { font-family: 'Fraunces', serif; font-size: 22px; display: block; }
+.deep-dive-trigger .dd-sub { font-size: 14px; opacity: 0.9; font-weight: 500; display: block; margin-top: 2px; }
+
+.dd-screen { padding: 0; }
+.dd-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.dd-nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.dd-nav-btn { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 10px 16px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+.dd-nav-btn:hover { border-color: var(--sky); }
+.dd-nav-btn.active { background: var(--sky); color: white; }
+
+.dd-topic { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 24px; }
+.dd-topic-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.dd-topic-subtitle { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; }
+
+.dd-section { margin-bottom: 28px; }
+.dd-section-label { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 8px; margin-bottom: 12px; }
+.dd-section-label.story { background: var(--berry-light); color: var(--berry); }
+.dd-section-label.steps { background: var(--leaf-light); color: var(--leaf); }
+.dd-section-label.visual { background: var(--sky-light); color: var(--sky); }
+.dd-section-label.video { background: #FFF4D6; color: var(--gold); }
+.dd-section-label.tip { background: var(--cream); color: var(--saffron); }
+
+.dd-story { background: var(--cream); border-radius: 16px; padding: 24px; border-left: 5px solid var(--berry); margin-bottom: 16px; }
+.dd-story-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--berry); margin-bottom: 10px; }
+.dd-story-text { font-size: 15px; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+
+.dd-steps { counter-reset: ddstep; }
+.dd-step { display: flex; gap: 16px; margin-bottom: 18px; align-items: flex-start; }
+.dd-step-num { counter-increment: ddstep; flex-shrink: 0; width: 36px; height: 36px; background: var(--leaf); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; }
+.dd-step-content { flex: 1; }
+.dd-step-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.dd-step-text { font-size: 14px; line-height: 1.7; color: var(--ink); }
+.dd-step-example { background: var(--paper); border-radius: 10px; padding: 12px 14px; margin-top: 8px; font-size: 14px; font-family: 'Nunito', sans-serif; border-left: 3px solid var(--marigold); color: var(--ink); }
+
+.dd-visual { text-align: center; margin: 20px 0; }
+.dd-visual svg { max-width: 100%; height: auto; border-radius: 12px; }
+.dd-visual-caption { font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic; }
+
+.dd-video { margin: 20px 0; border-radius: 16px; overflow: hidden; background: var(--ink); }
+.dd-video iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+.dd-video-caption { padding: 10px 16px; font-size: 12px; color: var(--ink-soft); background: var(--paper); }
+
+.dd-tip { background: #FFF4D6; border-radius: 14px; padding: 18px 20px; border-left: 4px solid var(--gold); margin: 16px 0; }
+.dd-tip-title { font-weight: 800; font-size: 13px; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.dd-tip-text { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+.dd-funfact { background: linear-gradient(135deg, #FFF4D6 0%, #FFEEBB 100%); border-radius: 16px; padding: 20px 22px; border: 2px solid var(--gold); margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+.dd-funfact-icon { font-size: 32px; flex-shrink: 0; }
+.dd-funfact-content { flex: 1; }
+.dd-funfact-label { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.dd-funfact-text { font-size: 15px; line-height: 1.6; color: var(--ink); font-weight: 600; }
+
+.dd-rich-text { font-size: 15px; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+.dd-rich-text strong, .dd-rich-text b { font-weight: 700; color: var(--ink); }
+
+/* === CONCEPT TEACHING CARDS (Math) === */
+.concept-card { background: white; border-radius: 20px; padding: 28px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 20px; border: 2px solid var(--paper-dark); }
+.concept-card.answered { border-color: var(--leaf); }
+.concept-name { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--saffron); margin-bottom: 8px; }
+.concept-definition { font-size: 15px; line-height: 1.7; color: var(--ink); margin-bottom: 14px; white-space: pre-wrap; }
+.concept-examples { background: var(--paper); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.concept-examples-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px; display: block; }
+.concept-example-item { font-size: 14px; line-height: 1.6; color: var(--ink); padding: 4px 0; font-family: 'Nunito', sans-serif; }
+.concept-check { background: var(--cream); border: 2px solid var(--marigold); border-radius: 16px; padding: 20px; margin-top: 16px; }
+
+/* === SELF-CHECK CRITERIA (Stage 3) === */
+.self-check-box { background: var(--paper); border-radius: 14px; padding: 16px 18px; margin-top: 14px; border: 2px solid var(--paper-dark); }
+.self-check-title { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--saffron); margin-bottom: 10px; }
+.self-check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; cursor: pointer; user-select: none; }
+.self-check-item + .self-check-item { border-top: 1px solid var(--paper-dark); }
+.self-check-tick { width: 24px; height: 24px; border: 2px solid var(--paper-dark); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; transition: all 0.2s ease; background: white; }
+.self-check-tick.checked { background: var(--leaf); border-color: var(--leaf); color: white; }
+.self-check-label { font-size: 14px; color: var(--ink); line-height: 1.4; }
+.self-check-stars { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--gold); }
+
+/* === STAGE 3: THINK DEEPER === */
+.think-card { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); transition: border-color 0.3s ease; }
+.think-card.submitted { border-color: var(--leaf); background: linear-gradient(135deg, var(--cream), var(--leaf-light)); }
+.scenario-box { background: var(--cream); padding: 16px 18px; border-radius: 12px; border-left: 5px solid var(--saffron); margin: 12px 0 14px 0; color: var(--ink); font-size: 16px; line-height: 1.7; font-weight: 600; }
+.word-limit-tag { display: inline-block; background: var(--sky); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px; }
+.text-input { width: 100%; padding: 14px 16px; border: 2px solid var(--paper-dark); border-radius: 12px; font-family: inherit; font-size: 15px; background: white; color: var(--ink); transition: border-color 0.2s ease; line-height: 1.5; }
+.text-input:focus { outline: none; border-color: var(--saffron); }
+textarea.text-input { resize: vertical; min-height: 100px; }
+textarea.text-input[readonly] { background: var(--paper); cursor: default; }
+.word-counter { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); text-align: right; transition: color 0.2s ease; }
+.word-counter.in-range { color: var(--leaf); }
+.word-counter.over { color: var(--berry); }
+.model-answer-box { margin-top: 14px; padding: 16px 18px; background: linear-gradient(135deg, var(--cream), var(--paper-dark)); border-radius: 12px; border: 2px dashed var(--marigold); animation: slideDown 0.4s ease; }
+.model-answer-box .feedback-label { color: var(--saffron); }
+.answer-text { margin-top: 6px; line-height: 1.6; color: var(--ink); font-size: 14px; }
+.submitted-tag { display: inline-block; margin-left: 8px; background: var(--leaf); color: white; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.marks-tag { display: inline-block; margin-left: 8px; background: var(--ink); color: var(--cream); padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.question-category { display: inline-block; margin-left: 10px; padding: 4px 12px; background: var(--paper-dark); border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); vertical-align: middle; }
+
+/* === STAGE 4: TEST === */
+.test-intro { background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 100%); color: white; padding: 40px 32px; border-radius: 24px; text-align: center; margin-bottom: 28px; box-shadow: 0 8px 24px var(--shadow-strong); position: relative; overflow: hidden; }
+.test-intro::before { content: ''; position: absolute; top: -50px; left: -50px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%); border-radius: 50%; }
+.test-intro-icon { font-size: 60px; margin-bottom: 12px; position: relative; z-index: 2; }
+.test-intro h2 { font-family: 'Fraunces', serif; font-weight: 900; font-size: 32px; margin-bottom: 8px; position: relative; z-index: 2; }
+.test-intro-subtitle { font-size: 15px; opacity: 0.95; margin-bottom: 8px; position: relative; z-index: 2; }
+.test-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0; position: relative; z-index: 2; }
+.test-stat { background: rgba(255,255,255,0.2); padding: 14px; border-radius: 14px; backdrop-filter: blur(10px); }
+.test-stat-num { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; line-height: 1; }
+.test-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-top: 4px; }
+.test-sections-preview { background: rgba(0,0,0,0.15); border-radius: 14px; padding: 16px; margin: 20px 0; text-align: left; position: relative; z-index: 2; }
+.test-section-preview { padding: 6px 0; font-size: 13px; }
+.test-section-preview + .test-section-preview { border-top: 1px solid rgba(255,255,255,0.2); }
+.test-start-btn { background: white; color: var(--saffron); padding: 16px 36px; font-size: 16px; font-weight: 800; border-radius: 14px; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; z-index: 2; }
+.test-start-btn:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+
+.timer-bar { position: sticky; top: 12px; z-index: 10; background: var(--ink); color: var(--cream); padding: 14px 22px; border-radius: 14px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px var(--shadow-strong); }
+.timer-display { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.timer-display.warning { color: var(--marigold); }
+.timer-display.urgent { color: #FF8B6E; animation: pulse 1s ease-in-out infinite; }
+.timer-progress { font-size: 13px; font-weight: 700; opacity: 0.85; }
+
+.test-section { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); }
+.test-section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 2px solid var(--paper-dark); margin-bottom: 14px; }
+.test-section-header h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); }
+.test-section-marks { background: var(--saffron); color: white; padding: 4px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
+.test-section-instructions { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; font-style: italic; }
+.test-passage { background: var(--paper); border-radius: 14px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--sky); }
+.test-passage-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.test-passage-author { font-size: 12px; color: var(--ink-soft); font-style: italic; margin-bottom: 12px; }
+.test-passage-text { font-size: 14px; line-height: 1.7; color: var(--ink); white-space: pre-wrap; }
+.test-passage-note { margin-top: 12px; font-size: 12px; color: var(--ink-soft); padding: 8px 12px; background: rgba(244, 168, 44, 0.15); border-radius: 8px; }
+
+.test-question { padding: 18px 0; border-bottom: 1px solid var(--paper-dark); }
+.test-question:last-child { border-bottom: none; }
+.test-q-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.test-q-num { font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; color: var(--saffron); }
+.test-q-type { font-size: 10px; font-weight: 800; letter-spacing: 1px; color: var(--ink-soft); background: var(--paper-dark); padding: 3px 8px; border-radius: 6px; }
+.option-btn.test-selected { background: var(--cream); border-color: var(--saffron); color: var(--ink); font-weight: 700; }
+.option-btn.test-selected .option-letter { background: var(--saffron); color: white; }
+
+.test-submit-zone { text-align: center; margin: 32px 0; padding: 28px; background: var(--cream); border-radius: 18px; border: 2px solid var(--paper-dark); }
+.test-submit-btn { padding: 14px 32px; font-size: 16px; }
+
+/* === RESULTS === */
+.results-screen { padding: 24px 0; position: relative; }
+.results-hero { background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 50%, var(--gold) 100%); color: white; padding: 48px 32px; border-radius: 28px; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 12px 36px var(--shadow-strong); text-align: center; }
+.results-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.25) 0%, transparent 25%), radial-gradient(circle at 85% 80%, rgba(255,255,255,0.18) 0%, transparent 30%); pointer-events: none; }
+
+.confetti-piece { position: absolute; width: 8px; height: 14px; border-radius: 2px; animation: confettiFall 3s ease-in-out infinite; opacity: 0.85; pointer-events: none; }
+@keyframes confettiFall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(700px) rotate(720deg); opacity: 0; } }
+
+.badge-circle { width: 160px; height: 160px; margin: 0 auto 20px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 36px rgba(0,0,0,0.2), inset 0 0 20px rgba(244, 168, 44, 0.2); position: relative; z-index: 2; animation: badgePop 0.8s cubic-bezier(0.5, 1.5, 0.7, 1); }
+.badge-circle.no-badge { background: rgba(255,255,255,0.85); }
+@keyframes badgePop { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+.badge-circle::before { content: ''; position: absolute; inset: -10px; border-radius: 50%; border: 4px dashed white; opacity: 0.6; animation: spin 20s linear infinite; }
+.badge-emoji { font-size: 80px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+.badge-name { font-family: 'Fraunces', serif; font-weight: 900; font-size: 36px; margin-bottom: 6px; color: white; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); position: relative; z-index: 2; }
+.badge-tagline { font-size: 17px; opacity: 0.95; margin-bottom: 24px; position: relative; z-index: 2; font-weight: 600; }
+.results-percentage { background: white; color: var(--saffron); display: inline-block; padding: 18px 40px; border-radius: 18px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); margin-top: 8px; position: relative; z-index: 2; }
+.percentage-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 56px; line-height: 1; }
+.percentage-label { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 6px; }
+
+.motivational-quote { background: var(--cream); border: 2px solid var(--marigold); border-radius: 18px; padding: 22px 24px; margin: 24px auto; max-width: 600px; font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; color: var(--ink); line-height: 1.5; position: relative; text-align: center; }
+.motivational-quote::before { content: '"'; font-family: 'Fraunces', serif; font-size: 80px; color: var(--marigold); position: absolute; top: -20px; left: 12px; line-height: 1; opacity: 0.4; }
+
+.section-scores { background: white; border-radius: 20px; padding: 24px; margin: 24px auto; max-width: 700px; box-shadow: 0 6px 20px var(--shadow); border: 2px solid var(--paper-dark); }
+.section-scores h3 { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; color: var(--ink); margin-bottom: 20px; text-align: center; }
+.scores-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.score-cell { background: var(--paper); border-radius: 14px; padding: 16px 10px; text-align: center; border: 2px solid var(--paper-dark); transition: transform 0.2s ease; }
+.score-cell:hover { transform: translateY(-2px); }
+.score-cell.strong { background: var(--leaf-light); border-color: var(--leaf); }
+.score-cell.improvement { background: var(--berry-light); border-color: var(--berry); }
+.score-cell-icon { font-size: 26px; margin-bottom: 4px; }
+.score-cell-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-soft); margin-bottom: 6px; }
+.score-cell-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 26px; color: var(--ink); line-height: 1; }
+.score-cell-out-of { font-size: 12px; color: var(--ink-soft); margin-top: 4px; font-weight: 600; }
+.score-cell-tag { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 8px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+.score-cell-tag.strong-tag { background: var(--leaf); color: white; }
+.score-cell-tag.improve-tag { background: var(--berry); color: white; }
+.score-cell-tag.neutral-tag { background: var(--paper-dark); color: var(--ink-soft); }
+
+.reattempt-card { background: linear-gradient(135deg, var(--sky) 0%, #4a7a9c 100%); color: white; padding: 24px 28px; border-radius: 20px; margin: 24px auto; max-width: 600px; text-align: center; box-shadow: 0 6px 20px rgba(91, 141, 184, 0.3); }
+.reattempt-card h4 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.reattempt-card p { font-size: 15px; opacity: 0.95; margin-bottom: 16px; }
+.reattempt-btn { background: white; color: var(--sky); padding: 12px 28px; border: none; border-radius: 12px; font-family: inherit; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.reattempt-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+
+.manual-grading-note { margin-top: 20px; padding: 14px 18px; background: #FFF4D6; border-radius: 12px; font-size: 13px; color: var(--ink-soft); border-left: 4px solid var(--gold); max-width: 700px; margin-left: auto; margin-right: auto; }
+
+.results-detail { background: var(--cream); border-radius: 18px; padding: 22px 24px; margin: 16px auto; max-width: 700px; text-align: left; border: 2px solid var(--paper-dark); }
+.results-detail h4 { font-family: 'Fraunces', serif; font-size: 18px; margin-bottom: 12px; color: var(--ink); }
+.review-item { padding: 14px 0; border-bottom: 1px solid var(--paper-dark); }
+.review-item:last-child { border-bottom: none; }
+.review-q { font-weight: 700; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+.review-content { font-size: 13px; color: var(--ink-soft); }
+.review-row { padding: 4px 0; line-height: 1.5; }
+.review-result { display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; }
+.review-result.correct { background: var(--leaf-light); color: var(--leaf); }
+.review-result.incorrect { background: var(--berry-light); color: var(--berry); }
+.review-result.manual { background: #FFF4D6; color: #B8830A; }
+
+.results-actions { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+@media (max-width: 600px) { .container { padding: 16px 14px 60px; } header.app-header { padding: 20px; border-radius: 18px; } .progress-bar { gap: 5px; } .progress-step { padding: 8px 4px; font-size: 9px; } .step-num { font-size: 16px; } .branches-grid { grid-template-columns: 1fr; } .panel-container { padding: 22px; } .panel-title { font-size: 22px; } .narration-text { font-size: 15px; } .cards-grid { grid-template-columns: 1fr; } .vocab-card { height: 260px; } .panel-nav { flex-direction: column; } .test-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; } .test-stat { padding: 10px 6px; } .test-stat-num { font-size: 22px; } .badge-circle { width: 130px; height: 130px; } .badge-emoji { font-size: 60px; } .badge-name { font-size: 28px; } .percentage-num { font-size: 44px; } .results-hero { padding: 32px 20px; } .scores-table { grid-template-columns: 1fr 1fr; } .score-cell { padding: 14px 8px; } .score-cell-num { font-size: 22px; } .think-card, .test-section { padding: 18px; } }
+</style>
+</head>
+<body>
+
+<script type="application/json" id="embedded-chapter">
+{
+ "schema_version": "2.0",
+ "chapter_id": "evs-ch4-getting-to-know-animals",
+ "chapter_number": 4,
+ "chapter_title": "Getting to Know Animals",
+ "subject": "EVS",
+ "books": [
+  "HELLO EARTH! — A course on the world around us (Class 5)"
+ ],
+ "theme": "Senses, communication, migration and sleep in animals",
+ "theme_short": "Getting to Know Animals",
+ "summary": "Discover how animals sense the world with noses, ears, eyes, whiskers and antennae; how they communicate with sounds, movements and smells; why some birds migrate; and how animals rest through hibernation, aestivation and nocturnal habits.",
+ "school_exam_format": {
+  "test_name": "Periodic Test",
+  "session": "2026-27",
+  "total_marks": 20,
+  "duration_minutes": 40
+ },
+ "badges": {
+  "champion": {
+   "threshold": 90,
+   "name": "Animal Expert",
+   "emoji": "🏆",
+   "tagline": "You truly know your animals!"
+  },
+  "star": {
+   "threshold": 75,
+   "name": "Nature Explorer",
+   "emoji": "⭐",
+   "tagline": "Great work exploring the animal world!"
+  },
+  "spark": {
+   "threshold": 60,
+   "name": "Curious Cub",
+   "emoji": "✨",
+   "tagline": "Keep going — you're learning fast!"
+  }
+ },
+ "motivational_quotes": [
+  "Every animal has something amazing to teach us — keep your eyes and ears open!",
+  "The best time to learn something new is right now!",
+  "Curious minds ask 'why' — and that is how discoveries happen.",
+  "A mistake is proof that you are trying. Learn from it and try again."
+ ],
+ "stage_0_deep_dive": {
+  "title": "Deep Dive — Getting to Know Animals",
+  "description": "Stories, pictures and fun facts about how animals sense the world, communicate with each other, travel far and sleep.",
+  "topics": [
+   {
+    "id": "dd_super_senses",
+    "title": "Animal Super-Senses",
+    "icon": "👃",
+    "subtitle": "Why a dog's nose and a cat's whiskers are amazing tools",
+    "sections": [
+     {
+      "type": "story",
+      "title": "Sheru the Sniffer Dog",
+      "content": "At a busy railway station, a police dog named **Sheru** walked past a row of bags, his nose twitching. Suddenly he sat down beside one bag and would not move. His trainer smiled — Sheru had found exactly what he was looking for, only by **smell**.\n\n\"How did he know?\" asked a little boy named Arjun.\n\n\"A dog's sense of smell is far stronger than ours,\" said the trainer. \"That is why the police use *sniffer dogs* to trace people and things.\"\n\nArjun thought about it. A dog smells with its nose, just like us — but *so much better*. And then he remembered: not every animal senses the world the same way. A bat can barely see, yet it hunts perfectly in the dark. A cat feels its way with its whiskers. An eagle spots a rabbit from high in the sky. Even a butterfly can *taste with its feet*!\n\nJust like humans, animals have **sense organs** to hear, smell, taste, see and feel the world — but each animal has its own super-sense that helps it survive.",
+      "image_svg": "<svg viewBox=\"0 0 800 430\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"'Segoe UI','Helvetica Neue',Arial,sans-serif\">\n<rect width=\"800\" height=\"430\" rx=\"16\" fill=\"#F3F8EE\"/>\n<text x=\"400\" y=\"42\" font-size=\"22\" font-weight=\"bold\" fill=\"#2E5218\" text-anchor=\"middle\">Different Animals, Different Super-Senses</text>\n<rect x=\"30\" y=\"70\" width=\"180\" height=\"200\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#C6DCA9\" stroke-width=\"2\"/>\n<text x=\"120\" y=\"140\" font-size=\"60\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128021;</text>\n<text x=\"120\" y=\"180\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">DOG</text>\n<text x=\"120\" y=\"206\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Powerful SMELL</text>\n<text x=\"120\" y=\"232\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">Sniffer dogs trace</text>\n<text x=\"120\" y=\"250\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">criminals for the police</text>\n<rect x=\"223\" y=\"70\" width=\"180\" height=\"200\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#C6DCA9\" stroke-width=\"2\"/>\n<text x=\"313\" y=\"140\" font-size=\"60\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#129415;</text>\n<text x=\"313\" y=\"180\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">BAT</text>\n<text x=\"313\" y=\"206\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Sharp HEARING</text>\n<text x=\"313\" y=\"232\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">Blind, but hunts using</text>\n<text x=\"313\" y=\"250\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">high-frequency sound</text>\n<rect x=\"416\" y=\"70\" width=\"180\" height=\"200\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#C6DCA9\" stroke-width=\"2\"/>\n<text x=\"506\" y=\"140\" font-size=\"60\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128008;</text>\n<text x=\"506\" y=\"180\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">CAT</text>\n<text x=\"506\" y=\"206\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">WHISKERS + NIGHT VISION</text>\n<text x=\"506\" y=\"232\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">Whiskers feel objects</text>\n<text x=\"506\" y=\"250\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">in the dark</text>\n<rect x=\"609\" y=\"70\" width=\"161\" height=\"200\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#C6DCA9\" stroke-width=\"2\"/>\n<text x=\"689\" y=\"140\" font-size=\"60\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#129413;</text>\n<text x=\"689\" y=\"180\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">EAGLE</text>\n<text x=\"689\" y=\"206\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Sharp EYESIGHT</text>\n<text x=\"689\" y=\"232\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">Spots prey from</text>\n<text x=\"689\" y=\"250\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">very far away</text>\n<rect x=\"30\" y=\"288\" width=\"740\" height=\"118\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#7CB342\" stroke-width=\"2\"/>\n<text x=\"110\" y=\"360\" font-size=\"56\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#129419;</text>\n<text x=\"470\" y=\"322\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">BUTTERFLY AND OTHER INSECTS</text>\n<text x=\"470\" y=\"350\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">ANTENNAE to sense things and find their way</text>\n<text x=\"470\" y=\"372\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">COMPOUND EYES to see better &#183; tastes with its FEET</text>\n<text x=\"470\" y=\"392\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">Sips nectar through a straw-like proboscis</text>\n</svg>",
+      "image_caption": "Every animal has one sense it is especially good at."
+     },
+     {
+      "type": "steps",
+      "title": "Match the Animal to its Super-Sense",
+      "steps": [
+       {
+        "title": "Dog — smell",
+        "text": "A dog's nose is its strongest tool. Sniffer dogs are trained by the police to trace criminals and missing people.",
+        "example": "Sheru found the right bag at the station only by its smell."
+       },
+       {
+        "title": "Bat — hearing",
+        "text": "Bats are almost blind. They make high-frequency sounds and listen to the echo to fly and hunt in complete darkness.",
+        "example": "A bat catches a flying insect at night without ever seeing it."
+       },
+       {
+        "title": "Cat — touch (whiskers) + night vision",
+        "text": "A cat's whiskers feel objects around it, and its strong night vision lets it move about in the dark.",
+        "example": "A cat squeezes through a narrow gap at night without bumping into anything."
+       },
+       {
+        "title": "Insects — antennae, compound eyes, feet",
+        "text": "Insects use antennae to sense and find their way, compound eyes (many tiny lenses) to see, and some, like butterflies, even taste and smell with their feet.",
+        "example": "A butterfly lands on a flower and 'tastes' it with its feet before sipping nectar through its straw-like proboscis."
+       }
+      ]
+     },
+     {
+      "type": "tip",
+      "title": "Remember This",
+      "content": "Different animals lead with different senses. Dogs → smell. Bats → hearing. Cats → whiskers + night vision. Eagles → eyesight. Fish → sight + sensing vibrations. The sense an animal is best at is usually the one it needs most to find food and stay safe."
+     },
+     {
+      "type": "funfact",
+      "title": "Did You Know?",
+      "content": "A butterfly's proboscis works like a drinking straw. It stays rolled up like a spring under the head and unrolls only when the butterfly wants to sip nectar from a flower!"
+     }
+    ]
+   },
+   {
+    "id": "dd_animal_talk",
+    "title": "How Animals Communicate",
+    "icon": "🗣️",
+    "subtitle": "Sounds, dances, smells and clicks — the many ways animals send messages",
+    "sections": [
+     {
+      "type": "story",
+      "title": "A Noisy, Busy Garden",
+      "content": "Anaya sat in her grandmother's garden and listened. A dog **barked** at the gate. A cat **purred** on the wall. Crickets **chirped** in the grass and a frog **croaked** near the pond.\n\n\"They are all *communicating*,\" said her grandmother. \"Animals send messages through sounds, smells and movements — to show joy, fear, anger or to warn of danger.\"\n\nA line of ants marched past. \"They cannot make a sound,\" said Anaya.\n\n\"They do not need to,\" laughed her grandmother. \"Ants, wolves, deer and skunks release special chemicals called **pheromones** to send messages. And look there —\" a honeybee was doing a little wiggling **dance** on a flower. \"That dance tells the other bees exactly where to find nectar.\"\n\nAnaya realised the whole garden was full of messages — she just had to know how to read them.",
+      "image_svg": "<svg viewBox=\"0 0 800 400\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"'Segoe UI','Helvetica Neue',Arial,sans-serif\">\n<rect width=\"800\" height=\"400\" rx=\"16\" fill=\"#FBF3EC\"/>\n<text x=\"400\" y=\"42\" font-size=\"22\" font-weight=\"bold\" fill=\"#8A4B10\" text-anchor=\"middle\">Four Ways Animals Send a Message</text>\n<rect x=\"30\" y=\"66\" width=\"365\" height=\"145\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#E0B089\" stroke-width=\"2\"/>\n<text x=\"90\" y=\"150\" font-size=\"46\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128021;</text>\n<text x=\"90\" y=\"190\" font-size=\"30\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128056;</text>\n<text x=\"250\" y=\"98\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">1. SOUNDS</text>\n<text x=\"250\" y=\"128\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Dogs bark &#183; cats purr</text>\n<text x=\"250\" y=\"150\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Crickets chirp &#183; frogs croak</text>\n<text x=\"250\" y=\"172\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Monkeys howl to warn</text>\n<text x=\"250\" y=\"194\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">to show joy, fear, anger or danger</text>\n<rect x=\"405\" y=\"66\" width=\"365\" height=\"145\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#E0B089\" stroke-width=\"2\"/>\n<text x=\"465\" y=\"150\" font-size=\"46\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128029;</text>\n<text x=\"465\" y=\"190\" font-size=\"30\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128024;</text>\n<text x=\"625\" y=\"98\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">2. MOVEMENTS</text>\n<text x=\"625\" y=\"128\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Bees DANCE to show the</text>\n<text x=\"625\" y=\"150\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">way to nectar</text>\n<text x=\"625\" y=\"172\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Elephants entwine trunks</text>\n<text x=\"625\" y=\"194\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">chimpanzees touch hands to greet</text>\n<rect x=\"30\" y=\"228\" width=\"365\" height=\"145\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#E0B089\" stroke-width=\"2\"/>\n<text x=\"90\" y=\"312\" font-size=\"46\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128058;</text>\n<text x=\"90\" y=\"352\" font-size=\"30\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#129452;</text>\n<text x=\"250\" y=\"260\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">3. SMELLS (chemicals)</text>\n<text x=\"250\" y=\"290\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Wolves, deer and skunks</text>\n<text x=\"250\" y=\"312\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">release PHEROMONES</text>\n<text x=\"250\" y=\"334\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Cats rub scent glands</text>\n<text x=\"250\" y=\"356\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">to mark their territory</text>\n<rect x=\"405\" y=\"228\" width=\"365\" height=\"145\" rx=\"14\" fill=\"#FFFFFF\" stroke=\"#E0B089\" stroke-width=\"2\"/>\n<text x=\"465\" y=\"312\" font-size=\"46\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128044;</text>\n<text x=\"465\" y=\"352\" font-size=\"30\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128011;</text>\n<text x=\"625\" y=\"260\" font-size=\"17\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">4. CLICKS AND WHISTLES</text>\n<text x=\"625\" y=\"290\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">Whales and dolphins</text>\n<text x=\"625\" y=\"312\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">communicate under water</text>\n<text x=\"625\" y=\"334\" font-size=\"15\" fill=\"#2E5218\" text-anchor=\"middle\">using clicks and whistles</text>\n<text x=\"625\" y=\"356\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">birds use different calls and chirps</text>\n</svg>",
+      "image_caption": "Animals send messages in four main ways: sounds, movements, smells, and clicks and whistles."
+     },
+     {
+      "type": "steps",
+      "title": "Four Ways Animals Communicate",
+      "steps": [
+       {
+        "title": "Sounds",
+        "text": "Dogs bark, cats purr, crickets chirp, frogs croak and monkeys howl to warn each other about predators.",
+        "example": "A monkey howls loudly the moment it spots a leopard, warning the whole troop."
+       },
+       {
+        "title": "Movements",
+        "text": "Bees dance to show other bees the way to nectar. Elephants entwine their trunks to show affection, and chimpanzees touch each other's hands to greet.",
+        "example": "A honeybee returns to the hive and dances to point the others toward a flowering tree."
+       },
+       {
+        "title": "Smells (chemicals)",
+        "text": "Many animals like insects, wolves, deer and skunks release chemicals called pheromones. Cats and hamsters rub their scent glands against objects to mark their territory.",
+        "example": "A cat rubs its cheek on a chair leg, leaving its scent to say 'this is mine'."
+       },
+       {
+        "title": "Clicks and whistles",
+        "text": "Whales and dolphins communicate using clicks and whistles under water.",
+        "example": "A dolphin calls its group together with a special whistle only they recognise."
+       }
+      ]
+     },
+     {
+      "type": "funfact",
+      "title": "Did You Know?",
+      "content": "A wagging tail is one of the main ways a dog sends a message to us — a happy dog wags its tail. Watching an animal's body movements is a great way to understand what it is feeling."
+     }
+    ]
+   },
+   {
+    "id": "dd_great_journey",
+    "title": "The Great Bird Journey",
+    "icon": "🦅",
+    "subtitle": "Why some birds fly thousands of kilometres and come back",
+    "sections": [
+     {
+      "type": "story",
+      "title": "The Crane that Visits India",
+      "content": "Every winter, a beautiful white bird arrives at a wetland in India after an enormous journey. It is the **Siberian crane**.\n\nIn its home in **Siberia** (a place in Russia), the winter becomes bitterly cold and food becomes hard to find. So the crane spreads its wings and **flies all the way to India**, which is much warmer at that time and full of food. When spring returns and Siberia becomes warm again, the crane **flies back home**.\n\nThis travelling to escape unfavourable weather is called **migration**, and birds that do it are called **migratory birds**. Birds like eagles, owls and hawks have very sharp eyesight and can spot their prey from far away — and an owl's hearing is ten times stronger than a human's, even though birds have no outside ears!",
+      "image_svg": "<svg viewBox=\"0 0 800 400\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"'Segoe UI','Helvetica Neue',Arial,sans-serif\">\n<rect width=\"800\" height=\"400\" rx=\"16\" fill=\"#EAF3FB\"/>\n<text x=\"400\" y=\"42\" font-size=\"22\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">The Siberian Crane's Long Journey</text>\n<rect x=\"40\" y=\"72\" width=\"300\" height=\"145\" rx=\"14\" fill=\"#CFE2F3\" stroke=\"#8FB8DC\" stroke-width=\"2\"/>\n<text x=\"190\" y=\"128\" font-size=\"44\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#10052;&#65039;</text>\n<text x=\"190\" y=\"164\" font-size=\"18\" font-weight=\"bold\" fill=\"#24435F\" text-anchor=\"middle\">SIBERIA (Russia)</text>\n<text x=\"190\" y=\"190\" font-size=\"15\" fill=\"#2C5F8A\" text-anchor=\"middle\">Winter is VERY COLD</text>\n<text x=\"190\" y=\"210\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">Food is very hard to find</text>\n<rect x=\"460\" y=\"230\" width=\"300\" height=\"145\" rx=\"14\" fill=\"#FBE4C4\" stroke=\"#E0B089\" stroke-width=\"2\"/>\n<text x=\"610\" y=\"286\" font-size=\"44\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#9728;&#65039;</text>\n<text x=\"610\" y=\"322\" font-size=\"18\" font-weight=\"bold\" fill=\"#8A4B10\" text-anchor=\"middle\">INDIA</text>\n<text x=\"610\" y=\"348\" font-size=\"15\" fill=\"#8A5A2B\" text-anchor=\"middle\">Much WARMER in winter</text>\n<text x=\"610\" y=\"368\" font-size=\"13\" fill=\"#5C4322\" text-anchor=\"middle\">Plenty of food and suitable weather</text>\n<path d=\"M348 168 C 430 178, 470 190, 500 222\" stroke=\"#E87722\" stroke-width=\"5\" fill=\"none\" stroke-dasharray=\"12 8\" stroke-linecap=\"round\"/>\n<path d=\"M487 208 L505 232 L479 230 Z\" fill=\"#E87722\"/>\n<text x=\"400\" y=\"145\" font-size=\"15\" font-weight=\"bold\" fill=\"#B85C10\">Winter &#8594; flies to India</text>\n<text x=\"418\" y=\"196\" font-size=\"40\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128038;</text>\n<path d=\"M470 300 C 380 300, 330 280, 316 232\" stroke=\"#4A8C46\" stroke-width=\"5\" fill=\"none\" stroke-dasharray=\"12 8\" stroke-linecap=\"round\"/>\n<path d=\"M304 246 L314 218 L328 240 Z\" fill=\"#4A8C46\"/>\n<text x=\"330\" y=\"330\" font-size=\"15\" font-weight=\"bold\" fill=\"#2C7A2C\">Spring &#8594; returns to Siberia</text>\n<rect x=\"40\" y=\"240\" width=\"240\" height=\"70\" rx=\"12\" fill=\"#FFFFFF\" stroke=\"#8FB8DC\" stroke-width=\"2\"/>\n<text x=\"160\" y=\"268\" font-size=\"15\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">This journey is called</text>\n<text x=\"160\" y=\"294\" font-size=\"17\" font-weight=\"bold\" fill=\"#B85C10\" text-anchor=\"middle\">MIGRATION</text>\n</svg>",
+      "image_caption": "The Siberian crane flies to warmer India in winter and returns to Siberia in spring."
+     },
+     {
+      "type": "steps",
+      "title": "Why Do Birds Migrate?",
+      "steps": [
+       {
+        "title": "Winter turns harsh",
+        "text": "In cold places like Siberia, winter is so cold that food becomes very hard to find.",
+        "example": "The Siberian crane cannot find enough to eat when its home freezes over."
+       },
+       {
+        "title": "They travel to survive",
+        "text": "The birds fly long distances to reach a place with suitable weather and plenty of food.",
+        "example": "The crane flies thousands of kilometres to warm, food-rich India."
+       },
+       {
+        "title": "They return home",
+        "text": "Once the season changes and their home becomes warm again, the birds travel back.",
+        "example": "In spring, when Siberia warms up, the crane flies back to raise its young."
+       }
+      ]
+     },
+     {
+      "type": "tip",
+      "title": "Key Idea",
+      "content": "Migration helps birds survive — it lets them escape weather that is too cold (or where food runs out) and always stay where there is enough to eat."
+     }
+    ]
+   },
+   {
+    "id": "dd_sleepy_animals",
+    "title": "Sleepy Animals",
+    "icon": "😴",
+    "subtitle": "Winter sleep, summer sleep and night owls",
+    "sections": [
+     {
+      "type": "story",
+      "title": "Who Sleeps When?",
+      "content": "Just like us, animals need rest — but they sleep in surprising ways. A grown-up human needs about **8 hours** of sleep, but a tiger sleeps for around **16 hours**! Horses can sleep standing **upright**, and fish sleep with their **eyes open**.\n\nSome animals do something even more amazing. To escape the severe cold, animals like **bears, bats, snakes, bees and skunks** sleep for a very long time — this winter sleep can last a whole season and is called **hibernation**.\n\nOthers, like **snails, earthworms, lizards and even crocodiles**, sleep through the hot summer months to escape the heat. This summer sleep is called **aestivation**.\n\nAnd some animals — **owls, bats and rats** — rest during the day but become very active at night. These are called **nocturnal** animals.",
+      "image_svg": "<svg viewBox=\"0 0 800 320\" xmlns=\"http://www.w3.org/2000/svg\" font-family=\"'Segoe UI','Helvetica Neue',Arial,sans-serif\">\n<rect width=\"800\" height=\"320\" rx=\"16\" fill=\"#F5F3FA\"/>\n<text x=\"400\" y=\"42\" font-size=\"22\" font-weight=\"bold\" fill=\"#3A2A5E\" text-anchor=\"middle\">Three Sleep Habits of Animals</text>\n<rect x=\"30\" y=\"66\" width=\"240\" height=\"222\" rx=\"14\" fill=\"#DCE6F5\" stroke=\"#8FB8DC\" stroke-width=\"2\"/>\n<text x=\"150\" y=\"102\" font-size=\"18\" font-weight=\"bold\" fill=\"#1F4E79\" text-anchor=\"middle\">HIBERNATION</text>\n<text x=\"150\" y=\"126\" font-size=\"14\" fill=\"#2C5F8A\" text-anchor=\"middle\">Long WINTER sleep</text>\n<text x=\"150\" y=\"188\" font-size=\"52\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128059;</text>\n<text x=\"150\" y=\"216\" font-size=\"14\" fill=\"#2C5F8A\" text-anchor=\"middle\">to escape severe cold</text>\n<text x=\"150\" y=\"248\" font-size=\"14\" fill=\"#5C4322\" text-anchor=\"middle\">bears &#183; bats &#183; snakes</text>\n<text x=\"150\" y=\"270\" font-size=\"14\" fill=\"#5C4322\" text-anchor=\"middle\">bees &#183; skunks</text>\n<rect x=\"280\" y=\"66\" width=\"240\" height=\"222\" rx=\"14\" fill=\"#FBE7C6\" stroke=\"#E0B089\" stroke-width=\"2\"/>\n<text x=\"400\" y=\"102\" font-size=\"18\" font-weight=\"bold\" fill=\"#8A4B10\" text-anchor=\"middle\">AESTIVATION</text>\n<text x=\"400\" y=\"126\" font-size=\"14\" fill=\"#8A5A2B\" text-anchor=\"middle\">Long SUMMER sleep</text>\n<text x=\"400\" y=\"188\" font-size=\"52\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#128012;</text>\n<text x=\"400\" y=\"216\" font-size=\"14\" fill=\"#8A5A2B\" text-anchor=\"middle\">to escape extreme heat</text>\n<text x=\"400\" y=\"248\" font-size=\"14\" fill=\"#5C4322\" text-anchor=\"middle\">snails &#183; earthworms</text>\n<text x=\"400\" y=\"270\" font-size=\"14\" fill=\"#5C4322\" text-anchor=\"middle\">lizards &#183; crocodiles</text>\n<rect x=\"530\" y=\"66\" width=\"240\" height=\"222\" rx=\"14\" fill=\"#2E2A44\" stroke=\"#4A4470\" stroke-width=\"2\"/>\n<text x=\"650\" y=\"102\" font-size=\"18\" font-weight=\"bold\" fill=\"#F4E27A\" text-anchor=\"middle\">NOCTURNAL</text>\n<text x=\"650\" y=\"126\" font-size=\"14\" fill=\"#CFC9E6\" text-anchor=\"middle\">Awake at NIGHT</text>\n<text x=\"650\" y=\"188\" font-size=\"52\" text-anchor=\"middle\" font-family=\"'Segoe UI Emoji','Apple Color Emoji','Noto Color Emoji','Segoe UI',Arial,sans-serif\">&#129417;</text>\n<text x=\"650\" y=\"216\" font-size=\"14\" fill=\"#CFC9E6\" text-anchor=\"middle\">Rests by day, active at night</text>\n<text x=\"650\" y=\"248\" font-size=\"14\" fill=\"#EDE7FF\" text-anchor=\"middle\">owls &#183; bats &#183; rats</text>\n</svg>",
+      "image_caption": "Hibernation (winter sleep), aestivation (summer sleep) and nocturnal animals (awake at night)."
+     },
+     {
+      "type": "steps",
+      "title": "Three Sleep Words to Know",
+      "steps": [
+       {
+        "title": "Hibernation — winter sleep",
+        "text": "A long, deep sleep to escape severe cold. It can last an entire season.",
+        "example": "A bear hibernates through the freezing winter and wakes up when it gets warm."
+       },
+       {
+        "title": "Aestivation — summer sleep",
+        "text": "A long sleep to escape the extreme heat of summer.",
+        "example": "A snail seals itself and aestivates to survive the hottest, driest months."
+       },
+       {
+        "title": "Nocturnal — awake at night",
+        "text": "These animals are inactive during the day and very active at night.",
+        "example": "An owl sleeps by day and hunts mice at night."
+       }
+      ]
+     },
+     {
+      "type": "funfact",
+      "title": "Did You Know?",
+      "content": "Hibernation = 'H' for 'How cold!' (winter sleep). Aestivation sounds like 'heat-ivation' — sleeping away the summer heat. A tiny trick to never mix them up!"
+     }
+    ]
+   }
+  ]
+ },
+ "stage_1_learn": {
+  "title": "Learn",
+  "description": "Read each card, understand it, then answer the quick check to earn a ⭐.",
+  "branches": [
+   {
+    "id": "b_insects",
+    "title": "Senses in Insects",
+    "icon": "🦋",
+    "type": "concept_teaching",
+    "marks": 3,
+    "concept_title": "How insects sense the world",
+    "intro": "Insects are small animals with six legs. They have some very special sense organs.",
+    "cards": [
+     {
+      "id": "c_antennae",
+      "concept_name": "Antennae",
+      "definition": "Insects are small animals with **six legs** — bees, flies, butterflies, ants and cockroaches are all insects.\n\nMost insects have two long, thin, tube-like structures on their heads called **antennae**. Antennae are special sense organs that help insects to *sense things around them and find their way*.\n\nSo when you see an ant or a butterfly moving its feelers, those are its antennae — helping it understand the world around it.",
+      "examples": [
+       "An ant waves its antennae to follow a trail to a spilled drop of sugar syrup.",
+       "A cockroach uses its antennae to feel its way in the dark."
+      ],
+      "check": {
+       "question": "What are the two long, thin, tube-like sense organs on an insect's head called?",
+       "options": [
+        "Whiskers",
+        "Proboscis",
+        "Antennae",
+        "Feathers"
+       ],
+       "correct": 2,
+       "explanation": "The two long, thin, tube-like structures on the heads of most insects are called antennae. They help the insect sense things around it and find its way."
+      }
+     },
+     {
+      "id": "c_compound_eyes",
+      "concept_name": "Compound Eyes",
+      "definition": "Insects have special eyes made up of **many tiny lenses**. These are called **compound eyes**.\n\nBecause they are made of so many lenses, compound eyes help insects to *see things better and notice movement*, even from far away. This helps insects spot food and escape from danger quickly.",
+      "examples": [
+       "A housefly's compound eyes let it notice your hand moving and fly away before you can catch it.",
+       "A dragonfly's large compound eyes help it hunt tiny insects in the air."
+      ],
+      "check": {
+       "question": "Insect eyes that are made up of many tiny lenses are called —",
+       "options": [
+        "Compound eyes",
+        "Simple eyes",
+        "Night eyes",
+        "Glass eyes"
+       ],
+       "correct": 0,
+       "explanation": "Insects have special eyes made up of many lenses called compound eyes, which help them see things better."
+      }
+     },
+     {
+      "id": "c_proboscis",
+      "concept_name": "Proboscis and Feet",
+      "definition": "Butterflies have a surprising sense: they have sense organs **in their feet** that help them to *smell and taste*!\n\nButterflies also suck **nectar** from flowers using a special mouth part called the **proboscis**. The proboscis is long, flexible and works just like a **straw** — it stays curled up and unrolls to reach deep inside a flower.",
+      "examples": [
+       "A butterfly lands on a flower and 'tastes' it with its feet before deciding to feed.",
+       "The butterfly then unrolls its proboscis like a straw to sip the sweet nectar."
+      ],
+      "check": {
+       "question": "How does a butterfly drink nectar from a flower?",
+       "options": [
+        "It bites the flower with sharp teeth",
+        "It scoops nectar with its wings",
+        "It licks it with a long tongue",
+        "It sucks it up using a straw-like proboscis"
+       ],
+       "correct": 3,
+       "explanation": "Butterflies suck nectar using a special mouth part called the proboscis, which acts like a straw."
+      }
+     }
+    ]
+   },
+   {
+    "id": "b_land",
+    "title": "Senses in Land Animals",
+    "icon": "🐕",
+    "type": "concept_teaching",
+    "marks": 4,
+    "concept_title": "How land animals sense the world",
+    "intro": "Most land animals smell through their noses, see with their eyes, taste with their tongues and hear with their ears — but each has its own strength.",
+    "cards": [
+     {
+      "id": "c_dogs",
+      "concept_name": "Dogs — a strong sense of smell",
+      "definition": "Dogs have a **very strong sense of smell** — far better than ours.\n\nBecause of this, **sniffer dogs** are used by the police for **tracing** criminals and finding missing things or people. 'Tracing' means to look carefully for something.",
+      "examples": [
+       "A sniffer dog follows a smell trail to find a lost child.",
+       "Police dogs sniff luggage at airports to trace hidden things."
+      ],
+      "check": {
+       "question": "Why are sniffer dogs used by the police?",
+       "options": [
+        "Because they can fly",
+        "Because their strong sense of smell helps them trace criminals",
+        "Because they have the best eyesight of all animals",
+        "Because they sleep all day"
+       ],
+       "correct": 1,
+       "explanation": "Dogs have a very strong sense of smell, so sniffer dogs are used by the police for tracing criminals."
+      }
+     },
+     {
+      "id": "c_rats_snakes",
+      "concept_name": "Rats and Snakes",
+      "definition": "**Rats** have **poor eyesight**, but they have very **sharp senses of taste, smell and sound**. These sharp senses help them find food and stay safe even in the dark.\n\n**Snakes** have **weak eyesight and weak hearing**, but a **strong sense of smell and taste**. A snake often flicks its tongue to 'taste-smell' the air around it.",
+      "examples": [
+       "A rat finds food in a dark store-room using smell and sound, not sight.",
+       "A snake flicks its tongue in and out to sense a nearby animal."
+      ],
+      "check": {
+       "question": "Which senses are strong in a snake?",
+       "options": [
+        "Smell and taste",
+        "Eyesight and hearing",
+        "Only eyesight",
+        "Only hearing"
+       ],
+       "correct": 0,
+       "explanation": "Snakes have weak eyesight and hearing, but a strong sense of smell and taste."
+      }
+     },
+     {
+      "id": "c_scavengers",
+      "concept_name": "Scavengers",
+      "definition": "**Scavengers** are animals that feed on **dead animals**. Scavengers like **hawks, vultures, foxes and wolves** depend on their **sense of smell** to locate dead animals for food.\n\nBy clearing away dead bodies, scavengers also help keep nature clean.",
+      "examples": [
+       "A vulture circles high in the sky and smells its way to a dead animal below.",
+       "A fox uses its keen nose to find leftover food at night."
+      ],
+      "check": {
+       "question": "Which sense do scavengers like vultures and foxes mainly use to find dead animals for food?",
+       "options": [
+        "Hearing",
+        "Touch",
+        "Taste",
+        "Smell"
+       ],
+       "correct": 3,
+       "explanation": "Scavengers like hawks, vultures, foxes and wolves depend on their sense of smell to locate dead animals for food."
+      }
+     },
+     {
+      "id": "c_bats_cats",
+      "concept_name": "Bats and Cats",
+      "definition": "**Bats** are **blind**, but they manage to fly and hunt using their **sense of hearing**. Bats can even hear sounds of very **high frequency** — sounds so high that the human ear cannot hear them.\n\n**Cats** use their **whiskers** to detect things around them, and all cats have very strong **night vision**, which lets them see well in the dark.",
+      "examples": [
+       "A bat flies through a dark cave and catches insects using only sound.",
+       "A cat moves confidently around a dark room at night, feeling with its whiskers."
+      ],
+      "check": {
+       "question": "How do blind bats manage to fly and hunt?",
+       "options": [
+        "By using their strong eyesight",
+        "By using their sense of smell",
+        "By using their sense of hearing",
+        "By using their whiskers"
+       ],
+       "correct": 2,
+       "explanation": "Bats are blind but manage to fly and hunt using their sense of hearing, including sounds of very high frequency."
+      }
+     }
+    ]
+   },
+   {
+    "id": "b_birds_water",
+    "title": "Senses in Birds & Water Animals",
+    "icon": "🦉",
+    "type": "concept_teaching",
+    "marks": 4,
+    "concept_title": "How birds and water animals sense the world",
+    "intro": "Birds are champions of sight and hearing, while water animals have their own clever ways to sense their surroundings.",
+    "cards": [
+     {
+      "id": "c_bird_senses",
+      "concept_name": "Sight and Hearing in Birds",
+      "definition": "Birds like **eagles, owls and hawks** have very **sharp eyesight** and can spot their prey from very far away.\n\nBirds also have an **excellent sense of hearing**, even though they do **not have external (outside) ears**. An **owl's sense of hearing is ten times stronger** than a human being's! Birds use hearing to communicate with their young ones and flock members, and to locate their prey.",
+      "examples": [
+       "An eagle soaring high in the sky spots a small rabbit on the ground far below.",
+       "An owl hears a mouse moving in the grass in the dark and swoops down to catch it."
+      ],
+      "check": {
+       "question": "Which of these statements about birds is TRUE?",
+       "options": [
+        "An owl's hearing is ten times stronger than a human's",
+        "Birds have large outside ears like humans",
+        "Eagles have very weak eyesight",
+        "Birds cannot hear at all"
+       ],
+       "correct": 0,
+       "explanation": "An owl's sense of hearing is ten times stronger than a human being's, even though birds have no external ears."
+      }
+     },
+     {
+      "id": "c_migration",
+      "concept_name": "Migration",
+      "definition": "Some birds **cannot survive in extreme climates** (weather that is very hot or very cold). They travel long distances to find suitable weather and food, and return once the season changes again. This is called **migration**, and such birds are called **migratory birds**.\n\nFor example, in winter, when it becomes very cold in **Siberia** (a place in Russia), **Siberian cranes** fly to **India**, which is warmer at that time. They go back only in spring, once Siberia becomes warm again.",
+      "examples": [
+       "Siberian cranes fly from cold Siberia to warmer India every winter.",
+       "When spring comes and Siberia warms up, the cranes fly back home."
+      ],
+      "check": {
+       "question": "Why do Siberian cranes fly to India in winter?",
+       "options": [
+        "Because India is colder than Siberia",
+        "Because they get lost",
+        "Because Siberia becomes very cold and India is warmer with more food",
+        "Because they cannot fly long distances"
+       ],
+       "correct": 2,
+       "explanation": "In winter Siberia becomes very cold, so the cranes migrate to India, which is warmer at that time, and return in spring."
+      }
+     },
+     {
+      "id": "c_fish",
+      "concept_name": "Fish and Sharks",
+      "definition": "**Fish** have a strong **sense of sight** which helps them find food and avoid predators. They have **taste buds on their lip and skin**, and **internal ears** which can sense the vibrations made by sounds.\n\n**Sharks** use the **earth's magnetic field** to find their way around, and they also have a highly developed **sense of smell**.",
+      "examples": [
+       "A fish tastes its surroundings with taste buds on its skin, not just its mouth.",
+       "A shark senses the earth's magnetic field to navigate across the ocean."
+      ],
+      "check": {
+       "question": "Where do fish have taste buds?",
+       "options": [
+        "Only inside the mouth",
+        "On their lip and skin",
+        "On their fins only",
+        "They have no taste buds"
+       ],
+       "correct": 1,
+       "explanation": "Fish have taste buds on their lip and skin, and internal ears that can sense vibrations from sounds."
+      }
+     },
+     {
+      "id": "c_whales",
+      "concept_name": "Whales and Dolphins",
+      "definition": "Some **whales and dolphins** give out sounds of very **high frequency**. These sounds **echo back** after hitting objects, and the animal can **detect the echo**.\n\nUsing these echoes, whales and dolphins can find food and know what is around them, even in deep, dark water where it is hard to see.",
+      "examples": [
+       "A dolphin sends out clicks and listens for the echo to locate a fish.",
+       "A whale uses echoing sounds to sense objects far away in the deep sea."
+      ],
+      "check": {
+       "question": "How do whales and dolphins use high-frequency sounds?",
+       "options": [
+        "The sounds echo back and help them detect what is around them",
+        "The sounds make them sleep",
+        "The sounds help them fly",
+        "The sounds change their colour"
+       ],
+       "correct": 0,
+       "explanation": "Some whales and dolphins give out very high-frequency sounds that echo back and can be detected by them to sense their surroundings."
+      }
+     }
+    ]
+   },
+   {
+    "id": "b_communicate",
+    "title": "How Animals Communicate",
+    "icon": "💬",
+    "type": "concept_teaching",
+    "marks": 3,
+    "concept_title": "Sounds, movements and smells",
+    "intro": "Animals communicate through sounds, smells, movements and in some other ways too.",
+    "cards": [
+     {
+      "id": "c_sound_comm",
+      "concept_name": "Communicating with Sounds",
+      "definition": "Animals use **sounds** to share their feelings and warnings.\n\n**Dogs bark, cats purr, crickets chirp and frogs croak** to convey joy, danger, fear or anger. **Monkeys howl** to warn each other about **predators** (animals that kill and eat other animals). **Birds** use different calls and chirps, and **whales and dolphins** communicate using **clicks and whistles**.",
+      "examples": [
+       "A monkey howls to warn its troop that a leopard is near.",
+       "A frog croaks loudly near a pond to send its message."
+      ],
+      "check": {
+       "question": "Why do monkeys howl?",
+       "options": [
+        "To put their babies to sleep",
+        "To warn each other about predators",
+        "To call the rain",
+        "To mark their territory with smell"
+       ],
+       "correct": 1,
+       "explanation": "Monkeys howl to warn each other about predators — animals that hunt and eat them."
+      }
+     },
+     {
+      "id": "c_movement_comm",
+      "concept_name": "Communicating with Movements",
+      "definition": "Animals also send messages using **body movements**.\n\n**Chimpanzees** touch each other's hands to **greet**. **Bees dance** when they find nectar — this dance helps other bees find their way to the source of nectar. **Elephants entwine their trunks** to show affection. When a **dog wags its tail**, it usually means it is happy.",
+      "examples": [
+       "A honeybee dances in the hive to show the others where the nectar is.",
+       "Two elephants wrap their trunks together as a sign of affection."
+      ],
+      "check": {
+       "question": "What does a bee's dance tell other bees?",
+       "options": [
+        "That it is time to sleep",
+        "That a predator is coming",
+        "That the weather will change",
+        "The way to the source of nectar"
+       ],
+       "correct": 3,
+       "explanation": "Bees dance when they find nectar; the dance helps other bees find their way to the source of nectar."
+      }
+     },
+     {
+      "id": "c_chemical_comm",
+      "concept_name": "Communicating with Smells",
+      "definition": "Many animals communicate using **smells** — special chemicals.\n\nAnimals like **insects, wolves, deer and skunks** release chemicals called **pheromones** to communicate with each other. **Cats and hamsters** rub their **scent glands** against objects to **mark their territory**. Some fish, like **catfish and sharks**, can even sense the **electrical signals** of other animals and stay away from danger.",
+      "examples": [
+       "A cat rubs its face on furniture to mark it as its own territory.",
+       "A wolf leaves pheromones to send a message to other wolves in the pack."
+      ],
+      "check": {
+       "question": "The chemicals that animals like wolves, deer and skunks release to communicate are called —",
+       "options": [
+        "Pheromones",
+        "Vitamins",
+        "Minerals",
+        "Proteins"
+       ],
+       "correct": 0,
+       "explanation": "Many animals like insects, wolves, deer and skunks release chemicals called pheromones to communicate with each other."
+      }
+     }
+    ]
+   },
+   {
+    "id": "b_sleep",
+    "title": "Animals and Sleep",
+    "icon": "😴",
+    "type": "concept_teaching",
+    "marks": 3,
+    "concept_title": "Hibernation, aestivation and nocturnal animals",
+    "intro": "Just like us, animals need rest — but they sleep in many different ways.",
+    "cards": [
+     {
+      "id": "c_sleep_ways",
+      "concept_name": "Different Ways Animals Sleep",
+      "definition": "All animals need time to rest and sleep. While an adult human needs about **8 hours** of sleep, a **tiger needs about 16 hours**.\n\nAnimals sleep in different ways. **Horses sleep standing upright**, while **fish sleep with their eyes open**.",
+      "examples": [
+       "A horse can doze while still standing on its legs.",
+       "A fish rests with its eyes open because it has no eyelids to close."
+      ],
+      "check": {
+       "question": "About how many hours does a tiger sleep?",
+       "options": [
+        "8 hours",
+        "16 hours",
+        "2 hours",
+        "24 hours"
+       ],
+       "correct": 1,
+       "explanation": "While an adult human needs about 8 hours of sleep, a tiger needs about 16 hours."
+      }
+     },
+     {
+      "id": "c_hibernation",
+      "concept_name": "Hibernation and Aestivation",
+      "definition": "Some animals escape **severe cold** by sleeping for a long time. This sleep-like state can last an entire season. This **winter sleep** is called **hibernation**. Animals like **bears, bats, snakes, bees and skunks** hibernate.\n\nSome animals like **snails, earthworms, lizards and even crocodiles** sleep through the **hot summer** months to escape the heat. This **summer sleep** is called **aestivation**.",
+      "examples": [
+       "A bear hibernates through the freezing winter and wakes up in spring.",
+       "A snail aestivates to survive the extreme heat of summer."
+      ],
+      "check": {
+       "question": "The long winter sleep that helps animals escape severe cold is called —",
+       "options": [
+        "Aestivation",
+        "Migration",
+        "Hibernation",
+        "Nocturnal"
+       ],
+       "correct": 2,
+       "explanation": "The winter sleep that helps animals like bears and snakes escape severe cold is called hibernation. Summer sleep is aestivation."
+      }
+     },
+     {
+      "id": "c_nocturnal",
+      "concept_name": "Nocturnal Animals",
+      "definition": "Some animals like **owls, bats and rats** are **inactive during the day** but are **very active at night**.\n\nSuch animals are called **nocturnal** animals. They rest while the sun is up and come out to find food after dark.",
+      "examples": [
+       "An owl sleeps during the day and hunts mice at night.",
+       "Rats stay hidden by day and become active after dark."
+      ],
+      "check": {
+       "question": "Animals that rest during the day but are active at night are called —",
+       "options": [
+        "Migratory",
+        "Hibernating",
+        "Aquatic",
+        "Nocturnal"
+       ],
+       "correct": 3,
+       "explanation": "Animals like owls, bats and rats that are inactive during the day and active at night are called nocturnal animals."
+      }
+     }
+    ]
+   }
+  ]
+ },
+ "stage_2_practice": {
+  "title": "Practice",
+  "description": "Practice questions on the whole chapter. Tap '💡 Show hint' if you need a nudge!",
+  "sections": [
+   {
+    "id": "prac_senses",
+    "title": "Senses in Animals",
+    "marks": 6,
+    "questions": [
+     {
+      "id": "pq1",
+      "question": "Which of these is NOT an insect?",
+      "options": [
+       "Butterfly",
+       "Ant",
+       "Bee",
+       "Rat"
+      ],
+      "correct": 3,
+      "hint": "Insects are small animals with SIX legs. Count the legs!",
+      "explanation": "Butterflies, ants and bees are insects (six legs). A rat is a mammal, not an insect."
+     },
+     {
+      "id": "pq2",
+      "question": "Which animal uses whiskers to detect things around it?",
+      "options": [
+       "Cat",
+       "Whale",
+       "Bee",
+       "Shark"
+      ],
+      "correct": 0,
+      "hint": "Think of a pet that also has very strong night vision.",
+      "explanation": "Cats use their whiskers to detect things around them and have very strong night vision."
+     },
+     {
+      "id": "pq3",
+      "question": "Bats are blind, so they fly and hunt using their sense of —",
+      "options": [
+       "Smell",
+       "Sight",
+       "Hearing",
+       "Taste"
+      ],
+      "correct": 2,
+      "hint": "They can even hear sounds of very high frequency.",
+      "explanation": "Bats are blind but manage to fly and hunt using their sense of hearing."
+     },
+     {
+      "id": "pq4",
+      "question": "Which sense is strongest in a dog?",
+      "options": [
+       "Eyesight",
+       "Smell",
+       "Hearing",
+       "Taste"
+      ],
+      "correct": 1,
+      "hint": "It is the reason the police use sniffer dogs.",
+      "explanation": "Dogs have a very strong sense of smell, which is why sniffer dogs are used for tracing."
+     },
+     {
+      "id": "pq5",
+      "question": "The special eyes of insects, made of many tiny lenses, are called —",
+      "options": [
+       "Compound eyes",
+       "Simple eyes",
+       "Glass eyes",
+       "Night eyes"
+      ],
+      "correct": 0,
+      "hint": "'Compound' means 'made of many parts'.",
+      "explanation": "Insects have compound eyes, made up of many lenses, that help them see things better."
+     },
+     {
+      "id": "pq6",
+      "question": "Fish have taste buds on their —",
+      "options": [
+       "Fins and tail",
+       "Bones",
+       "Eyes",
+       "Lip and skin"
+      ],
+      "correct": 3,
+      "hint": "It is not just inside the mouth — it is on the outside of the body too.",
+      "explanation": "Fish have taste buds on their lip and skin, and internal ears to sense vibrations."
+     }
+    ]
+   },
+   {
+    "id": "prac_communicate",
+    "title": "How Animals Communicate",
+    "marks": 4,
+    "questions": [
+     {
+      "id": "pq7",
+      "question": "Which animals communicate using clicks and whistles?",
+      "options": [
+       "Cats and dogs",
+       "Whales and dolphins",
+       "Bees and ants",
+       "Eagles and owls"
+      ],
+      "correct": 1,
+      "hint": "These are water animals that live in the sea.",
+      "explanation": "Whales and dolphins communicate using clicks and whistles."
+     },
+     {
+      "id": "pq8",
+      "question": "Bees communicate the location of nectar by —",
+      "options": [
+       "Barking",
+       "Howling",
+       "Dancing",
+       "Purring"
+      ],
+      "correct": 2,
+      "hint": "It is a special movement, not a sound.",
+      "explanation": "Bees dance when they find nectar; the dance shows other bees the way to it."
+     },
+     {
+      "id": "pq9",
+      "question": "Cats and hamsters rub their scent glands against objects to —",
+      "options": [
+       "Clean the objects",
+       "Keep warm",
+       "Find food",
+       "Mark their territory"
+      ],
+      "correct": 3,
+      "hint": "It is a way of saying 'this place is mine'.",
+      "explanation": "Cats and hamsters rub scent glands against objects to mark their territory."
+     },
+     {
+      "id": "pq10",
+      "question": "Monkeys howl mainly to —",
+      "options": [
+       "Warn about predators",
+       "Greet visitors",
+       "Show they are hungry",
+       "Mark territory"
+      ],
+      "correct": 0,
+      "hint": "A predator is an animal that hunts and eats other animals.",
+      "explanation": "Monkeys howl to warn each other about predators."
+     }
+    ]
+   },
+   {
+    "id": "prac_sleep_migration",
+    "title": "Migration & Sleep",
+    "marks": 4,
+    "questions": [
+     {
+      "id": "pq11",
+      "question": "The travelling of birds to escape unfavourable weather is called —",
+      "options": [
+       "Hibernation",
+       "Migration",
+       "Aestivation",
+       "Communication"
+      ],
+      "correct": 1,
+      "hint": "Think of the Siberian crane flying to India in winter.",
+      "explanation": "Birds travelling long distances to escape unfavourable weather is called migration."
+     },
+     {
+      "id": "pq12",
+      "question": "The winter sleep of animals like bears and snakes is called —",
+      "options": [
+       "Aestivation",
+       "Migration",
+       "Hibernation",
+       "Nocturnal"
+      ],
+      "correct": 2,
+      "hint": "It happens in the cold season to escape severe cold.",
+      "explanation": "The long winter sleep to escape severe cold is called hibernation."
+     },
+     {
+      "id": "pq13",
+      "question": "Snails, lizards and crocodiles sleeping through the hot summer is called —",
+      "options": [
+       "Tracing",
+       "Hibernation",
+       "Migration",
+       "Aestivation"
+      ],
+      "correct": 3,
+      "hint": "It is the opposite season to hibernation.",
+      "explanation": "Sleeping through the hot summer months to escape the heat is called aestivation."
+     },
+     {
+      "id": "pq14",
+      "question": "Owls, bats and rats that are active at night are called —",
+      "options": [
+       "Nocturnal",
+       "Aquatic",
+       "Migratory",
+       "Hibernating"
+      ],
+      "correct": 0,
+      "hint": "'Noct' comes from a word meaning 'night'.",
+      "explanation": "Animals that rest by day and are active at night are called nocturnal animals."
+     }
+    ]
+   }
+  ]
+ },
+ "stage_3_think": {
+  "title": "Think Deeper",
+  "description": "Write your own answer, submit it, then compare with the model answer and tick what you got right.",
+  "problems": [
+   {
+    "id": "tp1",
+    "category": "senses",
+    "marks": 5,
+    "scenario": "Arjun watched a sniffer dog find a hidden bag at the railway station, and later saw an owl catch a mouse in the dark.",
+    "question": "Why do animals need sense organs? Explain with the help of these two examples.",
+    "model_answer": "Animals need sense organs to hear, smell, taste, see and feel the world around them. Sense organs help them find food, escape from predators and stay safe. The sniffer dog used its very strong sense of smell to trace the hidden bag, and the owl used its very sharp eyesight and excellent hearing to find and catch the mouse in the dark. Without their sense organs, neither animal could find what it needed to survive.",
+    "explanation": "Sense organs connect an animal to its surroundings, helping it find food and avoid danger.",
+    "self_check_criteria": [
+     "Did I say that sense organs help animals sense the world (hear, smell, taste, see, feel)?",
+     "Did I mention that senses help animals find food and stay safe from predators?",
+     "Did I use the dog's strong sense of smell as an example?",
+     "Did I use the owl's sharp eyesight or hearing as an example?"
+    ]
+   },
+   {
+    "id": "tp2",
+    "category": "insects",
+    "marks": 5,
+    "scenario": "Meera noticed an ant waving its feelers as it crawled along the kitchen shelf, and a butterfly resting on a flower.",
+    "question": "How are antennae useful to insects? Explain what antennae are and what they help insects to do.",
+    "model_answer": "Antennae are two long, thin, tube-like structures found on the heads of most insects. They are special sense organs. Antennae help insects to sense things around them and to find their way. That is why the ant was waving its antennae — it was sensing its surroundings and following its path. Antennae help insects like ants, bees and butterflies move about safely and find food.",
+    "explanation": "Antennae are the insect's main 'feelers' for sensing the world and navigating.",
+    "self_check_criteria": [
+     "Did I describe antennae as long, thin, tube-like structures on an insect's head?",
+     "Did I say antennae are sense organs?",
+     "Did I explain that they help insects sense things around them?",
+     "Did I explain that they help insects find their way?"
+    ]
+   },
+   {
+    "id": "tp3",
+    "category": "communication",
+    "marks": 5,
+    "scenario": "On a jungle safari, Anya saw a honeybee dancing, two elephants wrapping their trunks together, and a dog wagging its tail.",
+    "question": "With the help of examples, explain how animals use body movements to communicate.",
+    "model_answer": "Animals use body movements to send messages to each other. Bees dance when they find nectar, and this dance helps other bees find their way to the source of nectar. Elephants entwine their trunks to show affection. Chimpanzees touch each other's hands to greet. A dog wagging its tail usually means it is happy. So the dancing bee, the elephants' trunks and the wagging dog were all communicating using their bodies.",
+    "explanation": "Body movements like dancing, touching and wagging are a real animal language.",
+    "self_check_criteria": [
+     "Did I explain that animals use body movements to send messages?",
+     "Did I give the example of bees dancing to show the way to nectar?",
+     "Did I give the example of elephants entwining trunks to show affection?",
+     "Did I give another movement example (chimpanzees greeting or a dog wagging its tail)?"
+    ]
+   },
+   {
+    "id": "tp4",
+    "category": "migration",
+    "marks": 5,
+    "scenario": "Every winter, a flock of Siberian cranes arrives at a wetland in India, and every spring they disappear again.",
+    "question": "Why do birds migrate? How does migration help them survive?",
+    "model_answer": "Some birds cannot survive in extreme climates — weather that is very hot or very cold. So they travel long distances to find suitable weather and enough food; this is called migration. For example, in winter, Siberia becomes very cold and food becomes hard to find, so Siberian cranes fly to India, which is warmer at that time. They return in spring when Siberia becomes warm again. Migration helps birds survive by letting them always stay where the weather is suitable and food is available.",
+    "explanation": "Migration is a survival journey away from harsh weather toward food and warmth.",
+    "self_check_criteria": [
+     "Did I say that some birds cannot survive in extreme (very hot or very cold) climates?",
+     "Did I explain that they travel long distances to find suitable weather and food?",
+     "Did I use the Siberian crane flying from Siberia to India as an example?",
+     "Did I say that migration helps birds survive by keeping them where there is food and good weather?"
+    ]
+   },
+   {
+    "id": "tp5",
+    "category": "sleep",
+    "marks": 5,
+    "scenario": "In winter a bear disappears into its cave for months, while in the hot summer a snail seals itself up and sleeps.",
+    "question": "Differentiate between hibernation and aestivation. Give an example of each.",
+    "model_answer": "Hibernation is the long winter sleep that some animals take to escape severe cold; it can last an entire season. Animals like bears, bats, snakes, bees and skunks hibernate. Aestivation is the long summer sleep that some animals take to escape the extreme heat. Animals like snails, earthworms, lizards and crocodiles aestivate. So the main difference is the season: hibernation is in winter (to escape cold) and aestivation is in summer (to escape heat).",
+    "explanation": "Same idea (a long sleep to survive harsh weather) but opposite seasons.",
+    "self_check_criteria": [
+     "Did I say hibernation is a winter sleep to escape the severe cold?",
+     "Did I say aestivation is a summer sleep to escape the extreme heat?",
+     "Did I give a correct example of a hibernating animal (bear, bat, snake, bee or skunk)?",
+     "Did I give a correct example of an aestivating animal (snail, earthworm, lizard or crocodile)?"
+    ]
+   }
+  ]
+ },
+ "stage_4_test": {
+  "title": "Getting to Know Animals — Test",
+  "total_marks": 20,
+  "time_limit": 2400,
+  "instructions": "Section A has 8 multiple-choice questions (1 mark each). Section B has 5 short-answer questions (12 marks). Read each question carefully. You have 40 minutes.",
+  "sections": [
+   {
+    "id": "test_section_a",
+    "title": "Section A — Multiple Choice",
+    "marks": 8,
+    "questions": [
+     {
+      "id": "ta1",
+      "type": "mcq",
+      "question": "Which of these is NOT an insect?",
+      "options": [
+       "Bee",
+       "Butterfly",
+       "Rat",
+       "Ant"
+      ],
+      "correct_answer": "C",
+      "marks": 1
+     },
+     {
+      "id": "ta2",
+      "type": "mcq",
+      "question": "Which animal uses whiskers to detect things around it?",
+      "options": [
+       "Cat",
+       "Whale",
+       "Bee",
+       "Shark"
+      ],
+      "correct_answer": "A",
+      "marks": 1
+     },
+     {
+      "id": "ta3",
+      "type": "mcq",
+      "question": "Which of these animals use clicks and whistles to communicate?",
+      "options": [
+       "Cats",
+       "Insects",
+       "Eagles",
+       "Whales and dolphins"
+      ],
+      "correct_answer": "D",
+      "marks": 1
+     },
+     {
+      "id": "ta4",
+      "type": "mcq",
+      "question": "The straw-like mouth part a butterfly uses to suck nectar is called the —",
+      "options": [
+       "Antenna",
+       "Proboscis",
+       "Beak",
+       "Whisker"
+      ],
+      "correct_answer": "B",
+      "marks": 1
+     },
+     {
+      "id": "ta5",
+      "type": "mcq",
+      "question": "Sniffer dogs are used by the police because dogs have a very strong sense of —",
+      "options": [
+       "Smell",
+       "Sight",
+       "Hearing",
+       "Taste"
+      ],
+      "correct_answer": "A",
+      "marks": 1
+     },
+     {
+      "id": "ta6",
+      "type": "mcq",
+      "question": "The long winter sleep that helps animals escape severe cold is called —",
+      "options": [
+       "Aestivation",
+       "Migration",
+       "Hibernation",
+       "Communication"
+      ],
+      "correct_answer": "C",
+      "marks": 1
+     },
+     {
+      "id": "ta7",
+      "type": "mcq",
+      "question": "Owls, bats and rats that are active at night are called —",
+      "options": [
+       "Migratory animals",
+       "Nocturnal animals",
+       "Aquatic animals",
+       "Insects"
+      ],
+      "correct_answer": "B",
+      "marks": 1
+     },
+     {
+      "id": "ta8",
+      "type": "mcq",
+      "question": "Chemicals released by animals like wolves, deer and skunks to communicate are called —",
+      "options": [
+       "Vitamins",
+       "Minerals",
+       "Proteins",
+       "Pheromones"
+      ],
+      "correct_answer": "D",
+      "marks": 1
+     }
+    ]
+   },
+   {
+    "id": "test_section_b",
+    "title": "Section B — Short Answers",
+    "marks": 12,
+    "questions": [
+     {
+      "id": "tb1",
+      "type": "short_answer",
+      "marks": 2,
+      "question": "How are antennae useful to insects?",
+      "model_answer": "Antennae are two long, thin, tube-like sense organs on the heads of most insects. They help insects to sense things around them and to find their way.",
+      "marking_guide": "1 mark for saying antennae are sense organs on the insect's head. 1 mark for saying they help the insect sense its surroundings / find its way."
+     },
+     {
+      "id": "tb2",
+      "type": "short_answer",
+      "marks": 2,
+      "question": "Why do scavengers like vultures and foxes depend on their sense of smell?",
+      "model_answer": "Scavengers feed on dead animals. They depend on their sense of smell to locate dead animals so that they can find food.",
+      "marking_guide": "1 mark for scavengers feeding on dead animals. 1 mark for using sense of smell to locate dead animals for food."
+     },
+     {
+      "id": "tb3",
+      "type": "short_answer",
+      "marks": 2,
+      "question": "Give any two ways in which animals communicate, with one example each.",
+      "model_answer": "Animals communicate through sounds — for example, monkeys howl to warn about predators. They also communicate through movements — for example, bees dance to show other bees the way to nectar. (Other correct answers: smells/pheromones; clicks and whistles by whales and dolphins.)",
+      "marking_guide": "1 mark for each correct way of communicating with a matching example (any two of: sounds, movements, smells/pheromones, clicks and whistles)."
+     },
+     {
+      "id": "tb4",
+      "type": "short_answer",
+      "marks": 3,
+      "question": "Why do birds like the Siberian crane migrate? How does migration help them survive?",
+      "model_answer": "Some birds cannot survive in extreme climates. In winter, Siberia becomes very cold and food becomes hard to find, so the Siberian cranes fly to India, which is warmer at that time. They return in spring when Siberia becomes warm again. Migration helps birds survive by letting them stay where the weather is suitable and there is enough food.",
+      "marking_guide": "1 mark for birds not surviving extreme/very cold climate. 1 mark for flying to a warmer place (Siberia to India) and returning in spring. 1 mark for migration helping survival by giving suitable weather and food."
+     },
+     {
+      "id": "tb5",
+      "type": "short_answer",
+      "marks": 3,
+      "question": "Differentiate between hibernation and aestivation. Give one example of an animal for each.",
+      "model_answer": "Hibernation is the long winter sleep animals take to escape severe cold; for example, a bear (also bats, snakes, bees, skunks). Aestivation is the long summer sleep animals take to escape extreme heat; for example, a snail (also earthworms, lizards, crocodiles). The difference is the season: hibernation is in winter and aestivation is in summer.",
+      "marking_guide": "1 mark for hibernation = winter sleep to escape cold. 1 mark for aestivation = summer sleep to escape heat. 1 mark for one correct example of each."
+     }
+    ]
+   }
+  ],
+  "score_tiers": [
+   {
+    "min": 19,
+    "max": 20,
+    "message": "You are an Animal Expert! 🏆"
+   },
+   {
+    "min": 16,
+    "max": 18,
+    "message": "Good job! Keep it up! ⭐"
+   },
+   {
+    "min": 12,
+    "max": 15,
+    "message": "Nice effort, aim higher! ✨"
+   },
+   {
+    "min": 8,
+    "max": 11,
+    "message": "Room for improvement, try again! 💪"
+   },
+   {
+    "min": 0,
+    "max": 7,
+    "message": "You can do better, try again! 📚"
+   }
+  ]
+ }
+}
+</script>
+
+<div class="container" id="app">
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <p style="color: var(--ink-soft); font-weight: 600;">Loading your chapter...</p>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const App = {
+  data: null,
+  currentStage: 1,
+  currentBranch: null,
+  currentSection: null,
+  currentPanelIdx: 0,
+  currentVocabGroup: null,
+  state: {
+    panelChecks: {}, cardFlips: {}, spotItAnswers: {}, practiceAnswers: {},
+    thinkSubmissions: {},      // p_id: { value, submitted }
+    testAnswers: {},           // q_id: { value }
+    testStartTime: null,       // null if not started
+    testTimeUp: false,
+    testSubmitted: false,
+    spotItModal: null,
+  },
+
+  async init() {
+    try {
+      // Bind events ONCE at startup, before any rendering
+      this.bindEvents();
+
+      const embedded = document.getElementById('embedded-chapter');
+      if (embedded && embedded.textContent.trim()) {
+        try {
+          this.data = JSON.parse(embedded.textContent.trim());
+          this.loadProgress();
+          this.render();
+          return;
+        } catch (e) { console.warn('Embedded JSON parse failed:', e.message); }
+      }
+      const params = new URLSearchParams(window.location.search);
+      const chapter = params.get('chapter');
+      const url = chapter ? `${chapter}.json` : 'content/class5/english/ch1-that-boy-next-door.json';
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Could not load: ${url} (status ${response.status})`);
+      this.data = await response.json();
+      this.validateSchema();
+      this.loadProgress();
+      this.render();
+    } catch (err) { this.renderError(err.message); }
+  },
+
+  validateSchema() {
+    const required = ['chapter_id', 'chapter_title', 'subject', 'stage_1_learn', 'stage_2_practice'];
+    const missing = required.filter(f => !this.data[f]);
+    if (missing.length > 0) throw new Error(`JSON missing fields: ${missing.join(', ')}`);
+  },
+
+  storageKey() { return `egurukul_${this.data.chapter_id}`; },
+
+  // Bump this when schema or state shape changes — old state will be discarded
+  STATE_VERSION: 6,
+
+  loadProgress() {
+    try {
+      const saved = localStorage.getItem(this.storageKey());
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (p.stateVersion !== this.STATE_VERSION) {
+          console.log('Old state version detected, starting fresh');
+          localStorage.removeItem(this.storageKey());
+          return;
+        }
+        this.state.panelChecks = p.panelChecks || {};
+        this.state.cardFlips = p.cardFlips || {};
+        this.state.spotItAnswers = p.spotItAnswers || {};
+        this.state.practiceAnswers = p.practiceAnswers || {};
+        this.state.thinkSubmissions = p.thinkSubmissions || {};
+        this.state.testAnswers = p.testSubmitted ? (p.testAnswers || {}) : {};
+        this.state.testSubmitted = p.testSubmitted || false;
+        this.state.manualMarksAwarded = p.manualMarksAwarded || {};
+        this.currentStage = p.currentStage || 1;
+        if (this.currentStage < 1) this.currentStage = 1; // Never restore to Stage 0 (Deep Dive)
+      }
+    } catch (e) { console.warn(e); }
+  },
+
+  saveProgress() {
+    try {
+      localStorage.setItem(this.storageKey(), JSON.stringify({
+        stateVersion: this.STATE_VERSION,
+        panelChecks: this.state.panelChecks,
+        cardFlips: this.state.cardFlips,
+        spotItAnswers: this.state.spotItAnswers,
+        practiceAnswers: this.state.practiceAnswers,
+        thinkSubmissions: this.state.thinkSubmissions,
+        testAnswers: this.state.testSubmitted ? this.state.testAnswers : {},
+        testSubmitted: this.state.testSubmitted,
+        manualMarksAwarded: this.state.manualMarksAwarded || {},
+        currentStage: this.currentStage,
+      }));
+    } catch (e) { console.warn(e); }
+  },
+
+  resetProgress() {
+    if (confirm('Reset all your progress in this chapter? You will start fresh from Stage 1.')) {
+      localStorage.removeItem(this.storageKey());
+      this.state.panelChecks = {};
+      this.state.cardFlips = {};
+      this.state.spotItAnswers = {};
+      this.state.practiceAnswers = {};
+      this.state.thinkSubmissions = {};
+      this.state.testAnswers = {};
+      this.state.testStartTime = null;
+      this.state.testTimeUp = false;
+      this.state.testSubmitted = false;
+      this.state.manualMarksAwarded = {};
+      this.currentStage = 1;
+      this.currentBranch = null;
+      this.currentSection = null;
+      this.currentPanelIdx = 0;
+      this.currentVocabGroup = null;
+      this.deepDiveTopicIdx = 0;
+      this.previousStage = 1;
+      this.stopTimer();
+      this.render();
+      window.scrollTo(0, 0);
+    }
+  },
+
+  isBranchComplete(branch) {
+    if (branch.type === 'story_panels') {
+      return branch.panels.every(p => !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined));
+    }
+    if (branch.type === 'vocabulary_cards') {
+      return branch.cards.every(c => this.state.spotItAnswers[c.id] !== undefined);
+    }
+    if (branch.type === 'concept_teaching') {
+      return branch.cards.every(c => !c.check || (this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined));
+    }
+    return false;
+  },
+
+  countAnsweredPanels(branch) {
+    if (!branch.panels) return 0;
+    return branch.panels.filter(p =>
+      !p.comprehension_check ||
+      (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined)
+    ).length;
+  },
+
+  isStage1Complete() { return this.data.stage_1_learn.branches.every(b => this.isBranchComplete(b)); },
+
+  isPracticeSectionComplete(section) {
+    return section.questions.every(q => this.state.practiceAnswers[q.id] && this.state.practiceAnswers[q.id].selected !== undefined);
+  },
+
+  isStage2Complete() { return this.data.stage_2_practice.sections.every(s => this.isPracticeSectionComplete(s)); },
+
+  isStage3Complete() {
+    const problems = this.data.stage_3_think.problems;
+    return problems.every(p => this.state.thinkSubmissions[p.id] && this.state.thinkSubmissions[p.id].submitted);
+  },
+
+  isStage4Complete() { return this.state.testSubmitted; },
+
+  isStageComplete(n) {
+    if (n === 1) return this.isStage1Complete();
+    if (n === 2) return this.isStage2Complete();
+    if (n === 3) return this.isStage3Complete();
+    if (n === 4) return this.isStage4Complete();
+    return false;
+  },
+
+  isStageUnlocked(n) {
+    if (n === 1) return true;
+    return this.isStageComplete(n - 1);
+  },
+
+  render() {
+    const app = document.getElementById('app');
+    const hasDeepDive = this.data.stage_0_deep_dive && this.data.stage_0_deep_dive.topics && this.data.stage_0_deep_dive.topics.length > 0;
+    app.innerHTML = `
+      ${this.renderHeader()}
+      ${this.currentStage === 0 ? '' : (hasDeepDive ? this.renderDeepDiveTrigger() : '')}
+      ${this.currentStage === 0 ? '' : this.renderProgressBar()}
+      <div>
+        ${this.currentStage === 0 ? this.renderStage0() : ''}
+        ${this.currentStage === 1 ? this.renderStage1() : ''}
+        ${this.currentStage === 2 ? this.renderStage2() : ''}
+        ${this.currentStage === 3 ? this.renderStage3() : ''}
+        ${this.currentStage === 4 ? this.renderStage4() : ''}
+      </div>
+      ${this.state.spotItModal ? this.renderSpotItModal() : ''}
+    `;
+    // Execute deferred JS for interactive Deep Dive sections (global scope so inline onclick works)
+    app.querySelectorAll('.dd-deferred-js').forEach(el => {
+      try {
+        const js = el.textContent;
+        if (js && js.trim()) {
+          const s = document.createElement('script');
+          s.textContent = js;
+          document.body.appendChild(s);
+          s.remove();
+        }
+      } catch(e) { console.warn('Interactive JS error:', e); }
+      el.remove();
+    });
+    // bindEvents is now called ONCE in init(), not here
+  },
+
+  renderError(msg) {
+    document.getElementById('app').innerHTML = `
+      <div class="error-screen">
+        <h2 style="font-family: 'Fraunces', serif; margin-bottom: 12px;">Couldn't load the chapter</h2>
+        <p>${this.escapeHtml(msg)}</p>
+        <p style="font-size: 13px; margin-top: 12px;">Make sure the JSON file is in the same folder, or paste it inside the embedded-chapter script tag.</p>
+      </div>
+    `;
+  },
+
+  renderHeader() {
+    const d = this.data;
+    let title = d.chapter_title;
+    if (d.chapter_number) title = `Chapter ${d.chapter_number} — ${title}`;
+    return `
+      <header class="app-header">
+        <div class="header-eyebrow">${this.escapeHtml(d.subject || '')} · Class 5</div>
+        <h1 class="header-title">${this.escapeHtml(title)}</h1>
+        ${d.chapter_author ? `<div class="header-author">by ${this.escapeHtml(d.chapter_author)}</div>` : ''}
+        <button class="reset-btn" data-reset-progress="1" title="Clear all progress and start fresh">↻ Reset</button>
+      </header>
+    `;
+  },
+
+  renderProgressBar() {
+    const stages = [{num:1,label:'Learn'},{num:2,label:'Practice'},{num:3,label:'Think'},{num:4,label:'Test'}];
+    return `<div class="progress-bar">${stages.map(s => {
+      const isActive = this.currentStage === s.num;
+      const isComplete = this.isStageComplete(s.num);
+      const isLocked = !this.isStageUnlocked(s.num) && !isActive;
+      let cls = '';
+      if (isActive) cls = 'active';
+      else if (isComplete) cls = 'complete';
+      else if (isLocked) cls = 'locked';
+      return `<div class="progress-step ${cls}" data-stage="${s.num}"><span class="step-num">${s.num}</span><span>${s.label}</span></div>`;
+    }).join('')}</div>`;
+  },
+
+  renderDeepDiveTrigger() {
+    const dd = this.data.stage_0_deep_dive;
+    return `
+      <button class="deep-dive-trigger" data-open-deep-dive="1">
+        <span class="dd-icon">📚</span>
+        <span class="dd-text">
+          <span class="dd-title">${this.escapeHtml(dd.title || 'Deep Dive — Concept Reference')}</span>
+          <span class="dd-sub">${this.escapeHtml(dd.description || 'Detailed explanations, stories & visuals — always available for reference')}</span>
+        </span>
+      </button>
+    `;
+  },
+
+  renderStage0() {
+    const dd = this.data.stage_0_deep_dive;
+    if (!dd || !dd.topics || dd.topics.length === 0) return '';
+    const currentIdx = this.deepDiveTopicIdx || 0;
+    const topic = dd.topics[currentIdx];
+
+    return `
+      <div class="dd-screen">
+        <div class="dd-header">
+          <button class="btn btn-secondary" data-close-deep-dive="1">← Back to Dashboard</button>
+          <div>
+            <h2 class="stage-title" style="font-size:22px;margin:0;">📚 ${this.escapeHtml(dd.title || 'Deep Dive')}</h2>
+            <p class="stage-description" style="font-size:13px;">${this.escapeHtml(dd.description || '')}</p>
+          </div>
+        </div>
+        <div class="dd-nav">
+          ${dd.topics.map((t, i) => `
+            <button class="dd-nav-btn ${i === currentIdx ? 'active' : ''}" data-dd-topic="${i}">
+              ${t.icon || '📖'} ${this.escapeHtml(t.title)}
+            </button>
+          `).join('')}
+        </div>
+        <div class="dd-topic">
+          <div class="dd-topic-title">${topic.icon || ''} ${this.escapeHtml(topic.title)}</div>
+          ${topic.subtitle ? `<div class="dd-topic-subtitle">${this.escapeHtml(topic.subtitle)}</div>` : ''}
+          ${(topic.sections || []).map(sec => this.renderDeepDiveSection(sec)).join('')}
+        </div>
+        <div class="panel-nav">
+          <button class="btn btn-secondary" data-dd-topic="${currentIdx - 1}" ${currentIdx === 0 ? 'disabled' : ''}>← Previous Topic</button>
+          ${currentIdx < dd.topics.length - 1
+            ? `<button class="btn btn-primary" data-dd-topic="${currentIdx + 1}">Next Topic →</button>`
+            : `<button class="btn btn-success" data-close-deep-dive="1">✓ Back to Dashboard</button>`
+          }
+        </div>
+      </div>
+    `;
+  },
+
+  renderDeepDiveSection(sec) {
+    if (sec.type === 'story') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label story">📖 Story</span>
+          <div class="dd-story">
+            ${sec.title ? `<div class="dd-story-title">${this.escapeHtml(sec.title)}</div>` : ''}
+            <div class="dd-story-text">${this.renderDDText(sec.content)}</div>
+          </div>
+          ${sec.image_svg ? `<div class="dd-visual">${sec.image_svg}${sec.image_caption ? `<div class="dd-visual-caption">${this.escapeHtml(sec.image_caption)}</div>` : ''}</div>` : ''}
+        </div>
+      `;
+    }
+    if (sec.type === 'steps') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label steps">🪜 Step by Step</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-steps">
+            ${(sec.steps || []).map((step, i) => `
+              <div class="dd-step">
+                <div class="dd-step-num">${i + 1}</div>
+                <div class="dd-step-content">
+                  <div class="dd-step-title">${this.escapeHtml(step.title)}</div>
+                  <div class="dd-step-text">${this.renderDDText(step.text)}</div>
+                  ${step.example ? `<div class="dd-step-example">💡 ${this.renderDDText(step.example)}</div>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'visual') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label visual">🎨 Visual</span>
+          <div class="dd-visual">
+            ${sec.svg || ''}
+            ${sec.caption ? `<div class="dd-visual-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'video') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label video">🎬 Video</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-video">
+            <iframe src="${this.escapeAttr(sec.url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            ${sec.caption ? `<div class="dd-video-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'video_embedded') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label video">🎬 Video</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-video">
+            <video controls playsinline preload="metadata" style="width:100%;border-radius:12px;">
+              <source src="${sec.data_url || ''}" type="video/webm">
+              <source src="${sec.data_url || ''}" type="video/mp4">
+              Your browser does not support embedded video.
+            </video>
+            ${sec.caption ? `<div class="dd-video-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'tip') {
+      return `
+        <div class="dd-section">
+          <div class="dd-tip">
+            <div class="dd-tip-title">💡 ${this.escapeHtml(sec.title || 'Remember')}</div>
+            <div class="dd-tip-text">${this.renderDDText(sec.content)}</div>
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'text') {
+      return `
+        <div class="dd-section">
+          ${sec.label ? `<span class="dd-section-label tip">${this.escapeHtml(sec.label)}</span>` : ''}
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:10px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-rich-text">${this.renderDDText(sec.content)}</div>
+        </div>
+      `;
+    }
+    if (sec.type === 'funfact') {
+      return `
+        <div class="dd-section">
+          <div class="dd-funfact">
+            <span class="dd-funfact-icon">${sec.icon || '🤯'}</span>
+            <div class="dd-funfact-content">
+              <div class="dd-funfact-label">Did You Know?</div>
+              <div class="dd-funfact-text">${this.renderDDText(sec.content)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'interactive') {
+      const safeId = 'dd-int-' + Math.random().toString(36).substr(2, 8);
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label visual">🎮 Interactive</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-interactive" id="${safeId}">${sec.html || ''}</div>
+          ${sec.js ? `<div class="dd-deferred-js" style="display:none;" data-target="${safeId}">${this.escapeHtml(sec.js)}</div>` : ''}
+        </div>
+      `;
+    }
+    return '';
+  },
+
+  renderDDText(text) {
+    if (!text) return '';
+    // Simple markdown-like rendering: **bold**, *italic*, `code`, \n for line breaks
+    let html = this.escapeHtml(text);
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    html = html.replace(/`(.+?)`/g, '<code style="background:var(--paper-dark);padding:2px 6px;border-radius:4px;font-size:0.9em;">$1</code>');
+    return html;
+  },
+
+  renderStage1() {
+    const s = this.data.stage_1_learn;
+    if (this.currentBranch) {
+      const branch = s.branches.find(b => b.id === this.currentBranch);
+      if (branch) {
+        if (branch.type === 'story_panels') return this.renderStoryPanelView(branch);
+        if (branch.type === 'vocabulary_cards') return this.renderVocabCardsView(branch);
+        if (branch.type === 'concept_teaching') return this.renderConceptTeachingView(branch);
+      }
+    }
+    const s1Stars = this.computeStage1Stars();
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s1Stars.earned} / ${s1Stars.total}</strong></p>
+      </div>
+      <div class="branches-grid">${s.branches.map(b => {
+        const complete = this.isBranchComplete(b);
+        let progress = '';
+        if (b.type === 'story_panels') {
+          const total = b.panels.length;
+          const done = b.panels.filter(p => !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined)).length;
+          progress = `${done} / ${total} panels`;
+        } else if (b.type === 'vocabulary_cards') {
+          const total = b.cards.length;
+          const done = b.cards.filter(c => this.state.spotItAnswers[c.id] !== undefined).length;
+          progress = `${done} / ${total} words`;
+        } else if (b.type === 'concept_teaching') {
+          const total = b.cards.length;
+          const done = b.cards.filter(c => !c.check || (this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined)).length;
+          progress = `${done} / ${total} concepts`;
+        }
+        let starDisplay = '';
+        if (b.type === 'concept_teaching' && b.cards) {
+          const totalStars = b.cards.filter(c => c.check).length;
+          const earnedStars = b.cards.filter(c => {
+            if (!c.check) return false;
+            const a = this.state.panelChecks[c.id];
+            return a && a.selected === c.check.correct;
+          }).length;
+          starDisplay = `${earnedStars} / ${totalStars} ⭐`;
+        } else {
+          starDisplay = `${b.marks} marks`;
+        }
+        return `<div class="branch-card ${complete ? 'complete' : ''}" data-enter-branch="${this.escapeAttr(b.id)}">
+          <div class="branch-icon">${b.icon || '📖'}</div>
+          <div class="branch-title">${this.escapeHtml(b.title)}</div>
+          <div class="branch-meta">${starDisplay}</div>
+          <div class="branch-progress">${progress}</div>
+        </div>`;
+      }).join('')}</div>
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderStoryPanelView(branch) {
+    const idx = this.currentPanelIdx;
+    const panel = branch.panels[idx];
+    const total = branch.panels.length;
+    const check = this.state.panelChecks[panel.id] || {};
+    const isAnswered = check.selected !== undefined;
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">${this.escapeHtml(branch.story_title || '')}${branch.story_author ? ' · by ' + this.escapeHtml(branch.story_author) : ''}</p>
+        </div>
+      </div>
+      <div class="panel-dots">
+        ${branch.panels.map((p, i) => {
+          const answered = !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined);
+          const isCurrent = i === idx;
+          let cls = 'panel-dot';
+          if (isCurrent) cls += ' current';
+          if (answered) cls += ' answered';
+          return `<button class="${cls}" data-jump-to-panel="${i}" title="Panel ${i+1}: ${this.escapeAttr(p.panel_title)}">${i+1}${answered ? ' ✓' : ''}</button>`;
+        }).join('')}
+      </div>
+      <div class="panel-container">
+        <div class="panel-meta">
+          <span class="panel-counter">Panel ${idx + 1} of ${total}</span>
+          <span style="font-size:11px;color:var(--ink-soft);font-weight:700;">${this.countAnsweredPanels(branch)} of ${total} checks answered</span>
+        </div>
+        <h3 class="panel-title">${this.escapeHtml(panel.panel_title)}</h3>
+        <div class="narration-text">${this.renderNarrationWithHighlights(panel)}</div>
+        ${panel.comprehension_check ? this.renderComprehensionCheck(panel) : ''}
+      </div>
+      <div class="panel-nav">
+        ${idx > 0 ? `<button class="btn btn-secondary" data-panel-nav="prev">← Previous Panel</button>` : `<button class="btn btn-secondary" disabled>← Previous Panel</button>`}
+        ${idx < total - 1
+          ? `<button class="btn btn-primary" data-panel-nav="next" ${panel.comprehension_check && !isAnswered ? 'disabled' : ''}>Next Panel →</button>`
+          : `<button class="btn btn-success" data-panel-nav="finish-branch" ${!this.isBranchComplete(branch) ? 'disabled' : ''}>${this.isBranchComplete(branch) ? '✓ Finish ' + this.escapeHtml(branch.title) : 'Answer all panels to finish'}</button>`}
+      </div>
+    `;
+  },
+
+  renderNarrationWithHighlights(panel) {
+    let text = panel.narration_text;
+    if (panel.highlighted_words && panel.highlighted_words.length > 0) {
+      const sorted = [...panel.highlighted_words].sort((a, b) => b.word.length - a.word.length);
+      sorted.forEach((hw) => {
+        const escaped = hw.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b(${escaped})\\b`, 'gi');
+        const dataIdx = panel.highlighted_words.indexOf(hw);
+        text = text.replace(regex, (match) => `<span class="highlight-word" data-word-idx="${dataIdx}" data-panel-id="${this.escapeAttr(panel.id)}">${match}</span>`);
+      });
+    }
+    return text;
+  },
+
+  renderComprehensionCheck(panel) {
+    const check = panel.comprehension_check;
+    const ans = this.state.panelChecks[panel.id] || {};
+    const isAnswered = ans.selected !== undefined;
+    return `
+      <div class="comprehension-check">
+        <span class="check-label">Quick Check${check.marks ? ' · ' + check.marks + ' marks' : ''}</span>
+        <p class="check-question">${this.escapeHtml(check.question)}</p>
+        <ul class="options-list">${check.options.map((opt, i) => {
+          let cls = 'option-btn';
+          if (isAnswered) {
+            if (i === check.correct) cls += ' correct';
+            else if (i === ans.selected) cls += ' incorrect';
+          }
+          return `<li><button class="${cls}" data-panel-check="${this.escapeAttr(panel.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+          </button></li>`;
+        }).join('')}</ul>
+        ${isAnswered && check.explanation ? `
+          <div class="feedback-box explanation">
+            <span class="feedback-label">${ans.selected === check.correct ? '✓ Correct!' : "Let's understand"}</span>
+            ${this.escapeHtml(check.explanation)}
+          </div>` : ''}
+      </div>
+    `;
+  },
+
+  renderVocabCardsView(branch) {
+    // Group cards by source for cleaner browsing
+    const groups = {};
+    branch.cards.forEach(c => {
+      const src = c.source || 'Words';
+      if (!groups[src]) groups[src] = [];
+      groups[src].push(c);
+    });
+
+    // If we don't have a sub-view selected, default to first group
+    const sources = Object.keys(groups);
+    if (!this.currentVocabGroup || !groups[this.currentVocabGroup]) {
+      this.currentVocabGroup = sources[0];
+    }
+    const activeCards = groups[this.currentVocabGroup] || [];
+
+    // Group completion stats
+    const groupTabs = sources.map(src => {
+      const cards = groups[src];
+      const done = cards.filter(c => this.state.spotItAnswers[c.id] !== undefined).length;
+      const isActive = src === this.currentVocabGroup;
+      return `<button class="vocab-group-tab ${isActive ? 'active' : ''}" data-vocab-group="${this.escapeAttr(src)}">
+        ${this.escapeHtml(src)} <span style="opacity:0.7;font-size:11px;">(${done}/${cards.length})</span>
+      </button>`;
+    }).join('');
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">Tap each card to see meaning, then test yourself with "Spot it!"</p>
+        </div>
+      </div>
+      <div class="vocab-group-tabs">${groupTabs}</div>
+      <div class="cards-grid">${activeCards.map(c => this.renderVocabCard(c)).join('')}</div>
+      <div class="stage-nav">
+        <div></div>
+        <button class="btn ${this.isBranchComplete(branch) ? 'btn-success' : 'btn-secondary'}" data-back-to-branches="1">${this.isBranchComplete(branch) ? '✓ Branch Complete · Back' : 'Save & Back'}</button>
+      </div>
+    `;
+  },
+
+  renderVocabCard(card) {
+    const flipped = this.state.cardFlips[card.id];
+    const spotAnswered = this.state.spotItAnswers[card.id] !== undefined;
+    return `
+      <div class="vocab-card ${flipped ? 'flipped' : ''} ${spotAnswered ? 'complete' : ''}" data-flip-card="${this.escapeAttr(card.id)}">
+        <div class="vocab-card-inner">
+          <div class="vocab-face front">
+            <div class="vocab-source-tag">${this.escapeHtml(card.source || 'Word')}</div>
+            <div class="vocab-word">${this.escapeHtml(card.word)}</div>
+            <div class="vocab-flip-hint">Tap to reveal</div>
+          </div>
+          <div class="vocab-face back">
+            <div class="vocab-meaning">${this.escapeHtml(card.meaning)}</div>
+            ${card.example_from_story ? `<div><span class="vocab-example-label">From the story</span><p class="vocab-example">${this.escapeHtml(card.example_from_story)}</p></div>` : ''}
+            ${card.indian_context_example ? `<div style="margin-top:6px;"><span class="vocab-example-label">Example</span><p class="vocab-example">${this.escapeHtml(card.indian_context_example)}</p></div>` : ''}
+            ${card.spot_it ? `<div class="spot-it-cta" data-open-spot-it="${this.escapeAttr(card.id)}">${spotAnswered ? '✓ Spot it answered' : '🎯 Spot it! Tap to test yourself'}</div>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  renderSpotItModal() {
+    const cardId = this.state.spotItModal;
+    let card = null;
+    for (const branch of this.data.stage_1_learn.branches) {
+      if (branch.cards) { card = branch.cards.find(c => c.id === cardId); if (card) break; }
+    }
+    if (!card || !card.spot_it) return '';
+    const ans = this.state.spotItAnswers[card.id];
+    const spot = card.spot_it;
+    const isAnswered = ans !== undefined;
+    return `
+      <div class="modal-overlay" data-close-modal="1">
+        <div class="modal-content" data-stop-propagation="1">
+          <div class="modal-title">Spot it: <span class="modal-word">${this.escapeHtml(card.word)}</span></div>
+          <p style="margin:12px 0 16px 0;color:var(--ink-soft);font-size:14px;">${this.escapeHtml(spot.question)}</p>
+          <ul class="options-list">${spot.options.map((opt, i) => {
+            let cls = 'option-btn';
+            if (isAnswered) {
+              if (i === spot.correct) cls += ' correct';
+              else if (i === ans.selected) cls += ' incorrect';
+            }
+            return `<li><button class="${cls}" data-spot-answer="${this.escapeAttr(card.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+              <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+            </button></li>`;
+          }).join('')}</ul>
+          ${isAnswered ? `
+            <div class="feedback-box explanation" style="margin-bottom:12px;">
+              <span class="feedback-label">${ans.selected === spot.correct ? '✓ Correct!' : 'Not quite — see the right answer above'}</span>
+            </div>
+            <button class="btn btn-primary" data-close-modal="1" style="width:100%;">Continue</button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  },
+
+  renderConceptTeachingView(branch) {
+    const cards = branch.cards || [];
+    const currentCard = cards[this.currentPanelIdx] || cards[0];
+    if (!currentCard) return '';
+    const idx = this.currentPanelIdx;
+    const total = cards.length;
+    const isAnswered = currentCard.check && this.state.panelChecks[currentCard.id] && this.state.panelChecks[currentCard.id].selected !== undefined;
+    const ans = this.state.panelChecks[currentCard.id] || {};
+    const isCorrect = isAnswered && ans.selected === currentCard.check.correct;
+    const isLast = idx === total - 1;
+    const allDone = this.isBranchComplete(branch);
+    // Count stars earned (1 per correct quick check)
+    const starsEarned = cards.filter(c => {
+      if (!c.check) return false;
+      const a = this.state.panelChecks[c.id];
+      return a && a.selected === c.check.correct;
+    }).length;
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          ${branch.concept_title ? `<p class="stage-description" style="font-size:13px;">${this.escapeHtml(branch.concept_title)}</p>` : ''}
+        </div>
+        <span class="marks-tag">⭐ ${starsEarned} / ${total}</span>
+      </div>
+      ${branch.intro ? `<p style="color:var(--ink-soft);font-size:14px;margin-bottom:16px;">${this.escapeHtml(branch.intro)}</p>` : ''}
+      <div class="panel-dots">
+        ${cards.map((c, i) => {
+          const done = c.check && this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined;
+          const correct = done && this.state.panelChecks[c.id].selected === c.check.correct;
+          const cls = i === idx ? (done ? 'current answered' : 'current') : (done ? 'answered' : '');
+          return `<button class="panel-dot ${cls}" data-jump-to-panel="${i}">${i + 1}${correct ? ' ⭐' : (done ? ' ✗' : '')}</button>`;
+        }).join('')}
+      </div>
+      <div class="concept-card ${isAnswered ? 'answered' : ''}">
+        <div class="panel-meta">
+          <span class="panel-counter">Concept ${idx + 1} of ${total}</span>
+        </div>
+        <div class="concept-name">${this.escapeHtml(currentCard.concept_name)}</div>
+        <div class="concept-definition">${this.escapeHtml(currentCard.definition)}</div>
+        ${currentCard.examples && currentCard.examples.length > 0 ? `
+          <div class="concept-examples">
+            <span class="concept-examples-label">Examples</span>
+            ${currentCard.examples.map(ex => `<div class="concept-example-item">• ${this.escapeHtml(ex)}</div>`).join('')}
+          </div>
+        ` : ''}
+        ${currentCard.check ? `
+          <div class="concept-check">
+            <span class="check-label">Quick Check</span>
+            <p class="check-question">${this.escapeHtml(currentCard.check.question)}</p>
+            <ul class="options-list">${currentCard.check.options.map((opt, i) => {
+              let cls = '';
+              if (isAnswered) {
+                if (i === currentCard.check.correct) cls = 'correct';
+                else if (i === ans.selected && i !== currentCard.check.correct) cls = 'incorrect';
+              }
+              return `<li><button class="option-btn ${cls}" data-panel-check="${this.escapeAttr(currentCard.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+                <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+              </button></li>`;
+            }).join('')}</ul>
+            ${isAnswered ? `
+              <div class="feedback-box ${isCorrect ? 'explanation' : 'hint'}">
+                <span class="feedback-label">${isCorrect ? '✓ Correct! ⭐ Star earned!' : '✗ That\'s not right. Here\'s why:'}</span>
+                ${this.escapeHtml(currentCard.check.explanation || '')}
+                ${!isCorrect ? `<div style="margin-top:12px;padding:14px;background:rgba(74,124,89,0.08);border-radius:10px;border-left:4px solid var(--leaf);">
+                  <strong style="color:var(--leaf);">✅ The correct answer is ${String.fromCharCode(65 + currentCard.check.correct)}: ${this.escapeHtml(currentCard.check.options[currentCard.check.correct])}</strong>
+                  <p style="margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink);">You chose ${String.fromCharCode(65 + ans.selected)}: ${this.escapeHtml(currentCard.check.options[ans.selected])}. Go through the explanation above step by step. If it's still not clear, tap <strong>← Previous</strong> to re-read the concept card, then come back.</p>
+                </div>` : ''}
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+      </div>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" data-panel-nav="prev" ${idx === 0 ? 'disabled' : ''}>← Previous</button>
+        ${isLast
+          ? `<button class="btn ${allDone ? 'btn-success' : 'btn-primary'}" data-panel-nav="finish-branch">${allDone ? '✓ Done' : 'Back to Topics'}</button>`
+          : `<button class="btn btn-primary" data-panel-nav="next">Next →</button>`
+        }
+      </div>
+    `;
+  },
+
+  renderStage2() {
+    if (!this.isStageUnlocked(2)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Stage 1 First</div>
+          <p class="placeholder-detail">Finish all three branches in Learn before moving to Practice.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    const s = this.data.stage_2_practice;
+    if (this.currentSection) {
+      const section = s.sections.find(sec => sec.id === this.currentSection);
+      if (section) return this.renderPracticeSectionView(section);
+    }
+    const s2Stars = this.computeStage2Stars();
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s2Stars.earned} / ${s2Stars.total}</strong></p>
+      </div>
+      <div class="branches-grid">${s.sections.map(sec => {
+        const complete = this.isPracticeSectionComplete(sec);
+        const total = sec.questions.length;
+        const done = sec.questions.filter(q => this.state.practiceAnswers[q.id] && this.state.practiceAnswers[q.id].selected !== undefined).length;
+        const correct = sec.questions.filter(q => {
+          const a = this.state.practiceAnswers[q.id];
+          return a && a.selected === q.correct;
+        }).length;
+        return `<div class="branch-card ${complete ? 'complete' : ''}" data-enter-section="${this.escapeAttr(sec.id)}">
+          <div class="branch-icon">${sec.icon || '📑'}</div>
+          <div class="branch-title">${this.escapeHtml(sec.title)}</div>
+          <div class="branch-meta">${correct} / ${total} ⭐</div>
+          <div class="branch-progress">${done} / ${total} answered</div>
+        </div>`;
+      }).join('')}</div>
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderPracticeSectionView(section) {
+    const correct = section.questions.filter(q => {
+      const a = this.state.practiceAnswers[q.id];
+      return a && a.selected === q.correct;
+    }).length;
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-sections="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(section.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">${section.questions.length} questions · ⭐ ${correct} / ${section.questions.length}</p>
+        </div>
+      </div>
+      ${section.questions.map((q, i) => this.renderPracticeQuestion(q, i + 1)).join('')}
+      <div class="stage-nav">
+        <div></div>
+        <button class="btn ${this.isPracticeSectionComplete(section) ? 'btn-success' : 'btn-secondary'}" data-back-to-sections="1">${this.isPracticeSectionComplete(section) ? '✓ Section Complete · Back' : 'Save & Back'}</button>
+      </div>
+    `;
+  },
+
+  renderPracticeQuestion(q, num) {
+    const ans = this.state.practiceAnswers[q.id] || {};
+    const isAnswered = ans.selected !== undefined;
+    return `
+      <div class="question-card">
+        <div>
+          <span class="question-number">${num}</span>
+          ${q.category ? `<span style="display:inline-block;margin-left:10px;padding:4px 12px;background:var(--paper-dark);border-radius:12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);vertical-align:middle;">${this.escapeHtml(q.category)}</span>` : ''}
+        </div>
+        ${q.passage_excerpt ? `<div class="passage-excerpt">${this.escapeHtml(q.passage_excerpt)}</div>` : ''}
+        <p class="question-text">${this.escapeHtml(q.question)}</p>
+        <ul class="options-list">${q.options.map((opt, i) => {
+          let cls = 'option-btn';
+          if (isAnswered) {
+            if (i === q.correct) cls += ' correct';
+            else if (i === ans.selected) cls += ' incorrect';
+          }
+          return `<li><button class="${cls}" data-practice-answer="${this.escapeAttr(q.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+          </button></li>`;
+        }).join('')}</ul>
+        ${!isAnswered && q.hint ? `<div class="question-actions"><button class="btn btn-secondary" data-show-hint="${this.escapeAttr(q.id)}">💡 Show hint</button></div>` : ''}
+        ${ans.showHint && q.hint ? `<div class="feedback-box hint"><span class="feedback-label">Hint</span>${this.escapeHtml(q.hint)}</div>` : ''}
+        ${isAnswered && q.explanation ? `<div class="feedback-box ${ans.selected === q.correct ? 'explanation' : 'hint'}">
+          <span class="feedback-label">${ans.selected === q.correct ? '✓ Correct! ⭐' : '✗ That\'s not right. Here\'s why:'}</span>
+          ${this.escapeHtml(q.explanation)}
+          ${ans.selected !== q.correct ? `<div style="margin-top:12px;padding:14px;background:rgba(74,124,89,0.08);border-radius:10px;border-left:4px solid var(--leaf);">
+            <strong style="color:var(--leaf);">✅ The correct answer is ${String.fromCharCode(65 + q.correct)}: ${this.escapeHtml(q.options[q.correct])}</strong>
+            <p style="margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink);">You chose ${String.fromCharCode(65 + ans.selected)}: ${this.escapeHtml(q.options[ans.selected])}. Read the explanation above carefully to understand the difference.</p>
+          </div>` : ''}
+        </div>` : ''}
+      </div>
+    `;
+  },
+
+  // ============================================================
+  // STAGE 3: THINK DEEPER
+  // ============================================================
+  renderStage3() {
+    if (!this.isStageUnlocked(3)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Practice First</div>
+          <p class="placeholder-detail">Finish all of Practice before unlocking Think Deeper.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    const s = this.data.stage_3_think;
+    const s3Stars = this.computeStage3Stars();
+
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s3Stars.earned} / ${s3Stars.total}</strong></p>
+      </div>
+      ${s.problems.map((p, i) => this.renderThinkProblem(p, i + 1)).join('')}
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderThinkProblem(p, num) {
+    const sub = this.state.thinkSubmissions[p.id] || {};
+    const isSubmitted = !!sub.submitted;
+    const userAnswer = sub.value || '';
+    const hasCriteria = p.self_check_criteria && p.self_check_criteria.length > 0;
+    const starsEarned = isSubmitted && hasCriteria ? (sub.selfChecks || []).length : 0;
+    const starsMax = hasCriteria ? p.self_check_criteria.length : 0;
+
+    return `
+      <div class="think-card ${isSubmitted ? 'submitted' : ''}" data-think-id="${this.escapeAttr(p.id)}">
+        <div>
+          <span class="question-number">${num}</span>
+          ${p.category ? `<span class="question-category">${this.escapeHtml(p.category)}</span>` : ''}
+          ${hasCriteria ? `<span class="marks-tag">⭐ ${starsEarned} / ${starsMax}</span>` : ''}
+          ${isSubmitted ? `<span class="submitted-tag">✓ Submitted</span>` : ''}
+        </div>
+        ${p.scenario ? `<div class="scenario-box">${this.escapeHtml(p.scenario)}</div>` : ''}
+        <p class="question-text">${this.escapeHtml(p.question)}</p>
+        <textarea
+          class="text-input"
+          rows="5"
+          placeholder="Write your answer here..."
+          data-think-input="${this.escapeAttr(p.id)}"
+          ${isSubmitted ? 'readonly' : ''}>${this.escapeHtml(userAnswer)}</textarea>
+        <div class="question-actions">
+          ${!isSubmitted
+            ? `<button class="btn btn-success" data-think-submit="${this.escapeAttr(p.id)}">✓ Submit Answer</button>`
+            : `<button class="btn btn-secondary" data-think-edit="${this.escapeAttr(p.id)}">✎ Edit Answer</button>`}
+        </div>
+        ${isSubmitted ? `
+          <div class="model-answer-box">
+            <span class="feedback-label">Model answer</span>
+            <p class="answer-text">${this.escapeHtml(p.model_answer)}</p>
+            ${p.explanation ? `
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--paper-dark);">
+                <span class="feedback-label" style="color: var(--leaf);">Why this works</span>
+                <p class="answer-text">${this.escapeHtml(p.explanation)}</p>
+              </div>
+            ` : ''}
+          </div>
+          ${hasCriteria ? `
+            <div class="self-check-box">
+              <div class="self-check-title">⭐ Self-Check — Rate Your Answer</div>
+              ${p.self_check_criteria.map((c, ci) => {
+                const checks = sub.selfChecks || [];
+                const isChecked = checks.includes(ci);
+                return `<div class="self-check-item" data-self-check="${this.escapeAttr(p.id)}" data-check-idx="${ci}">
+                  <span class="self-check-tick ${isChecked ? 'checked' : ''}">${isChecked ? '✓' : ''}</span>
+                  <span class="self-check-label">${this.escapeHtml(c)}</span>
+                </div>`;
+              }).join('')}
+              <div class="self-check-stars">
+                ⭐ ${starsEarned} / ${starsMax} checks passed
+              </div>
+            </div>
+          ` : ''}
+        ` : ''}
+      </div>
+    `;
+  },
+
+  countWords(s) {
+    if (!s || !s.trim()) return 0;
+    return s.trim().split(/\s+/).length;
+  },
+
+  wordCounterClass(count, limit) {
+    if (!limit) return '';
+    const m = limit.match(/(\d+)\s*[-–]\s*(\d+)/);
+    if (!m) return '';
+    const min = parseInt(m[1], 10), max = parseInt(m[2], 10);
+    if (count >= min && count <= max) return 'in-range';
+    if (count > max) return 'over';
+    return '';
+  },
+
+  // ============================================================
+  // STAGE 4: TEST
+  // ============================================================
+  renderStage4() {
+    if (!this.isStageUnlocked(4)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Think Deeper First</div>
+          <p class="placeholder-detail">Finish all five Think Deeper questions before taking the test.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    if (this.state.testSubmitted) return this.renderResults();
+    if (this.state.testStartTime === null) return this.renderTestIntro();
+    return this.renderTestActive();
+  },
+
+  renderTestIntro() {
+    const s = this.data.stage_4_test;
+    const minutes = Math.floor((s.duration_seconds || 2400) / 60);
+    const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+
+    return `
+      <div class="test-intro">
+        <div class="test-intro-icon">🏆</div>
+        <h2>${this.escapeHtml(s.title)}</h2>
+        <p class="test-intro-subtitle">${this.escapeHtml(s.subtitle || '')}</p>
+        <div class="test-stats">
+          <div class="test-stat">
+            <div class="test-stat-num">${totalQuestions}</div>
+            <div class="test-stat-label">Questions</div>
+          </div>
+          <div class="test-stat">
+            <div class="test-stat-num">${s.total_marks}</div>
+            <div class="test-stat-label">Marks</div>
+          </div>
+          <div class="test-stat">
+            <div class="test-stat-num">${minutes}</div>
+            <div class="test-stat-label">Minutes</div>
+          </div>
+        </div>
+        <div class="test-sections-preview">
+          ${s.sections.map(sec => `
+            <div class="test-section-preview">
+              <strong>${this.escapeHtml(sec.title)}</strong> · ${sec.marks} marks · ${sec.questions.length} questions
+            </div>
+          `).join('')}
+        </div>
+        <button class="test-start-btn" data-start-test="1">Start Test →</button>
+      </div>
+    `;
+  },
+
+  renderTestActive() {
+    const s = this.data.stage_4_test;
+    const elapsed = Math.floor((Date.now() - this.state.testStartTime) / 1000);
+    const remaining = Math.max(0, (s.duration_seconds || 2400) - elapsed);
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    let timerClass = '';
+    if (remaining < 60) timerClass = 'urgent';
+    else if (remaining < 300) timerClass = 'warning';
+
+    if (remaining === 0 && !this.state.testTimeUp) {
+      this.state.testTimeUp = true;
+      setTimeout(() => this.submitTest(), 100);
+    }
+
+    const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+    const answeredCount = Object.keys(this.state.testAnswers).filter(k => {
+      const v = this.state.testAnswers[k];
+      return v && v.value !== undefined && String(v.value).trim() !== '';
+    }).length;
+
+    return `
+      <div class="timer-bar">
+        <div class="timer-display ${timerClass}" id="timer-display">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</div>
+        <div class="timer-progress" id="timer-progress">${answeredCount} / ${totalQuestions} answered</div>
+      </div>
+      ${s.sections.map((sec, sidx) => this.renderTestSection(sec, sidx + 1)).join('')}
+      <div class="test-submit-zone">
+        <p style="margin-bottom: 12px; color: var(--ink-soft); font-size: 14px;">When you're done, submit your test.</p>
+        <button class="btn btn-primary test-submit-btn" data-submit-test="1">Submit Test ✓</button>
+      </div>
+    `;
+  },
+
+  renderTestSection(section, sidx) {
+    return `
+      <div class="test-section">
+        <div class="test-section-header">
+          <h3>${this.escapeHtml(section.title)}</h3>
+          <span class="test-section-marks">${section.marks} marks</span>
+        </div>
+        ${section.instructions ? `<p class="test-section-instructions">${this.escapeHtml(section.instructions)}</p>` : ''}
+        ${section.passage ? this.renderTestPassage(section.passage) : ''}
+        ${section.questions.map((q, i) => this.renderTestQuestion(q, sidx, i + 1)).join('')}
+      </div>
+    `;
+  },
+
+  renderTestPassage(passage) {
+    return `
+      <div class="test-passage">
+        <div class="test-passage-title">${this.escapeHtml(passage.title)}</div>
+        ${passage.author ? `<div class="test-passage-author">${this.escapeHtml(passage.author)}</div>` : ''}
+        <div class="test-passage-text">${this.escapeHtml(passage.text)}</div>
+        ${passage.is_ai_generated ? `<div class="test-passage-note">📝 ${this.escapeHtml(passage.review_note || 'AI-generated passage — parent please review.')}</div>` : ''}
+      </div>
+    `;
+  },
+
+  renderTestQuestion(q, sidx, qnum) {
+    const ans = this.state.testAnswers[q.id] || {};
+    const value = ans.value !== undefined ? String(ans.value) : '';
+
+    let inputHtml = '';
+    if (q.type === 'mcq') {
+      inputHtml = `
+        <ul class="options-list">
+          ${q.options.map((opt, i) => {
+            const letter = String.fromCharCode(65 + i);
+            const selected = ans.value === letter;
+            return `<li><button class="option-btn ${selected ? 'test-selected' : ''}" data-test-mcq="${this.escapeAttr(q.id)}" data-value="${this.escapeAttr(letter)}">
+              <span class="option-letter">${letter}</span><span>${this.escapeHtml(opt)}</span>
+            </button></li>`;
+          }).join('')}
+        </ul>
+      `;
+    } else if (q.type === 'fill_blank') {
+      inputHtml = `<input type="text" class="text-input" data-test-input="${this.escapeAttr(q.id)}" value="${this.escapeAttr(value)}" placeholder="Type your answer...">`;
+    } else if (q.type === 'short_answer' || q.type === 'subjective') {
+      const wlimit = q.word_limit || '';
+      const wc = this.countWords(value);
+      const wccls = this.wordCounterClass(wc, wlimit);
+      inputHtml = `
+        ${wlimit ? `<div class="word-limit-tag">📝 Word limit: ${this.escapeHtml(wlimit)}</div>` : ''}
+        <textarea class="text-input" rows="${q.type === 'subjective' ? 6 : 4}" data-test-input="${this.escapeAttr(q.id)}" placeholder="Write your answer here...">${this.escapeHtml(value)}</textarea>
+        <div class="word-counter ${wccls}" data-counter-for="${this.escapeAttr(q.id)}">
+          ${wc} word${wc === 1 ? '' : 's'}${wlimit ? ` · target: ${this.escapeHtml(wlimit)}` : ''}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="test-question">
+        <div class="test-q-header">
+          <span class="test-q-num">Q${qnum}</span>
+          <span class="test-q-type">${q.type.replace('_', ' ').toUpperCase()}</span>
+          <span class="marks-tag">${q.marks} mark${q.marks > 1 ? 's' : ''}</span>
+        </div>
+        <p class="question-text">${this.escapeHtml(q.question)}</p>
+        ${inputHtml}
+      </div>
+    `;
+  },
+
+  startTest() {
+    this.state.testStartTime = Date.now();
+    this.state.testAnswers = {};
+    this.state.testTimeUp = false;
+    this.state.testSubmitted = false;
+    this.startTimer();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  captureTestInputs() {
+    document.querySelectorAll('[data-test-input]').forEach(el => {
+      const qid = el.dataset.testInput;
+      this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value: el.value };
+    });
+  },
+
+  submitTest() {
+    this.captureTestInputs();
+    this.stopTimer();
+    this.state.testSubmitted = true;
+    this.saveProgress();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  retakeTest() {
+    if (!confirm('Retake the test? Your previous test answers will be cleared. (Other progress in Stages 1-3 stays.)')) return;
+    this.state.testStartTime = null;
+    this.state.testAnswers = {};
+    this.state.testTimeUp = false;
+    this.state.testSubmitted = false;
+    this.saveProgress();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  // ============================================================
+  // TIMER
+  // ============================================================
+  timerInterval: null,
+  startTimer() {
+    this.stopTimer();
+    this.timerInterval = setInterval(() => {
+      if (this.state.testSubmitted || this.state.testStartTime === null) {
+        this.stopTimer();
+        return;
+      }
+      const s = this.data.stage_4_test;
+      const elapsed = Math.floor((Date.now() - this.state.testStartTime) / 1000);
+      const remaining = Math.max(0, (s.duration_seconds || 2400) - elapsed);
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      const display = document.getElementById('timer-display');
+      if (display) {
+        display.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        display.className = 'timer-display ' + (remaining < 60 ? 'urgent' : (remaining < 300 ? 'warning' : ''));
+      }
+      const progress = document.getElementById('timer-progress');
+      if (progress) {
+        const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+        // Capture current input values to keep "answered count" live without re-rendering
+        document.querySelectorAll('[data-test-input]').forEach(el => {
+          const qid = el.dataset.testInput;
+          this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value: el.value };
+        });
+        const answered = Object.keys(this.state.testAnswers).filter(k => {
+          const v = this.state.testAnswers[k];
+          return v && v.value !== undefined && String(v.value).trim() !== '';
+        }).length;
+        progress.textContent = `${answered} / ${totalQuestions} answered`;
+      }
+      if (remaining === 0 && !this.state.testTimeUp) {
+        this.state.testTimeUp = true;
+        this.stopTimer();
+        this.submitTest();
+      }
+    }, 1000);
+  },
+
+  stopTimer() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  },
+
+  // ============================================================
+  // RESULTS / SCORING
+  // ============================================================
+  computeStageScores() {
+    // Stage 1: 25 marks total. Use branch.marks weights × completion fraction within each branch.
+    const s1 = this.data.stage_1_learn;
+    let s1Score = 0;
+    s1.branches.forEach(b => {
+      if (b.type === 'story_panels') {
+        const totalChecks = b.panels.filter(p => p.comprehension_check).length;
+        if (totalChecks === 0) {
+          if (this.isBranchComplete(b)) s1Score += b.marks;
+        } else {
+          const correctChecks = b.panels.filter(p => {
+            if (!p.comprehension_check) return false;
+            const a = this.state.panelChecks[p.id];
+            return a && a.selected === p.comprehension_check.correct;
+          }).length;
+          s1Score += Math.round((correctChecks / totalChecks) * b.marks);
+        }
+      } else if (b.type === 'vocabulary_cards') {
+        const total = b.cards.length;
+        const correctSpots = b.cards.filter(c => {
+          const a = this.state.spotItAnswers[c.id];
+          return a && a.correct;
+        }).length;
+        s1Score += total > 0 ? Math.round((correctSpots / total) * b.marks) : 0;
+      } else if (b.type === 'concept_teaching') {
+        const totalChecks = b.cards.filter(c => c.check).length;
+        if (totalChecks === 0) {
+          if (this.isBranchComplete(b)) s1Score += b.marks;
+        } else {
+          const correctChecks = b.cards.filter(c => {
+            if (!c.check) return false;
+            const a = this.state.panelChecks[c.id];
+            return a && a.selected === c.check.correct;
+          }).length;
+          s1Score += Math.round((correctChecks / totalChecks) * b.marks);
+        }
+      }
+    });
+
+    // Stage 2: 25 marks. Sum of (correct/total) × section.marks across sections.
+    const s2 = this.data.stage_2_practice;
+    let s2Score = 0;
+    s2.sections.forEach(sec => {
+      const total = sec.questions.length;
+      if (total === 0) return;
+      const correct = sec.questions.filter(q => {
+        const a = this.state.practiceAnswers[q.id];
+        return a && a.selected === q.correct;
+      }).length;
+      s2Score += Math.round((correct / total) * sec.marks);
+    });
+
+    // Stage 3: 25 marks. Based on self_check_criteria ticks.
+    const s3 = this.data.stage_3_think;
+    let s3Score = 0;
+    const s3Problems = s3.problems;
+    const hasSelfChecks = s3Problems.some(p => p.self_check_criteria && p.self_check_criteria.length > 0);
+    if (hasSelfChecks) {
+      let totalStars = 0;
+      let maxStars = 0;
+      s3Problems.forEach(p => {
+        const sub = this.state.thinkSubmissions[p.id] || {};
+        const criteria = p.self_check_criteria || [];
+        maxStars += criteria.length;
+        if (sub.submitted) {
+          totalStars += (sub.selfChecks || []).length;
+        }
+      });
+      s3Score = maxStars > 0 ? Math.round((totalStars / maxStars) * 25) : 0;
+    } else {
+      const submittedCount = s3Problems.filter(p => this.state.thinkSubmissions[p.id] && this.state.thinkSubmissions[p.id].submitted).length;
+      s3Score = Math.round((submittedCount / s3Problems.length) * 25);
+    }
+
+    // Stage 4: scale to 25.
+    const s4 = this.data.stage_4_test;
+    const breakdown = this.gradeTestQuestions();
+    const autoScore = breakdown.reduce((sum, b) => sum + b.marks_awarded, 0);
+    const manualPotential = breakdown.filter(b => b.needs_manual).reduce((sum, b) => sum + b.q.marks, 0);
+    // Optimistic for display
+    const optimisticTotal = autoScore + manualPotential;
+    const s4Max = s4.total_marks || 25;
+    const s4Score = Math.round((optimisticTotal / s4Max) * 25);
+
+    return {
+      stage1: { score: s1Score, max: 25 },
+      stage2: { score: s2Score, max: 25 },
+      stage3: { score: s3Score, max: 25 },
+      stage4: { score: s4Score, max: 25, manualMarks: manualPotential, breakdown, rawAutoScore: autoScore, rawTotal: s4Max },
+      grandTotal: s1Score + s2Score + s3Score + s4Score,
+    };
+  },
+
+  gradeTestQuestions() {
+    const s = this.data.stage_4_test;
+    const out = [];
+    s.sections.forEach(sec => {
+      sec.questions.forEach(q => {
+        const ans = this.state.testAnswers[q.id] || {};
+        const userAnswer = (ans.value !== undefined ? String(ans.value) : '').trim();
+
+        if (q.type === 'mcq') {
+          const correct = userAnswer.toLowerCase() === String(q.correct_answer || '').toLowerCase();
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: q.correct_answer || '',
+            is_correct: correct,
+            marks_awarded: correct ? q.marks : 0,
+            needs_manual: false,
+          });
+        } else if (q.type === 'fill_blank') {
+          const norm = (s) => s.toLowerCase().trim().replace(/[.,;:!?'"]/g, '').replace(/\s+/g, ' ');
+          const correct = norm(userAnswer) === norm(String(q.correct_answer || ''));
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: q.correct_answer || '',
+            is_correct: correct,
+            marks_awarded: correct ? q.marks : 0,
+            needs_manual: false,
+          });
+        } else {
+          // short_answer or subjective — needs manual grading
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: '(See model answer)',
+            is_correct: null,
+            marks_awarded: 0,
+            needs_manual: true,
+          });
+        }
+      });
+    });
+    return out;
+  },
+
+  renderResults() {
+    const scores = this.computeStageScores();
+    const s4 = this.data.stage_4_test;
+    const s4Max = s4.total_marks || 20;
+    const breakdown = scores.stage4.breakdown;
+    const autoScore = scores.stage4.rawAutoScore;
+    const manualMarks = scores.stage4.manualMarks;
+    // Manual marks state — parent can adjust
+    const manualState = this.state.manualMarksAwarded || {};
+    let manualAwarded = 0;
+    breakdown.filter(b => b.needs_manual).forEach(b => {
+      manualAwarded += (manualState[b.q.id] !== undefined ? manualState[b.q.id] : 0);
+    });
+    const testScore = autoScore + manualAwarded;
+
+    // Badge and message from score_tiers in JSON
+    const tiers = s4.score_tiers || [];
+    let tierMsg = 'Keep practising!';
+    let tierEmoji = '🌱';
+    for (const tier of tiers) {
+      if (testScore >= tier.min && testScore <= tier.max) { tierMsg = tier.message; break; }
+    }
+    if (testScore >= s4Max * 0.95) tierEmoji = '🏆';
+    else if (testScore >= s4Max * 0.8) tierEmoji = '⭐';
+    else if (testScore >= s4Max * 0.6) tierEmoji = '✨';
+    else tierEmoji = '🌱';
+
+    const quotes = this.data.motivational_quotes || ["Every champion was once a beginner."];
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    const confetti = testScore >= s4Max * 0.8 ? this.generateConfetti() : '';
+
+    // Stars for stages 1-3
+    const s1Stars = this.computeStage1Stars();
+    const s2Stars = this.computeStage2Stars();
+    const s3Stars = this.computeStage3Stars();
+
+    return `
+      <div class="results-screen">
+        <div class="results-hero">
+          ${confetti}
+          <div class="badge-circle ${testScore < s4Max * 0.6 ? 'no-badge' : ''}">
+            <span class="badge-emoji">${tierEmoji}</span>
+          </div>
+          <h2 class="badge-name">${this.escapeHtml(tierMsg)}</h2>
+          <div class="results-percentage">
+            <div class="percentage-num">${testScore}/${s4Max}</div>
+            <div class="percentage-label">Test Score</div>
+          </div>
+        </div>
+
+        <div class="motivational-quote">${this.escapeHtml(quote)}</div>
+
+        <div class="section-scores">
+          <h3>How You Did In Each Section</h3>
+          <div class="scores-table">
+            ${this.renderStarCell('📖', 'Learn', s1Stars.earned, s1Stars.total)}
+            ${this.renderStarCell('✏️', 'Practice', s2Stars.earned, s2Stars.total)}
+            ${this.renderStarCell('💭', 'Think', s3Stars.earned, s3Stars.total)}
+            ${this.renderMarksCell('🏆', 'Test', testScore, s4Max)}
+          </div>
+        </div>
+
+        <div class="reattempt-card">
+          <h4>Think you can do better? 🎯</h4>
+          <p>Take the test again — try to beat your score!</p>
+          <button class="reattempt-btn" data-retake-test="1">↻ Retake Test</button>
+        </div>
+
+        <div class="results-detail">
+          <h4>Test — Your Answers Reviewed</h4>
+          ${breakdown.map((b, i) => {
+            const qType = b.q.type || '';
+            const optionLetters = ['A','B','C','D','E','F'];
+            let userDisplay = b.user_answer || '(not answered)';
+            let correctDisplay = b.correct_display || '';
+
+            // For MCQs show option letter + text
+            if (qType === 'mcq' && b.q.options) {
+              const userIdx = optionLetters.indexOf(b.user_answer.toUpperCase());
+              if (userIdx >= 0 && b.q.options[userIdx]) {
+                userDisplay = b.user_answer.toUpperCase() + ': ' + b.q.options[userIdx];
+              }
+              const correctIdx = optionLetters.indexOf((b.q.correct_answer || '').toUpperCase());
+              if (correctIdx >= 0 && b.q.options[correctIdx]) {
+                correctDisplay = b.q.correct_answer.toUpperCase() + ': ' + b.q.options[correctIdx];
+              }
+            }
+
+            return `
+            <div class="review-item">
+              <div class="review-q">
+                <strong>Q${i+1}.</strong> <em>${this.escapeHtml(b.section.title)}</em><br>
+                ${this.escapeHtml(b.q.question)}
+              </div>
+              <div class="review-content">
+                ${b.needs_manual ? `
+                  <div class="review-row"><strong>Your answer:</strong> "${this.escapeHtml(b.user_answer || '(not answered)')}"</div>
+                  ${b.q.model_answer ? `<div class="review-row"><strong>Model:</strong> ${this.escapeHtml(b.q.model_answer)}</div>` : ''}
+                  ${b.q.marking_guide ? `<div class="review-row" style="font-style:italic;color:var(--ink-soft);font-size:13px;"><strong>For parent:</strong> ${this.escapeHtml(b.q.marking_guide)}</div>` : ''}
+                  <div class="review-result manual" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span>Marks (out of ${b.q.marks}):</span>
+                    <button class="btn btn-secondary" style="padding:4px 10px;min-width:32px;" data-manual-marks-dec="${this.escapeAttr(b.q.id)}">−</button>
+                    <strong style="font-size:18px;min-width:24px;text-align:center;">${manualState[b.q.id] !== undefined ? manualState[b.q.id] : 0}</strong>
+                    <button class="btn btn-secondary" style="padding:4px 10px;min-width:32px;" data-manual-marks-inc="${this.escapeAttr(b.q.id)}">+</button>
+                  </div>
+                ` : `
+                  <div class="review-row"><strong>Your answer:</strong> ${this.escapeHtml(userDisplay)}</div>
+                  <div class="review-row"><strong>Correct:</strong> ${this.escapeHtml(correctDisplay)}</div>
+                  <div class="review-result ${b.is_correct ? 'correct' : 'incorrect'}">${b.is_correct ? `✓ +${b.marks_awarded}` : `✗ 0 / ${b.q.marks}`}</div>
+                `}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+
+        <div class="results-actions">
+          <button class="btn btn-secondary" data-back-home="1">← Back to Stages</button>
+        </div>
+      </div>
+    `;
+  },
+
+  computeStage1Stars() {
+    const s1 = this.data.stage_1_learn;
+    let earned = 0, total = 0;
+    s1.branches.forEach(b => {
+      if (b.type === 'concept_teaching' && b.cards) {
+        b.cards.forEach(c => {
+          if (c.check) {
+            total++;
+            const a = this.state.panelChecks[c.id];
+            if (a && a.selected === c.check.correct) earned++;
+          }
+        });
+      } else if (b.type === 'story_panels' && b.panels) {
+        b.panels.forEach(p => {
+          if (p.comprehension_check) {
+            total++;
+            const a = this.state.panelChecks[p.id];
+            if (a && a.selected === p.comprehension_check.correct) earned++;
+          }
+        });
+      } else if (b.type === 'vocabulary_cards' && b.cards) {
+        b.cards.forEach(c => {
+          total++;
+          const a = this.state.spotItAnswers[c.id];
+          if (a && a.correct) earned++;
+        });
+      }
+    });
+    return { earned, total };
+  },
+
+  computeStage2Stars() {
+    const s2 = this.data.stage_2_practice;
+    let earned = 0, total = 0;
+    s2.sections.forEach(sec => {
+      sec.questions.forEach(q => {
+        total++;
+        const a = this.state.practiceAnswers[q.id];
+        if (a && a.selected === q.correct) earned++;
+      });
+    });
+    return { earned, total };
+  },
+
+  computeStage3Stars() {
+    const s3 = this.data.stage_3_think;
+    let earned = 0, total = 0;
+    s3.problems.forEach(p => {
+      if (p.self_check_criteria) {
+        total += p.self_check_criteria.length;
+        const sub = this.state.thinkSubmissions[p.id] || {};
+        earned += (sub.selfChecks || []).length;
+      }
+    });
+    return { earned, total };
+  },
+
+  renderStarCell(icon, label, earned, total) {
+    const pct = total > 0 ? (earned / total) * 100 : 0;
+    let cls = '', tag = '';
+    if (pct >= 80) { cls = 'strong'; tag = '<span class="score-cell-tag strong-tag">Strong</span>'; }
+    else if (pct < 50) { cls = 'improvement'; tag = '<span class="score-cell-tag improve-tag">Practice More</span>'; }
+    else { tag = '<span class="score-cell-tag neutral-tag">Good</span>'; }
+    return `
+      <div class="score-cell ${cls}">
+        <div class="score-cell-icon">${icon}</div>
+        <div class="score-cell-label">${label}</div>
+        <div class="score-cell-num">${earned} ⭐</div>
+        <div class="score-cell-out-of">out of ${total}</div>
+        ${tag}
+      </div>
+    `;
+  },
+
+  renderMarksCell(icon, label, score, max) {
+    const pct = max > 0 ? (score / max) * 100 : 0;
+    let cls = '', tag = '';
+    if (pct >= 80) { cls = 'strong'; tag = '<span class="score-cell-tag strong-tag">Strong</span>'; }
+    else if (pct < 50) { cls = 'improvement'; tag = '<span class="score-cell-tag improve-tag">Practice More</span>'; }
+    else { tag = '<span class="score-cell-tag neutral-tag">Good</span>'; }
+    return `
+      <div class="score-cell ${cls}">
+        <div class="score-cell-icon">${icon}</div>
+        <div class="score-cell-label">${label}</div>
+        <div class="score-cell-num">${score}</div>
+        <div class="score-cell-out-of">out of ${max}</div>
+        ${tag}
+      </div>
+    `;
+  },
+
+  generateConfetti() {
+    const colors = ['#E87722', '#F4A82C', '#D4A53A', '#4A7C59', '#5B8DB8', '#B8385E', '#FFFFFF'];
+    let html = '';
+    for (let i = 0; i < 30; i++) {
+      const left = Math.random() * 100;
+      const delay = Math.random() * 3;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const rotate = Math.random() * 360;
+      html += `<div class="confetti-piece" style="left:${left}%;background:${color};animation-delay:${delay}s;transform:rotate(${rotate}deg);"></div>`;
+    }
+    return html;
+  },
+
+  renderStageNav() {
+    const canPrev = this.currentStage > 1;
+    const canNext = this.currentStage < 4 && this.isStageUnlocked(this.currentStage + 1);
+    const stageLabels = ['', 'Learn', 'Practice', 'Think', 'Test'];
+    return `
+      <div class="stage-nav">
+        ${canPrev ? `<button class="btn btn-secondary" data-stage-nav="prev">← Back to ${stageLabels[this.currentStage - 1]}</button>` : '<div></div>'}
+        ${canNext ? `<button class="btn btn-primary" data-stage-nav="next">Next: ${stageLabels[this.currentStage + 1]} →</button>` : (this.currentStage < 4 ? `<button class="btn btn-primary" disabled title="Complete current stage first">Next: ${stageLabels[this.currentStage + 1]} →</button>` : '<div></div>')}
+      </div>
+    `;
+  },
+
+  bindEvents() {
+    // Use document.body so the listener survives across renders.
+    // Called ONCE in init().
+    document.body.addEventListener('click', (e) => {
+      const t = e.target;
+
+      if (t.dataset && t.dataset.closeModal) { this.state.spotItModal = null; this.render(); return; }
+      if (t.classList && t.classList.contains('highlight-word')) { this.showWordTooltip(t); return; }
+
+      const target = t.closest('[data-stage], [data-enter-branch], [data-back-to-branches], [data-panel-nav], [data-panel-check], [data-flip-card], [data-open-spot-it], [data-spot-answer], [data-enter-section], [data-back-to-sections], [data-practice-answer], [data-show-hint], [data-stage-nav], [data-vocab-group], [data-reset-progress], [data-jump-to-panel], [data-think-submit], [data-think-edit], [data-start-test], [data-submit-test], [data-retake-test], [data-back-home], [data-test-mcq], [data-self-check], [data-manual-marks-inc], [data-manual-marks-dec], [data-open-deep-dive], [data-close-deep-dive], [data-dd-topic]');
+      if (!target) return;
+
+      if (target.dataset.resetProgress) {
+        this.resetProgress();
+        return;
+      }
+      if (target.dataset.jumpToPanel !== undefined) {
+        const idx = parseInt(target.dataset.jumpToPanel, 10);
+        if (!isNaN(idx)) {
+          this.currentPanelIdx = idx;
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      // Deep Dive navigation
+      if (target.dataset.openDeepDive !== undefined) {
+        this.previousStage = this.currentStage;
+        this.currentStage = 0;
+        this.deepDiveTopicIdx = 0;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.closeDeepDive !== undefined) {
+        this.currentStage = this.previousStage || 1;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.ddTopic !== undefined) {
+        const idx = parseInt(target.dataset.ddTopic, 10);
+        const dd = this.data.stage_0_deep_dive;
+        if (dd && idx >= 0 && idx < dd.topics.length) {
+          this.deepDiveTopicIdx = idx;
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      if (target.dataset.stage) {
+        const num = parseInt(target.dataset.stage, 10);
+        if (this.isStageUnlocked(num) || num === this.currentStage) {
+          this.currentStage = num;
+          this.currentBranch = null;
+          this.currentSection = null;
+          this.saveProgress();
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      if (target.dataset.enterBranch) {
+        this.currentBranch = target.dataset.enterBranch;
+        this.currentPanelIdx = 0;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.backToBranches) {
+        this.currentBranch = null;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.panelNav) {
+        const branch = this.data.stage_1_learn.branches.find(b => b.id === this.currentBranch);
+        const items = branch.panels || branch.cards || [];
+        if (target.dataset.panelNav === 'prev' && this.currentPanelIdx > 0) this.currentPanelIdx--;
+        else if (target.dataset.panelNav === 'next' && this.currentPanelIdx < items.length - 1) this.currentPanelIdx++;
+        else if (target.dataset.panelNav === 'finish-branch') { this.currentBranch = null; this.saveProgress(); }
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.panelCheck) {
+        const panelId = target.dataset.panelCheck;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.panelChecks[panelId] && this.state.panelChecks[panelId].selected !== undefined) return;
+        this.state.panelChecks[panelId] = { ...(this.state.panelChecks[panelId] || {}), selected: opt };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.flipCard) {
+        if (e.target.closest('[data-open-spot-it]')) return;
+        const id = target.dataset.flipCard;
+        this.state.cardFlips[id] = !this.state.cardFlips[id];
+        // Toggle the class directly on the live element so CSS transition animates.
+        // No full re-render — that would destroy the element and skip the animation.
+        target.classList.toggle('flipped');
+        this.saveProgress();
+        return;
+      }
+      if (target.dataset.vocabGroup) {
+        this.currentVocabGroup = target.dataset.vocabGroup;
+        this.render();
+        return;
+      }
+      if (target.dataset.openSpotIt) {
+        e.stopPropagation();
+        this.state.spotItModal = target.dataset.openSpotIt;
+        this.render();
+        return;
+      }
+      if (target.dataset.spotAnswer) {
+        const id = target.dataset.spotAnswer;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.spotItAnswers[id] !== undefined) return;
+        let card = null;
+        for (const branch of this.data.stage_1_learn.branches) {
+          if (branch.cards) { card = branch.cards.find(c => c.id === id); if (card) break; }
+        }
+        if (!card) return;
+        this.state.spotItAnswers[id] = { selected: opt, correct: opt === card.spot_it.correct };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.enterSection) {
+        this.currentSection = target.dataset.enterSection;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.backToSections) {
+        this.currentSection = null;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.practiceAnswer) {
+        const qid = target.dataset.practiceAnswer;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.practiceAnswers[qid] && this.state.practiceAnswers[qid].selected !== undefined) return;
+        this.state.practiceAnswers[qid] = { ...(this.state.practiceAnswers[qid] || {}), selected: opt };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.showHint) {
+        const qid = target.dataset.showHint;
+        this.state.practiceAnswers[qid] = { ...(this.state.practiceAnswers[qid] || {}), showHint: true };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — submit a Think problem
+      if (target.dataset.thinkSubmit) {
+        const pid = target.dataset.thinkSubmit;
+        const ta = document.querySelector(`[data-think-input="${CSS.escape(pid)}"]`);
+        const value = ta ? ta.value.trim() : '';
+        if (!value) {
+          alert('Please write your answer first before submitting.');
+          return;
+        }
+        this.state.thinkSubmissions[pid] = { value, submitted: true };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — edit (un-submit)
+      if (target.dataset.thinkEdit) {
+        const pid = target.dataset.thinkEdit;
+        const existing = this.state.thinkSubmissions[pid] || {};
+        this.state.thinkSubmissions[pid] = { ...existing, submitted: false };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — self-check criteria toggle
+      if (target.dataset.selfCheck) {
+        const pid = target.dataset.selfCheck;
+        const ci = parseInt(target.dataset.checkIdx, 10);
+        const existing = this.state.thinkSubmissions[pid] || {};
+        const checks = [...(existing.selfChecks || [])];
+        const idx = checks.indexOf(ci);
+        if (idx >= 0) checks.splice(idx, 1); else checks.push(ci);
+        this.state.thinkSubmissions[pid] = { ...existing, selfChecks: checks };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Results — manual marks adjustment
+      if (target.dataset.manualMarksInc) {
+        const qid = target.dataset.manualMarksInc;
+        if (!this.state.manualMarksAwarded) this.state.manualMarksAwarded = {};
+        const q = this.findTestQuestion(qid);
+        const max = q ? q.marks : 5;
+        const current = this.state.manualMarksAwarded[qid] || 0;
+        if (current < max) { this.state.manualMarksAwarded[qid] = current + 1; this.saveProgress(); this.render(); }
+        return;
+      }
+      if (target.dataset.manualMarksDec) {
+        const qid = target.dataset.manualMarksDec;
+        if (!this.state.manualMarksAwarded) this.state.manualMarksAwarded = {};
+        const current = this.state.manualMarksAwarded[qid] || 0;
+        if (current > 0) { this.state.manualMarksAwarded[qid] = current - 1; this.saveProgress(); this.render(); }
+        return;
+      }
+      // Stage 4 — start the test
+      if (target.dataset.startTest) {
+        this.startTest();
+        return;
+      }
+      // Stage 4 — MCQ click
+      if (target.dataset.testMcq) {
+        // Capture text inputs first so we don't lose typed values on re-render
+        this.captureTestInputs();
+        const qid = target.dataset.testMcq;
+        const value = target.dataset.value;
+        this.state.testAnswers[qid] = { value };
+        this.render();
+        return;
+      }
+      // Stage 4 — submit
+      if (target.dataset.submitTest) {
+        if (!confirm('Submit your test? You will not be able to change your answers after this.')) return;
+        this.submitTest();
+        return;
+      }
+      // Results — retake test
+      if (target.dataset.retakeTest) {
+        this.retakeTest();
+        return;
+      }
+      // Results — back home
+      if (target.dataset.backHome) {
+        this.currentStage = 1;
+        this.saveProgress();
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.stageNav === 'prev') {
+        this.currentStage = Math.max(1, this.currentStage - 1);
+        this.currentBranch = null; this.currentSection = null;
+        this.stopTimer();
+        this.saveProgress();
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.stageNav === 'next') {
+        if (this.isStageUnlocked(this.currentStage + 1)) {
+          this.currentStage = Math.min(4, this.currentStage + 1);
+          this.currentBranch = null; this.currentSection = null;
+          this.stopTimer();
+          this.saveProgress();
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+    });
+
+    // Input listener for Think textareas + Test text inputs — live word count, save state
+    document.body.addEventListener('input', (e) => {
+      const t = e.target;
+      // Stage 3 — Think problems
+      if (t.dataset && t.dataset.thinkInput) {
+        const pid = t.dataset.thinkInput;
+        const value = t.value;
+        const existing = this.state.thinkSubmissions[pid] || {};
+        this.state.thinkSubmissions[pid] = { ...existing, value, submitted: false };
+        // Update word counter directly without re-render (preserves cursor)
+        const counter = document.querySelector(`[data-counter-for="${CSS.escape(pid)}"]`);
+        if (counter) {
+          const wc = this.countWords(value);
+          // Find the original problem to read word_limit
+          const problem = this.data.stage_3_think.problems.find(p => p.id === pid);
+          const limit = problem ? problem.word_limit : '';
+          counter.textContent = `${wc} word${wc === 1 ? '' : 's'}${limit ? ` · target: ${limit}` : ''}`;
+          counter.className = 'word-counter ' + this.wordCounterClass(wc, limit);
+        }
+        return;
+      }
+      // Stage 4 — Test text inputs
+      if (t.dataset && t.dataset.testInput) {
+        const qid = t.dataset.testInput;
+        const value = t.value;
+        this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value };
+        // Update word counter for short_answer / subjective
+        const counter = document.querySelector(`[data-counter-for="${CSS.escape(qid)}"]`);
+        if (counter) {
+          const wc = this.countWords(value);
+          let limit = '';
+          // Find the question for word_limit
+          for (const sec of this.data.stage_4_test.sections) {
+            const q = sec.questions.find(q => q.id === qid);
+            if (q) { limit = q.word_limit || ''; break; }
+          }
+          counter.textContent = `${wc} word${wc === 1 ? '' : 's'}${limit ? ` · target: ${limit}` : ''}`;
+          counter.className = 'word-counter ' + this.wordCounterClass(wc, limit);
+        }
+        return;
+      }
+    });
+  },
+
+  showWordTooltip(el) {
+    document.querySelectorAll('.word-tooltip').forEach(t => t.remove());
+    const panelId = el.dataset.panelId;
+    const idx = parseInt(el.dataset.wordIdx, 10);
+    const branch = this.data.stage_1_learn.branches.find(b => b.id === this.currentBranch);
+    if (!branch) return;
+    const panel = branch.panels.find(p => p.id === panelId);
+    if (!panel || !panel.highlighted_words || !panel.highlighted_words[idx]) return;
+    const tip = document.createElement('span');
+    tip.className = 'word-tooltip';
+    tip.textContent = panel.highlighted_words[idx].meaning;
+    el.appendChild(tip);
+    setTimeout(() => tip.remove(), 3000);
+  },
+
+  escapeHtml(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  },
+
+  findTestQuestion(qid) {
+    if (!this.data.stage_4_test) return null;
+    for (const sec of this.data.stage_4_test.sections) {
+      const q = sec.questions.find(q => q.id === qid);
+      if (q) return q;
+    }
+    return null;
+  },
+  escapeAttr(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+
+</body>
+</html>
