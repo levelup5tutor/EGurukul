@@ -1,0 +1,3275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-Gurukul · Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #E87722; --marigold: #F4A82C; --cream: #FFF8EE; --paper: #FDF6E8;
+  --paper-dark: #F5EBD3; --ink: #2B1810; --ink-soft: #5C4332; --leaf: #4A7C59;
+  --leaf-light: #E8F4EA; --berry: #B8385E; --berry-light: #FBE9EE; --gold: #D4A53A;
+  --sky: #5B8DB8; --sky-light: #E5F0F8; --shadow: rgba(43,24,16,0.12); --shadow-strong: rgba(43,24,16,0.25);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); font-family: 'Nunito', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle at 20% 30%, rgba(232,119,34,0.04) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(244,168,44,0.06) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+.container { max-width: 920px; margin: 0 auto; padding: 24px 20px 80px; position: relative; z-index: 1; }
+header.app-header { margin-bottom: 28px; padding: 24px 28px; background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 100%); border-radius: 24px; color: white; box-shadow: 0 8px 24px var(--shadow); position: relative; overflow: hidden; }
+header.app-header::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%); border-radius: 50%; }
+.header-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9; margin-bottom: 6px; }
+.header-title { font-family: 'Fraunces', serif; font-weight: 900; font-size: clamp(26px, 5vw, 38px); line-height: 1.15; letter-spacing: -0.5px; }
+.header-meta { margin-top: 10px; font-size: 14px; opacity: 0.95; font-weight: 600; }
+.header-author { margin-top: 6px; font-size: 14px; opacity: 0.85; font-weight: 500; font-style: italic; }
+.header-theme-pill { display: inline-block; margin-top: 12px; background: rgba(0,0,0,0.25); color: white; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; backdrop-filter: blur(4px); }
+.reset-btn { position: absolute; top: 16px; right: 16px; background: var(--ink); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 7px 14px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s ease; z-index: 2; }
+.reset-btn:hover { background: #1a0e07; border-color: white; transform: translateY(-1px); }
+.progress-bar { display: flex; gap: 8px; margin-bottom: 32px; }
+.progress-step { flex: 1; padding: 12px 8px; background: var(--paper-dark); border-radius: 12px; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-soft); cursor: pointer; transition: all 0.25s ease; border: 2px solid transparent; user-select: none; position: relative; }
+.progress-step:hover { background: var(--cream); border-color: var(--marigold); }
+.progress-step.active { background: var(--ink); color: var(--cream); }
+.progress-step.complete { background: var(--leaf); color: white; }
+.progress-step.locked { opacity: 0.5; cursor: not-allowed; }
+.progress-step.locked:hover { background: var(--paper-dark); border-color: transparent; }
+.progress-step.complete::after { content: '✓'; position: absolute; top: 4px; right: 6px; font-size: 11px; font-weight: 900; }
+.progress-step.locked::after { content: '🔒'; position: absolute; top: 4px; right: 6px; font-size: 10px; }
+.step-num { display: block; font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; }
+.stage-header { margin-bottom: 24px; }
+.stage-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(24px, 4vw, 32px); color: var(--ink); letter-spacing: -0.3px; margin-bottom: 6px; }
+.stage-description { color: var(--ink-soft); font-size: 15px; }
+.branches-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.branch-card { background: var(--cream); border: 2px solid var(--paper-dark); border-radius: 18px; padding: 24px 20px; cursor: pointer; transition: all 0.25s ease; text-align: center; position: relative; }
+.branch-card:hover { border-color: var(--marigold); transform: translateY(-3px); box-shadow: 0 6px 16px var(--shadow); }
+.branch-card.complete { border-color: var(--leaf); background: var(--leaf-light); }
+.branch-card.complete::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; background: var(--leaf); color: white; border-radius: 50%; line-height: 24px; font-weight: 900; font-size: 14px; }
+.branch-icon { font-size: 40px; margin-bottom: 12px; }
+.branch-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.branch-meta { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.branch-progress { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+.panel-container { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 20px; }
+.panel-dots { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+.panel-dot { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; min-width: 44px; }
+.panel-dot:hover { border-color: var(--marigold); }
+.panel-dot.current { background: var(--ink); color: var(--cream); }
+.panel-dot.answered { background: var(--leaf); color: white; }
+.panel-dot.current.answered { background: var(--ink); border-color: var(--leaf); border-width: 3px; }
+.panel-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--paper-dark); }
+.panel-counter { font-size: 12px; font-weight: 800; color: var(--saffron); letter-spacing: 1.5px; text-transform: uppercase; }
+.panel-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+.narration-text { font-size: 16px; line-height: 1.75; color: var(--ink); margin-bottom: 16px; }
+.narration-text .highlight-word { background: linear-gradient(180deg, transparent 60%, rgba(244,168,44,0.4) 60%); cursor: pointer; font-weight: 700; color: var(--ink); border-radius: 2px; transition: background 0.2s ease; position: relative; }
+.narration-text .highlight-word:hover { background: linear-gradient(180deg, transparent 30%, rgba(244,168,44,0.7) 30%); }
+.word-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--cream); padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; line-height: 1.4; width: max-content; max-width: 240px; text-align: center; z-index: 100; box-shadow: 0 6px 20px rgba(0,0,0,0.25); pointer-events: none; }
+.word-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--ink); }
+.tts-controls { display: flex; gap: 10px; align-items: center; background: var(--sky-light); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.tts-btn { background: var(--sky); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.tts-btn:hover { background: #4a7a9c; }
+.tts-btn.playing { background: var(--berry); animation: pulse 1.5s ease-in-out infinite; }
+.tts-status { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+.comprehension-check { background: var(--cream); border: 2px solid var(--marigold); border-radius: 16px; padding: 20px; margin-top: 16px; }
+.check-label { display: inline-block; background: var(--saffron); color: white; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.check-question { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+.options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.option-btn { background: white; border: 2px solid var(--paper-dark); padding: 12px 16px; border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit; font-size: 14px; color: var(--ink); transition: all 0.2s ease; width: 100%; display: flex; align-items: center; gap: 10px; }
+.option-btn:hover:not(:disabled) { border-color: var(--marigold); background: var(--paper); transform: translateX(2px); }
+.option-letter { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--paper-dark); border-radius: 8px; font-weight: 700; font-size: 12px; flex-shrink: 0; color: var(--ink-soft); }
+.option-btn.correct { background: var(--leaf-light); border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
+.option-btn.correct .option-letter { background: var(--leaf); color: white; }
+.option-btn.incorrect { background: var(--berry-light); border-color: var(--berry); color: var(--berry); }
+.option-btn.incorrect .option-letter { background: var(--berry); color: white; }
+.option-btn:disabled { cursor: default; }
+.feedback-box { margin-top: 12px; padding: 14px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; animation: slideDown 0.3s ease; }
+.feedback-box.hint { background: #FFF4D6; border-left: 4px solid var(--gold); color: var(--ink); }
+.feedback-box.explanation { background: var(--leaf-light); border-left: 4px solid var(--leaf); color: var(--ink); }
+.feedback-label { font-weight: 800; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.panel-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.vocab-group-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.vocab-group-tab { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 10px 18px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+.vocab-group-tab:hover { border-color: var(--marigold); }
+.vocab-group-tab.active { background: var(--saffron); color: white; }
+.vocab-card { height: 280px; cursor: pointer; perspective: 1000px; }
+.vocab-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1); transform-style: preserve-3d; }
+.vocab-card.flipped .vocab-card-inner { transform: rotateY(180deg); }
+.vocab-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; box-shadow: 0 4px 16px var(--shadow); overflow: hidden; }
+.vocab-face.front { background: var(--cream); border: 2px solid var(--paper-dark); align-items: center; justify-content: center; text-align: center; }
+.vocab-face.back { background: linear-gradient(135deg, var(--saffron), var(--marigold)); color: white; transform: rotateY(180deg); overflow-y: auto; text-align: left; }
+.vocab-card.complete .vocab-face.front { border-color: var(--leaf); background: var(--leaf-light); }
+.vocab-card.complete .vocab-face.front::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; background: var(--leaf); color: white; border-radius: 50%; line-height: 24px; font-weight: 900; font-size: 14px; }
+.vocab-word { font-family: 'Fraunces', serif; font-weight: 700; font-size: 30px; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.5px; }
+.vocab-source-tag { display: inline-block; background: var(--paper-dark); color: var(--ink-soft); padding: 2px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.vocab-flip-hint { margin-top: 12px; font-size: 11px; color: var(--ink-soft); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; }
+.vocab-meaning { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; line-height: 1.4; margin-bottom: 10px; }
+.vocab-example { font-size: 12px; line-height: 1.45; margin-bottom: 6px; opacity: 0.95; }
+.vocab-example-label { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 2px; display: block; }
+.spot-it-cta { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 10px; text-align: center; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.4); }
+.spot-it-cta:hover { background: rgba(255,255,255,0.3); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(43,24,16,0.7); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content { background: var(--cream); border-radius: 20px; padding: 28px; max-width: 480px; width: 100%; box-shadow: 0 12px 40px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
+.modal-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.modal-word { color: var(--saffron); font-style: italic; }
+.question-card { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); }
+.question-number { display: inline-block; background: var(--ink); color: var(--cream); font-family: 'Fraunces', serif; font-weight: 700; width: 36px; height: 36px; line-height: 36px; text-align: center; border-radius: 50%; font-size: 16px; margin-bottom: 12px; }
+.passage-excerpt { background: var(--paper); padding: 12px 16px; border-radius: 12px; border-left: 4px solid var(--sky); margin-bottom: 12px; font-style: italic; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
+.question-text { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+.question-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.btn { padding: 10px 18px; border-radius: 12px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary { background: var(--paper-dark); color: var(--ink); }
+.btn-secondary:hover:not(:disabled) { background: var(--marigold); color: white; }
+.btn-primary { background: var(--saffron); color: white; box-shadow: 0 4px 12px rgba(232,119,34,0.3); }
+.btn-primary:hover:not(:disabled) { background: var(--ink); transform: translateY(-2px); }
+.btn-success { background: var(--leaf); color: white; box-shadow: 0 4px 12px rgba(74,124,89,0.3); }
+.btn-success:hover:not(:disabled) { background: #3a6248; transform: translateY(-2px); }
+.stage-nav { margin-top: 32px; display: flex; justify-content: space-between; gap: 12px; }
+.placeholder-card { background: var(--cream); border: 2px dashed var(--paper-dark); border-radius: 20px; padding: 48px 32px; text-align: center; color: var(--ink-soft); }
+.placeholder-icon { font-size: 60px; margin-bottom: 16px; opacity: 0.5; }
+.placeholder-title { font-family: 'Fraunces', serif; font-size: 22px; color: var(--ink); margin-bottom: 8px; }
+.placeholder-detail { font-size: 14px; line-height: 1.6; max-width: 480px; margin: 0 auto; }
+.loading-screen, .error-screen { text-align: center; padding: 48px 20px; }
+.spinner { width: 48px; height: 48px; border: 4px solid var(--paper-dark); border-top-color: var(--saffron); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-screen { background: var(--berry-light); border: 2px solid var(--berry); color: var(--berry); border-radius: 16px; }
+/* === STAGE 0: DEEP DIVE REFERENCE === */
+.deep-dive-trigger { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, var(--sky) 0%, #3d6d8f 100%); color: white; border: none; padding: 20px 28px; border-radius: 18px; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.25s ease; margin-bottom: 28px; width: 100%; box-shadow: 0 4px 16px rgba(91,141,184,0.3); }
+.deep-dive-trigger:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(91,141,184,0.4); }
+.deep-dive-trigger .dd-icon { font-size: 36px; }
+.deep-dive-trigger .dd-text { text-align: left; }
+.deep-dive-trigger .dd-title { font-family: 'Fraunces', serif; font-size: 22px; display: block; }
+.deep-dive-trigger .dd-sub { font-size: 14px; opacity: 0.9; font-weight: 500; display: block; margin-top: 2px; }
+
+.dd-screen { padding: 0; }
+.dd-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.dd-nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.dd-nav-btn { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 10px 16px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+.dd-nav-btn:hover { border-color: var(--sky); }
+.dd-nav-btn.active { background: var(--sky); color: white; }
+
+.dd-topic { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 24px; }
+.dd-topic-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.dd-topic-subtitle { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; }
+
+.dd-section { margin-bottom: 28px; }
+.dd-section-label { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 8px; margin-bottom: 12px; }
+.dd-section-label.story { background: var(--berry-light); color: var(--berry); }
+.dd-section-label.steps { background: var(--leaf-light); color: var(--leaf); }
+.dd-section-label.visual { background: var(--sky-light); color: var(--sky); }
+.dd-section-label.video { background: #FFF4D6; color: var(--gold); }
+.dd-section-label.tip { background: var(--cream); color: var(--saffron); }
+
+.dd-story { background: var(--cream); border-radius: 16px; padding: 24px; border-left: 5px solid var(--berry); margin-bottom: 16px; }
+.dd-story-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--berry); margin-bottom: 10px; }
+.dd-story-text { font-size: 15px; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+
+.dd-steps { counter-reset: ddstep; }
+.dd-step { display: flex; gap: 16px; margin-bottom: 18px; align-items: flex-start; }
+.dd-step-num { counter-increment: ddstep; flex-shrink: 0; width: 36px; height: 36px; background: var(--leaf); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; }
+.dd-step-content { flex: 1; }
+.dd-step-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.dd-step-text { font-size: 14px; line-height: 1.7; color: var(--ink); }
+.dd-step-example { background: var(--paper); border-radius: 10px; padding: 12px 14px; margin-top: 8px; font-size: 14px; font-family: 'Nunito', sans-serif; border-left: 3px solid var(--marigold); color: var(--ink); }
+
+.dd-visual { text-align: center; margin: 20px 0; }
+.dd-visual svg { max-width: 100%; height: auto; border-radius: 12px; }
+.dd-visual-caption { font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic; }
+
+.dd-video { margin: 20px 0; border-radius: 16px; overflow: hidden; background: var(--ink); }
+.dd-video iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+.dd-video-caption { padding: 10px 16px; font-size: 12px; color: var(--ink-soft); background: var(--paper); }
+
+.dd-tip { background: #FFF4D6; border-radius: 14px; padding: 18px 20px; border-left: 4px solid var(--gold); margin: 16px 0; }
+.dd-tip-title { font-weight: 800; font-size: 13px; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.dd-tip-text { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+.dd-funfact { background: linear-gradient(135deg, #FFF4D6 0%, #FFEEBB 100%); border-radius: 16px; padding: 20px 22px; border: 2px solid var(--gold); margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+.dd-funfact-icon { font-size: 32px; flex-shrink: 0; }
+.dd-funfact-content { flex: 1; }
+.dd-funfact-label { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.dd-funfact-text { font-size: 15px; line-height: 1.6; color: var(--ink); font-weight: 600; }
+
+.dd-rich-text { font-size: 15px; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+.dd-rich-text strong, .dd-rich-text b { font-weight: 700; color: var(--ink); }
+
+/* === CONCEPT TEACHING CARDS (Math) === */
+.concept-card { background: white; border-radius: 20px; padding: 28px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 20px; border: 2px solid var(--paper-dark); }
+.concept-card.answered { border-color: var(--leaf); }
+.concept-name { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--saffron); margin-bottom: 8px; }
+.concept-definition { font-size: 15px; line-height: 1.7; color: var(--ink); margin-bottom: 14px; white-space: pre-wrap; }
+.concept-examples { background: var(--paper); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.concept-examples-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px; display: block; }
+.concept-example-item { font-size: 14px; line-height: 1.6; color: var(--ink); padding: 4px 0; font-family: 'Nunito', sans-serif; }
+.concept-check { background: var(--cream); border: 2px solid var(--marigold); border-radius: 16px; padding: 20px; margin-top: 16px; }
+
+/* === SELF-CHECK CRITERIA (Stage 3) === */
+.self-check-box { background: var(--paper); border-radius: 14px; padding: 16px 18px; margin-top: 14px; border: 2px solid var(--paper-dark); }
+.self-check-title { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--saffron); margin-bottom: 10px; }
+.self-check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; cursor: pointer; user-select: none; }
+.self-check-item + .self-check-item { border-top: 1px solid var(--paper-dark); }
+.self-check-tick { width: 24px; height: 24px; border: 2px solid var(--paper-dark); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; transition: all 0.2s ease; background: white; }
+.self-check-tick.checked { background: var(--leaf); border-color: var(--leaf); color: white; }
+.self-check-label { font-size: 14px; color: var(--ink); line-height: 1.4; }
+.self-check-stars { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--gold); }
+
+/* === STAGE 3: THINK DEEPER === */
+.think-card { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); transition: border-color 0.3s ease; }
+.think-card.submitted { border-color: var(--leaf); background: linear-gradient(135deg, var(--cream), var(--leaf-light)); }
+.scenario-box { background: var(--cream); padding: 16px 18px; border-radius: 12px; border-left: 5px solid var(--saffron); margin: 12px 0 14px 0; color: var(--ink); font-size: 16px; line-height: 1.7; font-weight: 600; }
+.word-limit-tag { display: inline-block; background: var(--sky); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px; }
+.text-input { width: 100%; padding: 14px 16px; border: 2px solid var(--paper-dark); border-radius: 12px; font-family: inherit; font-size: 15px; background: white; color: var(--ink); transition: border-color 0.2s ease; line-height: 1.5; }
+.text-input:focus { outline: none; border-color: var(--saffron); }
+textarea.text-input { resize: vertical; min-height: 100px; }
+textarea.text-input[readonly] { background: var(--paper); cursor: default; }
+.word-counter { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); text-align: right; transition: color 0.2s ease; }
+.word-counter.in-range { color: var(--leaf); }
+.word-counter.over { color: var(--berry); }
+.model-answer-box { margin-top: 14px; padding: 16px 18px; background: linear-gradient(135deg, var(--cream), var(--paper-dark)); border-radius: 12px; border: 2px dashed var(--marigold); animation: slideDown 0.4s ease; }
+.model-answer-box .feedback-label { color: var(--saffron); }
+.answer-text { margin-top: 6px; line-height: 1.6; color: var(--ink); font-size: 14px; }
+.submitted-tag { display: inline-block; margin-left: 8px; background: var(--leaf); color: white; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.marks-tag { display: inline-block; margin-left: 8px; background: var(--ink); color: var(--cream); padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.question-category { display: inline-block; margin-left: 10px; padding: 4px 12px; background: var(--paper-dark); border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); vertical-align: middle; }
+
+/* === STAGE 4: TEST === */
+.test-intro { background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 100%); color: white; padding: 40px 32px; border-radius: 24px; text-align: center; margin-bottom: 28px; box-shadow: 0 8px 24px var(--shadow-strong); position: relative; overflow: hidden; }
+.test-intro::before { content: ''; position: absolute; top: -50px; left: -50px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%); border-radius: 50%; }
+.test-intro-icon { font-size: 60px; margin-bottom: 12px; position: relative; z-index: 2; }
+.test-intro h2 { font-family: 'Fraunces', serif; font-weight: 900; font-size: 32px; margin-bottom: 8px; position: relative; z-index: 2; }
+.test-intro-subtitle { font-size: 15px; opacity: 0.95; margin-bottom: 8px; position: relative; z-index: 2; }
+.test-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0; position: relative; z-index: 2; }
+.test-stat { background: rgba(255,255,255,0.2); padding: 14px; border-radius: 14px; backdrop-filter: blur(10px); }
+.test-stat-num { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; line-height: 1; }
+.test-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-top: 4px; }
+.test-sections-preview { background: rgba(0,0,0,0.15); border-radius: 14px; padding: 16px; margin: 20px 0; text-align: left; position: relative; z-index: 2; }
+.test-section-preview { padding: 6px 0; font-size: 13px; }
+.test-section-preview + .test-section-preview { border-top: 1px solid rgba(255,255,255,0.2); }
+.test-start-btn { background: white; color: var(--saffron); padding: 16px 36px; font-size: 16px; font-weight: 800; border-radius: 14px; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; z-index: 2; }
+.test-start-btn:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+
+.timer-bar { position: sticky; top: 12px; z-index: 10; background: var(--ink); color: var(--cream); padding: 14px 22px; border-radius: 14px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px var(--shadow-strong); }
+.timer-display { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.timer-display.warning { color: var(--marigold); }
+.timer-display.urgent { color: #FF8B6E; animation: pulse 1s ease-in-out infinite; }
+.timer-progress { font-size: 13px; font-weight: 700; opacity: 0.85; }
+
+.test-section { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); }
+.test-section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 2px solid var(--paper-dark); margin-bottom: 14px; }
+.test-section-header h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); }
+.test-section-marks { background: var(--saffron); color: white; padding: 4px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
+.test-section-instructions { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; font-style: italic; }
+.test-passage { background: var(--paper); border-radius: 14px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--sky); }
+.test-passage-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.test-passage-author { font-size: 12px; color: var(--ink-soft); font-style: italic; margin-bottom: 12px; }
+.test-passage-text { font-size: 14px; line-height: 1.7; color: var(--ink); white-space: pre-wrap; }
+.test-passage-note { margin-top: 12px; font-size: 12px; color: var(--ink-soft); padding: 8px 12px; background: rgba(244, 168, 44, 0.15); border-radius: 8px; }
+
+.test-question { padding: 18px 0; border-bottom: 1px solid var(--paper-dark); }
+.test-question:last-child { border-bottom: none; }
+.test-q-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.test-q-num { font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; color: var(--saffron); }
+.test-q-type { font-size: 10px; font-weight: 800; letter-spacing: 1px; color: var(--ink-soft); background: var(--paper-dark); padding: 3px 8px; border-radius: 6px; }
+.option-btn.test-selected { background: var(--cream); border-color: var(--saffron); color: var(--ink); font-weight: 700; }
+.option-btn.test-selected .option-letter { background: var(--saffron); color: white; }
+
+.test-submit-zone { text-align: center; margin: 32px 0; padding: 28px; background: var(--cream); border-radius: 18px; border: 2px solid var(--paper-dark); }
+.test-submit-btn { padding: 14px 32px; font-size: 16px; }
+
+/* === RESULTS === */
+.results-screen { padding: 24px 0; position: relative; }
+.results-hero { background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 50%, var(--gold) 100%); color: white; padding: 48px 32px; border-radius: 28px; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 12px 36px var(--shadow-strong); text-align: center; }
+.results-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.25) 0%, transparent 25%), radial-gradient(circle at 85% 80%, rgba(255,255,255,0.18) 0%, transparent 30%); pointer-events: none; }
+
+.confetti-piece { position: absolute; width: 8px; height: 14px; border-radius: 2px; animation: confettiFall 3s ease-in-out infinite; opacity: 0.85; pointer-events: none; }
+@keyframes confettiFall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(700px) rotate(720deg); opacity: 0; } }
+
+.badge-circle { width: 160px; height: 160px; margin: 0 auto 20px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 36px rgba(0,0,0,0.2), inset 0 0 20px rgba(244, 168, 44, 0.2); position: relative; z-index: 2; animation: badgePop 0.8s cubic-bezier(0.5, 1.5, 0.7, 1); }
+.badge-circle.no-badge { background: rgba(255,255,255,0.85); }
+@keyframes badgePop { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+.badge-circle::before { content: ''; position: absolute; inset: -10px; border-radius: 50%; border: 4px dashed white; opacity: 0.6; animation: spin 20s linear infinite; }
+.badge-emoji { font-size: 80px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+.badge-name { font-family: 'Fraunces', serif; font-weight: 900; font-size: 36px; margin-bottom: 6px; color: white; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); position: relative; z-index: 2; }
+.badge-tagline { font-size: 17px; opacity: 0.95; margin-bottom: 24px; position: relative; z-index: 2; font-weight: 600; }
+.results-percentage { background: white; color: var(--saffron); display: inline-block; padding: 18px 40px; border-radius: 18px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); margin-top: 8px; position: relative; z-index: 2; }
+.percentage-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 56px; line-height: 1; }
+.percentage-label { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 6px; }
+
+.motivational-quote { background: var(--cream); border: 2px solid var(--marigold); border-radius: 18px; padding: 22px 24px; margin: 24px auto; max-width: 600px; font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; color: var(--ink); line-height: 1.5; position: relative; text-align: center; }
+.motivational-quote::before { content: '"'; font-family: 'Fraunces', serif; font-size: 80px; color: var(--marigold); position: absolute; top: -20px; left: 12px; line-height: 1; opacity: 0.4; }
+
+.section-scores { background: white; border-radius: 20px; padding: 24px; margin: 24px auto; max-width: 700px; box-shadow: 0 6px 20px var(--shadow); border: 2px solid var(--paper-dark); }
+.section-scores h3 { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; color: var(--ink); margin-bottom: 20px; text-align: center; }
+.scores-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.score-cell { background: var(--paper); border-radius: 14px; padding: 16px 10px; text-align: center; border: 2px solid var(--paper-dark); transition: transform 0.2s ease; }
+.score-cell:hover { transform: translateY(-2px); }
+.score-cell.strong { background: var(--leaf-light); border-color: var(--leaf); }
+.score-cell.improvement { background: var(--berry-light); border-color: var(--berry); }
+.score-cell-icon { font-size: 26px; margin-bottom: 4px; }
+.score-cell-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-soft); margin-bottom: 6px; }
+.score-cell-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 26px; color: var(--ink); line-height: 1; }
+.score-cell-out-of { font-size: 12px; color: var(--ink-soft); margin-top: 4px; font-weight: 600; }
+.score-cell-tag { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 8px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+.score-cell-tag.strong-tag { background: var(--leaf); color: white; }
+.score-cell-tag.improve-tag { background: var(--berry); color: white; }
+.score-cell-tag.neutral-tag { background: var(--paper-dark); color: var(--ink-soft); }
+
+.reattempt-card { background: linear-gradient(135deg, var(--sky) 0%, #4a7a9c 100%); color: white; padding: 24px 28px; border-radius: 20px; margin: 24px auto; max-width: 600px; text-align: center; box-shadow: 0 6px 20px rgba(91, 141, 184, 0.3); }
+.reattempt-card h4 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.reattempt-card p { font-size: 15px; opacity: 0.95; margin-bottom: 16px; }
+.reattempt-btn { background: white; color: var(--sky); padding: 12px 28px; border: none; border-radius: 12px; font-family: inherit; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.reattempt-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+
+.manual-grading-note { margin-top: 20px; padding: 14px 18px; background: #FFF4D6; border-radius: 12px; font-size: 13px; color: var(--ink-soft); border-left: 4px solid var(--gold); max-width: 700px; margin-left: auto; margin-right: auto; }
+
+.results-detail { background: var(--cream); border-radius: 18px; padding: 22px 24px; margin: 16px auto; max-width: 700px; text-align: left; border: 2px solid var(--paper-dark); }
+.results-detail h4 { font-family: 'Fraunces', serif; font-size: 18px; margin-bottom: 12px; color: var(--ink); }
+.review-item { padding: 14px 0; border-bottom: 1px solid var(--paper-dark); }
+.review-item:last-child { border-bottom: none; }
+.review-q { font-weight: 700; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+.review-content { font-size: 13px; color: var(--ink-soft); }
+.review-row { padding: 4px 0; line-height: 1.5; }
+.review-result { display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; }
+.review-result.correct { background: var(--leaf-light); color: var(--leaf); }
+.review-result.incorrect { background: var(--berry-light); color: var(--berry); }
+.review-result.manual { background: #FFF4D6; color: #B8830A; }
+
+.results-actions { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+@media (max-width: 600px) { .container { padding: 16px 14px 60px; } header.app-header { padding: 20px; border-radius: 18px; } .progress-bar { gap: 5px; } .progress-step { padding: 8px 4px; font-size: 9px; } .step-num { font-size: 16px; } .branches-grid { grid-template-columns: 1fr; } .panel-container { padding: 22px; } .panel-title { font-size: 22px; } .narration-text { font-size: 15px; } .cards-grid { grid-template-columns: 1fr; } .vocab-card { height: 260px; } .panel-nav { flex-direction: column; } .test-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; } .test-stat { padding: 10px 6px; } .test-stat-num { font-size: 22px; } .badge-circle { width: 130px; height: 130px; } .badge-emoji { font-size: 60px; } .badge-name { font-size: 28px; } .percentage-num { font-size: 44px; } .results-hero { padding: 32px 20px; } .scores-table { grid-template-columns: 1fr 1fr; } .score-cell { padding: 14px 8px; } .score-cell-num { font-size: 22px; } .think-card, .test-section { padding: 18px; } }
+</style>
+</head>
+<body>
+
+<script type="application/json" id="embedded-chapter">
+{
+  "schema_version": "2.0",
+  "chapter_id": "math-ch2-operations-large-numbers",
+  "chapter_number": 2,
+  "chapter_title": "Operations on Large Numbers",
+  "subject": "Mathematics",
+  "books": [
+    "Learning Paths Mathematics Class 5"
+  ],
+  "theme": "Addition and Subtraction of Large Numbers",
+  "theme_short": "Operations",
+  "summary": "Master addition and subtraction of numbers up to 8 digits — learn the column method with carrying and borrowing, understand the properties of each operation, and solve real-world word problems.",
+  "school_exam_format": {
+    "test_name": "Periodic Test 1",
+    "session": "2026-27",
+    "total_marks": 20,
+    "duration_minutes": 40
+  },
+  "badges": {
+    "champion": {
+      "threshold": 90,
+      "name": "Calculation Champion",
+      "emoji": "🏆",
+      "tagline": "You've mastered large number operations!"
+    },
+    "star": {
+      "threshold": 75,
+      "name": "Operations Star",
+      "emoji": "⭐",
+      "tagline": "Brilliant calculating!"
+    },
+    "spark": {
+      "threshold": 60,
+      "name": "Arithmetic Spark",
+      "emoji": "✨",
+      "tagline": "Keep practising — accuracy comes with practice!"
+    }
+  },
+  "motivational_quotes": [
+    "Mathematics is the queen of the sciences. — Carl Friedrich Gauss",
+    "The essence of mathematics is not to make simple things complicated, but to make complicated things simple.",
+    "Practice does not make perfect. Perfect practice makes perfect.",
+    "Every big calculation is just a bunch of small steps done carefully."
+  ],
+  "stage_1_learn": {
+    "title": "Learn",
+    "description": "Learn addition and subtraction of large numbers step by step. Read each concept, study the examples, then test yourself.",
+    "branches": [
+      {
+        "id": "branch_addition",
+        "title": "Addition of Large Numbers",
+        "icon": "➕",
+        "type": "concept_teaching",
+        "marks": 5,
+        "concept_title": "Adding Numbers up to 8 Digits",
+        "intro": "You already know how to add small numbers. The same method works for lakhs and crores — just more columns!",
+        "cards": [
+          {
+            "id": "add_recap",
+            "concept_name": "Recap: How Column Addition Works",
+            "definition": "Column addition means writing numbers one below the other, lining up the digits by place value.\n\nRules:\n1. Always start adding from the ONES column (rightmost)\n2. Move LEFT one column at a time\n3. If the sum in any column is 10 or more:\n   • Write the ONES digit of the sum in that column\n   • CARRY the TENS digit to the next column\n\nThis works the same way whether you're adding 2-digit numbers or 8-digit numbers!\n\n💡 Think of it like stacking blocks — each column can only hold one digit. If there's overflow, it spills into the next column.",
+            "examples": [
+              "  35,436\n+ 43,968\n--------\n  79,404\n(6+8=14, write 4 carry 1; 3+6+1=10, write 0 carry 1; 4+9+1=14, write 4 carry 1; 5+3+1=9; 3+4=7)"
+            ],
+            "check": {
+              "question": "When adding two numbers, which column do you start from?",
+              "options": [
+                "Leftmost (highest place value)",
+                "Rightmost (ones place)",
+                "The middle column",
+                "Any column you like"
+              ],
+              "correct": 1,
+              "explanation": "Always start from the ONES column (rightmost) and move left. This is because carries flow from right to left."
+            }
+          },
+          {
+            "id": "add_7digit",
+            "concept_name": "Adding 7-Digit Numbers",
+            "definition": "Let's add two 7-digit numbers step by step:\n\n  60,43,985\n+ 24,86,373\n----------\n\nStart from ones:\n5 + 3 = 8 ✓\n8 + 7 = 15 → write 5, carry 1\n9 + 3 + 1 = 13 → write 3, carry 1\n3 + 6 + 1 = 10 → write 0, carry 1\n4 + 8 + 1 = 13 → write 3, carry 1\n0 + 4 + 1 = 5\n6 + 2 = 8\n\nAnswer: 85,30,358\n\n💡 Tip: Always double-check by estimating first. 60 lakh + 25 lakh ≈ 85 lakh. Our answer 85,30,358 is close to 85 lakh ✓",
+            "examples": [
+              "60,43,985 + 24,86,373 = 85,30,358",
+              "Estimation check: 60 lakh + 25 lakh ≈ 85 lakh ✓"
+            ],
+            "check": {
+              "question": "When adding 60,43,985 + 24,86,373, what happens in the tens column (8 + 7)?",
+              "options": [
+                "Write 15",
+                "Write 5 and carry 1 to hundreds",
+                "Write 1 and carry 5",
+                "Write 87"
+              ],
+              "correct": 1,
+              "explanation": "8 + 7 = 15. Since 15 ≥ 10, write the ones digit (5) in the tens column and carry the tens digit (1) to the hundreds column."
+            }
+          },
+          {
+            "id": "add_8digit",
+            "concept_name": "Adding 8-Digit Numbers (Crores)",
+            "definition": "The same method extends to 8 digits — into crores!\n\n  2,24,69,733\n+ 4,93,44,483\n------------\n  7,18,14,216\n\nStep by step from ones:\n3 + 3 = 6\n3 + 8 = 11 → write 1, carry 1\n7 + 4 + 1 = 12 → write 2, carry 1\n9 + 4 + 1 = 14 → write 4, carry 1\n6 + 3 + 1 = 10 → write 0 (wait, let me recheck)...\n\nActually: 4 + 4 = 8, then 9 + 4 = 13 write 3 carry 1, then 6 + 3 + 1 = 10 write 0 carry 1... the key point is: no matter how many digits, the PROCESS is the same.\n\n💡 For 8-digit numbers, there are more columns — be extra careful with carries. Write them small above each column so you don't forget!",
+            "examples": [
+              "2,24,69,733 + 4,93,44,483 = 7,18,14,216",
+              "Always align digits carefully and write carries above each column"
+            ],
+            "check": {
+              "question": "What is a good way to check if your addition answer is roughly correct?",
+              "options": [
+                "Subtract the answer from one number",
+                "Round both numbers and add mentally",
+                "Count the digits",
+                "Use a calculator only"
+              ],
+              "correct": 1,
+              "explanation": "Estimation! Round both numbers to the nearest lakh or crore and add mentally. If your precise answer is close to the estimate, it's likely correct."
+            }
+          },
+          {
+            "id": "add_properties",
+            "concept_name": "Properties of Addition",
+            "definition": "Addition follows special rules called PROPERTIES:\n\n1️⃣ Commutative Property: Changing the ORDER does not change the sum.\n   A + B = B + A\n   Example: 4,59,261 + 1,19,231 = 1,19,231 + 4,59,261 = 5,78,492\n\n2️⃣ Associative Property: Changing the GROUPING does not change the sum.\n   (A + B) + C = A + (B + C)\n   Example: (45,826 + 1,34,174) + 7,82,523 = 45,826 + (1,34,174 + 7,82,523)\n\n3️⃣ Additive Identity: Adding 0 to any number gives the same number.\n   A + 0 = A\n   0 is called the additive identity.\n   Example: 6,82,71,588 + 0 = 6,82,71,588\n\n4️⃣ Successor: Adding 1 gives the NEXT number (successor).\n   58,32,714 + 1 = 58,32,715\n\n💡 \"Commutative\" comes from \"commute\" (to swap). \"Associative\" comes from \"associate\" (to group).",
+            "examples": [
+              "Commutative: 4,59,261 + 1,19,231 = 1,19,231 + 4,59,261",
+              "Associative: (45,826 + 1,34,174) + 7,82,523 = 45,826 + (1,34,174 + 7,82,523)",
+              "Identity: 6,82,71,588 + 0 = 6,82,71,588",
+              "Successor: 58,32,714 + 1 = 58,32,715"
+            ],
+            "check": {
+              "question": "Which property is demonstrated by: 3,50,000 + 2,10,000 = 2,10,000 + 3,50,000?",
+              "options": [
+                "Associative property",
+                "Commutative property",
+                "Additive identity",
+                "Successor property"
+              ],
+              "correct": 1,
+              "explanation": "The ORDER of the numbers changed (3,50,000 and 2,10,000 swapped places) but the sum stays the same. That's the commutative property."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_subtraction",
+        "title": "Subtraction of Large Numbers",
+        "icon": "➖",
+        "type": "concept_teaching",
+        "marks": 5,
+        "concept_title": "Subtracting Numbers up to 8 Digits",
+        "intro": "Subtraction is the reverse of addition. Let's learn how borrowing works with really large numbers!",
+        "cards": [
+          {
+            "id": "sub_recap",
+            "concept_name": "Recap: How Column Subtraction Works",
+            "definition": "Column subtraction means writing the LARGER number on top, the smaller below, aligned by place value.\n\nRules:\n1. Always start from the ONES column (rightmost)\n2. Move LEFT one column at a time\n3. If the top digit is SMALLER than the bottom digit:\n   • BORROW 1 from the next column to the left\n   • That 1 becomes 10 in the current column\n   • The digit you borrowed from reduces by 1\n\n⚠️ Always subtract the smaller number FROM the larger number.\n\n💡 Borrowing is like breaking a ₹100 note into ten ₹10 notes — the total value stays the same, you just rearrange it.",
+            "examples": [
+              "  16,560\n−  5,825\n--------\n  10,735\n(0−5: borrow! 10−5=5; 6−1−2=3; 5−8: borrow! 15−8=7; 6−1−5=0; 1−0=1)"
+            ],
+            "check": {
+              "question": "In subtraction, when the top digit is smaller than the bottom digit, what do you do?",
+              "options": [
+                "Subtract the top from the bottom instead",
+                "Borrow 1 from the next column to the left",
+                "Skip that column",
+                "Write 0 and move on"
+              ],
+              "correct": 1,
+              "explanation": "You BORROW 1 from the next column to the left. That 1 becomes 10 in the current column, making the top digit big enough to subtract from."
+            }
+          },
+          {
+            "id": "sub_7digit",
+            "concept_name": "Subtracting 7-Digit Numbers",
+            "definition": "Let's subtract step by step:\n\n  80,38,529\n− 63,95,867\n----------\n\nOnes: 9 − 7 = 2\nTens: 2 − 6? Can't! Borrow from hundreds: 2 becomes 12. 12 − 6 = 6. Hundreds digit (5) becomes 4.\nHundreds: 4 − 8? Can't! Borrow from thousands: 4 becomes 14. 14 − 8 = 6. Thousands digit (8) becomes 7.\nThousands: 7 − 5 = 2 (wait, actually the original digit was 8, reduced by borrowing to 7)... \n\nLet me show the final answer: 80,38,529 − 63,95,867 = 16,42,662\n\n💡 With lots of borrowing, it's easy to lose track. Write the changed digits clearly above the original ones. Some students use a small line through the old digit and write the new one above.",
+            "examples": [
+              "80,38,529 − 63,95,867 = 16,42,662",
+              "Estimation check: 80 lakh − 64 lakh ≈ 16 lakh ✓"
+            ],
+            "check": {
+              "question": "What is a good way to CHECK your subtraction answer?",
+              "options": [
+                "Subtract again",
+                "Add your answer to the smaller number — it should equal the larger number",
+                "Count the digits",
+                "Round to the nearest lakh"
+              ],
+              "correct": 1,
+              "explanation": "The best check: Answer + Smaller number = Larger number. For example: 16,42,662 + 63,95,867 should equal 80,38,529. If it does, your subtraction is correct!"
+            }
+          },
+          {
+            "id": "sub_8digit",
+            "concept_name": "Subtracting 8-Digit Numbers (Crores)",
+            "definition": "The same process works for 8-digit numbers:\n\n  6,50,80,385\n− 3,98,93,257\n------------\n  2,51,87,128\n\nThis subtraction involves MULTIPLE borrows — some columns need to borrow from the column to their left, which might also need to borrow!\n\nChain borrowing example: If you need to borrow but the next column is 0, that 0 must first borrow from ITS left neighbor, becoming 10, then giving 1 to you (becoming 9 itself).\n\n💡 Real-world example: India's budget might have revenues of ₹6,50,80,385 and expenses of ₹3,98,93,257. The surplus = ₹2,51,87,128. This is exactly the kind of subtraction the government does!",
+            "examples": [
+              "6,50,80,385 − 3,98,93,257 = 2,51,87,128",
+              "Check: 2,51,87,128 + 3,98,93,257 = 6,50,80,385 ✓"
+            ],
+            "check": {
+              "question": "When you need to borrow but the next column has a 0, what happens?",
+              "options": [
+                "You can't borrow — subtraction is impossible",
+                "The 0 first borrows from its left neighbor, becomes 10, then gives 1 to you",
+                "You skip to a column with a non-zero digit",
+                "Write 0 in that column"
+              ],
+              "correct": 1,
+              "explanation": "Chain borrowing! The 0 column first borrows from its left (becoming 10), then gives 1 to you (becoming 9). This can chain through multiple 0s."
+            }
+          },
+          {
+            "id": "sub_properties",
+            "concept_name": "Properties of Subtraction",
+            "definition": "Subtraction has different properties from addition:\n\n1️⃣ Property of Zero: Subtracting 0 from any number gives the same number.\n   A − 0 = A\n   Example: 63,92,758 − 0 = 63,92,758\n\n2️⃣ Self-Subtraction: Any number minus itself equals 0.\n   A − A = 0\n   Example: 8,86,25,973 − 8,86,25,973 = 0\n\n3️⃣ Predecessor: Subtracting 1 gives the PREVIOUS number.\n   5,87,31,095 − 1 = 5,87,31,094\n\n⚠️ Subtraction is NOT commutative: A − B ≠ B − A\n   10 − 3 = 7, but 3 − 10 = −7 (negative!)\n\n⚠️ Subtraction is NOT associative: (A − B) − C ≠ A − (B − C)\n   (10 − 5) − 2 = 3, but 10 − (5 − 2) = 7\n\n💡 Addition and subtraction are INVERSE operations — one undoes the other!",
+            "examples": [
+              "63,92,758 − 0 = 63,92,758 (property of zero)",
+              "8,86,25,973 − 8,86,25,973 = 0 (self-subtraction)",
+              "5,87,31,095 − 1 = 5,87,31,094 (predecessor)",
+              "NOT commutative: 10 − 3 = 7 but 3 − 10 ≠ 7"
+            ],
+            "check": {
+              "question": "Is subtraction commutative? In other words, does A − B always equal B − A?",
+              "options": [
+                "Yes, always",
+                "No — A − B and B − A give different results (unless A = B)",
+                "Yes, for large numbers only",
+                "Yes, if both numbers are positive"
+              ],
+              "correct": 1,
+              "explanation": "Subtraction is NOT commutative. 10 − 3 = 7, but 3 − 10 = −7. They are equal only when A = B (both give 0)."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_word_problems",
+        "title": "Solving Word Problems",
+        "icon": "📝",
+        "type": "concept_teaching",
+        "marks": 3,
+        "concept_title": "Choosing Between Addition and Subtraction",
+        "intro": "The trickiest part isn't the calculation — it's knowing WHICH operation to use! Let's learn the clues.",
+        "cards": [
+          {
+            "id": "wp_clues",
+            "concept_name": "Clue Words for Addition and Subtraction",
+            "definition": "Word problems don't say \"add\" or \"subtract\" directly. You need to spot CLUE WORDS:\n\n➕ ADDITION clue words:\n• total, altogether, in all, combined, sum\n• how many in total, how much altogether\n• both, together, joined\n\n➖ SUBTRACTION clue words:\n• difference, how many more, how many less\n• remaining, left over, balance\n• how much more, how far apart\n• reduce, decrease, spent, gave away\n\n💡 Draw a simple diagram! Bar models help:\n• Addition: two bars joining into one bigger bar\n• Subtraction: one big bar with a piece removed",
+            "examples": [
+              "\"How many visitors came in all?\" → ADDITION (clue: in all)",
+              "\"How many more people visited in 2016?\" → SUBTRACTION (clue: how many more)",
+              "\"What is the total collection?\" → ADDITION (clue: total)"
+            ],
+            "check": {
+              "question": "\"Sumit bought a car for ₹6,85,385 and a fridge for ₹38,965. How much did he spend altogether?\" — which operation?",
+              "options": [
+                "Subtraction (he's spending money)",
+                "Addition (altogether = combine both amounts)",
+                "Multiplication (two items)",
+                "Division (splitting the cost)"
+              ],
+              "correct": 1,
+              "explanation": "The clue word is \"altogether\" — this means COMBINE the two amounts. Addition: ₹6,85,385 + ₹38,965."
+            }
+          },
+          {
+            "id": "wp_two_step",
+            "concept_name": "Two-Step Word Problems",
+            "definition": "Some problems need TWO operations:\n\nExample: Sumit bought a car for ₹6,85,385 and a fridge for ₹38,965. He had ₹7,50,000. How much money is left?\n\nStep 1 (Addition): Total spent = ₹6,85,385 + ₹38,965 = ₹7,24,350\nStep 2 (Subtraction): Money left = ₹7,50,000 − ₹7,24,350 = ₹25,650\n\nAnother example: Town A has population 14,82,675. Town B has 20,58,975.\nWhat is the total population? → Addition: 35,41,650\nHow many more people does Town B have? → Subtraction: 5,76,300\n\n💡 Read the problem TWICE. First time: understand the story. Second time: identify the operations needed.",
+            "examples": [
+              "Car ₹6,85,385 + Fridge ₹38,965 = ₹7,24,350 spent. ₹7,50,000 − ₹7,24,350 = ₹25,650 left.",
+              "Town A: 14,82,675 + Town B: 20,58,975 = Total: 35,41,650"
+            ],
+            "check": {
+              "question": "A shop earned ₹4,51,00,826 in January and ₹1,35,20,021 in February. It spent ₹3,00,00,000 on rent and salaries. What is left? What TWO operations do you need?",
+              "options": [
+                "Subtraction then addition",
+                "Addition then subtraction",
+                "Two subtractions",
+                "Two additions"
+              ],
+              "correct": 1,
+              "explanation": "Step 1: ADD January + February earnings. Step 2: SUBTRACT expenses from total earnings. Addition then subtraction."
+            }
+          },
+          {
+            "id": "wp_verification",
+            "concept_name": "Checking Your Word Problem Answer",
+            "definition": "After solving a word problem, ALWAYS check:\n\n✅ Does the answer make sense?\n• If you added, is the answer BIGGER than both numbers? (It must be!)\n• If you subtracted, is the answer SMALLER than the bigger number? (It must be!)\n• Is the answer roughly what you'd expect? (Estimate!)\n\n✅ Did you answer what was ASKED?\n• If they asked \"how much is left\" — did you subtract, not just add?\n• If they asked \"how many altogether\" — did you add?\n\n✅ Did you include the UNITS?\n• ₹ for money, km for distance, people for population\n\n💡 The biggest mistake students make is doing the right calculation but answering the WRONG question!",
+            "examples": [
+              "If 80,38,529 − 63,95,867 = 16,42,662 → check: 16,42,662 < 80,38,529 ✓ (answer is smaller than the larger number)",
+              "If the question asks 'how much is left' and your answer is bigger than what they started with — something is wrong!"
+            ],
+            "check": {
+              "question": "You calculated: 45,00,000 − 28,50,000 = 16,50,000. Which check confirms this is correct?",
+              "options": [
+                "16,50,000 × 2 = 33,00,000",
+                "16,50,000 + 28,50,000 = 45,00,000",
+                "16,50,000 ÷ 3 = 5,50,000",
+                "45,00,000 + 28,50,000 = 73,50,000"
+              ],
+              "correct": 1,
+              "explanation": "For subtraction: answer + subtracted number = original number. 16,50,000 + 28,50,000 = 45,00,000 ✓. This confirms the subtraction is correct."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "stage_2_practice": {
+    "title": "Practice",
+    "description": "Test your addition and subtraction skills with these MCQs.",
+    "sections": [
+      {
+        "id": "practice_addition",
+        "title": "Addition",
+        "icon": "➕",
+        "marks": 8,
+        "questions": [
+          {
+            "id": "pq1",
+            "question": "4,57,924 + 1,55,945 = ?",
+            "options": [
+              "6,13,869",
+              "6,13,896",
+              "6,12,869",
+              "5,13,869"
+            ],
+            "correct": 0,
+            "hint": "Add column by column from the right. 4+5=9, 2+4=6, 9+9=18 (carry 1)...",
+            "explanation": "457924 + 155945 = 613869. Working ones→left: 4+5=9, 2+4=6, 9+9=18(write 8 carry 1), 7+5+1=13(write 3 carry 1), 5+1+1=7(wait, recheck — actually: 5+5+1=11, write 1 carry 1, 4+1+1=6). Answer: 6,13,869."
+          },
+          {
+            "id": "pq2",
+            "question": "6,44,85,825 + 7,12,86,389 = ?",
+            "options": [
+              "13,57,72,214",
+              "13,57,72,114",
+              "13,57,71,214",
+              "13,57,82,214"
+            ],
+            "correct": 0,
+            "hint": "This is an 8-digit addition. Line up carefully and watch the carries!",
+            "explanation": "64485825 + 71286389 = 135772214. Written in Indian system: 13,57,72,214."
+          },
+          {
+            "id": "pq3",
+            "question": "Which property says A + 0 = A?",
+            "options": [
+              "Commutative property",
+              "Associative property",
+              "Additive identity",
+              "Closure property"
+            ],
+            "correct": 2,
+            "hint": "Which special number, when added, changes nothing?",
+            "explanation": "The additive identity property says adding 0 to any number gives the same number. 0 is the identity element for addition."
+          },
+          {
+            "id": "pq4",
+            "question": "Which property is shown by: (45,826 + 1,34,174) + 7,82,523 = 45,826 + (1,34,174 + 7,82,523)?",
+            "options": [
+              "Commutative",
+              "Associative",
+              "Identity",
+              "Distributive"
+            ],
+            "correct": 1,
+            "hint": "The GROUPING (brackets) changed but the numbers stayed in the same order.",
+            "explanation": "The brackets changed (regrouping) but the order stayed the same. That's the associative property."
+          },
+          {
+            "id": "pq5",
+            "question": "The successor of 58,32,714 is:",
+            "options": [
+              "58,32,715",
+              "58,32,713",
+              "58,32,724",
+              "59,32,714"
+            ],
+            "correct": 0,
+            "hint": "Successor = the very next number = add 1.",
+            "explanation": "Successor means the number that comes immediately after. 58,32,714 + 1 = 58,32,715."
+          },
+          {
+            "id": "pq6",
+            "question": "39,48,638 + 2,98,31,565 = ?",
+            "options": [
+              "3,37,80,203",
+              "3,37,80,303",
+              "33,78,203",
+              "3,37,81,203"
+            ],
+            "correct": 0,
+            "hint": "One number has 7 digits, the other has 9 digits. Line up ones places carefully!",
+            "explanation": "3948638 + 29831565 = 33780203. In Indian system: 3,37,80,203."
+          }
+        ]
+      },
+      {
+        "id": "practice_subtraction",
+        "title": "Subtraction",
+        "icon": "➖",
+        "marks": 8,
+        "questions": [
+          {
+            "id": "pq7",
+            "question": "9,91,30,419 − 3,88,25,123 = ?",
+            "options": [
+              "6,03,05,296",
+              "6,03,15,296",
+              "5,03,05,296",
+              "6,03,05,396"
+            ],
+            "correct": 0,
+            "hint": "Start from ones: 9−3=6, 1−2 can't → borrow...",
+            "explanation": "99130419 − 38825123 = 60305296. In Indian system: 6,03,05,296."
+          },
+          {
+            "id": "pq8",
+            "question": "The predecessor of 5,87,31,095 is:",
+            "options": [
+              "5,87,31,094",
+              "5,87,31,096",
+              "5,87,31,085",
+              "5,87,30,095"
+            ],
+            "correct": 0,
+            "hint": "Predecessor = the number just before = subtract 1.",
+            "explanation": "Predecessor = 5,87,31,095 − 1 = 5,87,31,094."
+          },
+          {
+            "id": "pq9",
+            "question": "Which statement is TRUE about subtraction?",
+            "options": [
+              "Subtraction is commutative (A−B = B−A)",
+              "Subtraction is associative",
+              "A − 0 = A",
+              "0 − A = A"
+            ],
+            "correct": 2,
+            "hint": "Think about what happens when you subtract nothing (zero).",
+            "explanation": "A − 0 = A is true (subtracting nothing leaves the number unchanged). Subtraction is neither commutative nor associative."
+          },
+          {
+            "id": "pq10",
+            "question": "52,37,240 − 32,91,835 = ?",
+            "options": [
+              "19,45,405",
+              "19,45,305",
+              "19,45,415",
+              "19,55,405"
+            ],
+            "correct": 0,
+            "hint": "Multiple borrows needed here. Start from ones: 0−5 needs borrowing.",
+            "explanation": "5237240 − 3291835 = 1945405. In Indian system: 19,45,405."
+          },
+          {
+            "id": "pq11",
+            "question": "8,86,25,973 − 8,86,25,973 = ?",
+            "options": [
+              "1",
+              "8,86,25,973",
+              "0",
+              "17,72,51,946"
+            ],
+            "correct": 2,
+            "hint": "What happens when you subtract a number from itself?",
+            "explanation": "Any number minus itself equals 0. This is the self-subtraction property."
+          },
+          {
+            "id": "pq12",
+            "question": "How can you CHECK that 80,38,529 − 63,95,867 = 16,42,662?",
+            "options": [
+              "Subtract again",
+              "Add 16,42,662 + 63,95,867 and check if it equals 80,38,529",
+              "Multiply 16,42,662 × 2",
+              "Divide 80,38,529 by 2"
+            ],
+            "correct": 1,
+            "hint": "Addition and subtraction are inverse operations — one checks the other.",
+            "explanation": "If subtraction is correct, then answer + subtracted number = original number. 16,42,662 + 63,95,867 should equal 80,38,529."
+          }
+        ]
+      },
+      {
+        "id": "practice_word_problems",
+        "title": "Word Problems",
+        "icon": "📝",
+        "marks": 9,
+        "questions": [
+          {
+            "id": "pq13",
+            "question": "A craft fair had 35,436 visitors on Day 1 and 43,968 on Day 2. How many visitors came in all?",
+            "options": [
+              "79,404",
+              "78,404",
+              "8,532",
+              "79,504"
+            ],
+            "correct": 0,
+            "hint": "\"In all\" means total — which operation combines two amounts?",
+            "explanation": "\"In all\" = addition. 35,436 + 43,968 = 79,404 visitors."
+          },
+          {
+            "id": "pq14",
+            "question": "A craft emporium had 58,50,000 visitors in 2016 and 48,94,800 in 2017. How many MORE visited in 2016?",
+            "options": [
+              "9,55,200",
+              "1,07,44,800",
+              "9,55,100",
+              "10,55,200"
+            ],
+            "correct": 0,
+            "hint": "\"How many more\" = find the difference = subtraction.",
+            "explanation": "\"How many more\" = subtraction. 58,50,000 − 48,94,800 = 9,55,200."
+          },
+          {
+            "id": "pq15",
+            "question": "Sumit bought a car for ₹6,85,385 and a fridge for ₹38,965. How much did he spend altogether?",
+            "options": [
+              "₹7,24,350",
+              "₹7,24,250",
+              "₹6,46,420",
+              "₹7,34,350"
+            ],
+            "correct": 0,
+            "hint": "\"Altogether\" means add both amounts.",
+            "explanation": "685385 + 38965 = 724350. He spent ₹7,24,350 altogether."
+          },
+          {
+            "id": "pq16",
+            "question": "City A has 8,48,396 children. City B has 7,19,289 children. How many more children does City A have?",
+            "options": [
+              "1,29,107",
+              "1,29,207",
+              "15,67,685",
+              "1,19,107"
+            ],
+            "correct": 0,
+            "hint": "\"How many more\" = subtraction: bigger − smaller.",
+            "explanation": "848396 − 719289 = 129107. City A has 1,29,107 more children."
+          }
+        ]
+      }
+    ]
+  },
+  "stage_3_think": {
+    "title": "Think Deeper",
+    "description": "Solve these real-world word problems using addition and subtraction of large numbers.",
+    "problems": [
+      {
+        "id": "tp1",
+        "category": "addition",
+        "marks": 5,
+        "scenario": "In the IPL 2025 season, the Mumbai Indians sold 12,45,680 tickets and the Chennai Super Kings sold 11,87,925 tickets.",
+        "question": "How many tickets were sold by both teams combined? Write the answer in the Indian number system with the number name in words.",
+        "model_answer": "Total = 12,45,680 + 11,87,925 = 24,33,605.\nIn words: Twenty-four lakh thirty-three thousand six hundred five.\nCheck: approximately 12.5 lakh + 12 lakh ≈ 24.5 lakh ✓",
+        "explanation": "\"Combined\" = addition. Add carefully, write with Indian commas, and verify with estimation.",
+        "self_check_criteria": [
+          "Did I add the two numbers correctly with proper carrying?",
+          "Did I write the answer with correct Indian comma placement?",
+          "Did I write the number name in words correctly?",
+          "Did I verify my answer using estimation?"
+        ]
+      },
+      {
+        "id": "tp2",
+        "category": "subtraction",
+        "marks": 5,
+        "scenario": "The annual budget of a village panchayat is ₹3,25,48,000. They have already spent ₹1,87,63,450 in the first six months.",
+        "question": "How much budget is remaining for the rest of the year? Check your answer by adding the remaining amount to the spent amount.",
+        "model_answer": "Remaining = ₹3,25,48,000 − ₹1,87,63,450 = ₹1,37,84,550.\nCheck: 1,37,84,550 + 1,87,63,450 = 3,25,48,000 ✓\nThe panchayat has ₹1,37,84,550 (one crore thirty-seven lakh eighty-four thousand five hundred fifty) remaining.",
+        "explanation": "\"Remaining\" = subtraction. Always verify subtraction by adding the answer back to the subtracted number.",
+        "self_check_criteria": [
+          "Did I subtract correctly with proper borrowing?",
+          "Did I verify by adding my answer + spent = total budget?",
+          "Did I use correct Indian comma placement in all numbers?",
+          "Did I include the ₹ symbol and write the answer clearly?"
+        ]
+      },
+      {
+        "id": "tp3",
+        "category": "two_step",
+        "marks": 5,
+        "scenario": "During Diwali, a sweet shop sold sweets worth ₹4,85,250 on Day 1, ₹5,12,800 on Day 2, and ₹3,97,650 on Day 3.",
+        "question": "What was the total sale over 3 days? If the shop had a target of ₹15,00,000 for the Diwali week, how much more do they need to sell in the remaining 4 days?",
+        "model_answer": "Total 3-day sale = ₹4,85,250 + ₹5,12,800 + ₹3,97,650 = ₹13,95,700.\nRemaining target = ₹15,00,000 − ₹13,95,700 = ₹1,04,300.\nThey need to sell ₹1,04,300 more in 4 days.",
+        "explanation": "Step 1: Add all three days (addition). Step 2: Subtract from target to find how much more is needed (subtraction).",
+        "self_check_criteria": [
+          "Did I add all three amounts correctly?",
+          "Did I subtract my total from the target to find the remaining?",
+          "Did I show both steps clearly?",
+          "Did I check that my total is less than the target (which makes sense)?"
+        ]
+      },
+      {
+        "id": "tp4",
+        "category": "comparison",
+        "marks": 5,
+        "scenario": "Haryana's population in the 2011 census was 2,53,51,462. Punjab's population was 2,77,43,338.",
+        "question": "Which state had more people and by how much? If both states grew by the same amount — say 15,00,000 people each by 2021 — what would their new populations be?",
+        "model_answer": "Punjab had more people.\nDifference = 2,77,43,338 − 2,53,51,462 = 23,91,876.\nPunjab had 23,91,876 more people.\n\nWith 15,00,000 growth each:\nHaryana 2021: 2,53,51,462 + 15,00,000 = 2,68,51,462.\nPunjab 2021: 2,77,43,338 + 15,00,000 = 2,92,43,338.",
+        "explanation": "Compare by subtracting. Then add the growth to each state's population.",
+        "self_check_criteria": [
+          "Did I correctly identify which state had more people?",
+          "Did I calculate the difference accurately?",
+          "Did I add 15,00,000 to both states correctly?",
+          "Did I use Indian comma placement throughout?"
+        ]
+      },
+      {
+        "id": "tp5",
+        "category": "properties",
+        "marks": 5,
+        "scenario": "Aarav says: \"I can add 3,45,000 + 2,55,000 + 1,00,000 in any order and get the same answer. But if I subtract them in a different order, I get a different answer.\"",
+        "question": "Is Aarav correct? Show with calculations that addition is commutative but subtraction is not. Use at least two different orderings for each operation.",
+        "model_answer": "Addition:\n3,45,000 + 2,55,000 + 1,00,000 = 7,00,000\n1,00,000 + 3,45,000 + 2,55,000 = 7,00,000\nSame answer! ✓ Addition IS commutative.\n\nSubtraction:\n3,45,000 − 2,55,000 = 90,000\n2,55,000 − 3,45,000 = −90,000 (negative!)\nDifferent answers! ✗ Subtraction is NOT commutative.\n\nAarav is correct!",
+        "explanation": "Demonstrate with actual calculations that order matters in subtraction but not in addition.",
+        "self_check_criteria": [
+          "Did I show addition giving the same answer in two different orders?",
+          "Did I show subtraction giving different answers when order changes?",
+          "Did I correctly state that addition is commutative and subtraction is not?",
+          "Did I calculate all answers correctly?"
+        ]
+      }
+    ]
+  },
+  "stage_4_test": {
+    "title": "Chapter 2 Test",
+    "total_marks": 20,
+    "time_limit": 2400,
+    "instructions": "Answer all questions carefully. Section A: 8 MCQs × 1 mark = 8 marks. Section B: Short answers = 12 marks. Total: 20 marks, 40 minutes.",
+    "sections": [
+      {
+        "id": "test_section_a",
+        "title": "Section A — MCQs",
+        "marks": 8,
+        "instructions": "Choose the correct option. Each question carries 1 mark.",
+        "questions": [
+          {
+            "id": "ta1",
+            "type": "mcq",
+            "question": "53,908 + 45,873 = ?",
+            "options": [
+              "99,781",
+              "98,781",
+              "99,871",
+              "99,681"
+            ],
+            "correct_answer": "A",
+            "marks": 1
+          },
+          {
+            "id": "ta2",
+            "type": "mcq",
+            "question": "84,101 − 66,348 = ?",
+            "options": [
+              "17,853",
+              "17,753",
+              "18,753",
+              "17,753"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta3",
+            "type": "mcq",
+            "question": "Which property says: A + B = B + A?",
+            "options": [
+              "Associative",
+              "Commutative",
+              "Additive identity",
+              "Distributive"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta4",
+            "type": "mcq",
+            "question": "The additive identity is:",
+            "options": [
+              "1",
+              "0",
+              "−1",
+              "The number itself"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta5",
+            "type": "mcq",
+            "question": "Is subtraction commutative?",
+            "options": [
+              "Yes, always",
+              "No, A − B ≠ B − A in general",
+              "Yes, for positive numbers",
+              "Only when A = B"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta6",
+            "type": "mcq",
+            "question": "The predecessor of 10,00,000 is:",
+            "options": [
+              "9,99,999",
+              "10,00,001",
+              "9,99,000",
+              "99,999"
+            ],
+            "correct_answer": "A",
+            "marks": 1
+          },
+          {
+            "id": "ta7",
+            "type": "mcq",
+            "question": "To check 500 − 175 = 325, you should:",
+            "options": [
+              "Subtract again",
+              "Add 325 + 175 and check if it equals 500",
+              "Multiply 325 × 2",
+              "Divide 500 by 175"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta8",
+            "type": "mcq",
+            "question": "\"How many visitors came altogether?\" needs which operation?",
+            "options": [
+              "Subtraction",
+              "Addition",
+              "Multiplication",
+              "Division"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          }
+        ]
+      },
+      {
+        "id": "test_section_b",
+        "title": "Section B — Short Answers",
+        "marks": 12,
+        "instructions": "Answer the following. Show your working.",
+        "questions": [
+          {
+            "id": "tb1",
+            "type": "short_answer",
+            "question": "Add: 4,51,00,826 + 1,35,20,021 + 1,57,23,224. Show your working.",
+            "marks": 2,
+            "model_answer": "4,51,00,826 + 1,35,20,021 = 5,86,20,847.\n5,86,20,847 + 1,57,23,224 = 7,43,44,071.\nSum = 7,43,44,071.",
+            "marking_guide": "1 mark for correct intermediate sum. 1 mark for correct final answer."
+          },
+          {
+            "id": "tb2",
+            "type": "short_answer",
+            "question": "Subtract: 7,17,13,801 − 4,53,25,712. Show your working.",
+            "marks": 2,
+            "model_answer": "7,17,13,801 − 4,53,25,712 = 2,63,88,089.",
+            "marking_guide": "1 mark for correct method with borrowing shown. 1 mark for correct answer."
+          },
+          {
+            "id": "tb3",
+            "type": "short_answer",
+            "question": "State the commutative and associative properties of addition with one example each using 6-digit or larger numbers.",
+            "marks": 2,
+            "model_answer": "Commutative: 4,59,261 + 1,19,231 = 1,19,231 + 4,59,261 = 5,78,492. Changing order doesn't change sum.\nAssociative: (45,826 + 1,34,174) + 7,82,523 = 45,826 + (1,34,174 + 7,82,523). Changing grouping doesn't change sum.",
+            "marking_guide": "1 mark for correct commutative example. 1 mark for correct associative example."
+          },
+          {
+            "id": "tb4",
+            "type": "short_answer",
+            "question": "Sumit bought a car for ₹6,85,385 and a refrigerator for ₹38,965. How much did he spend altogether? If he had ₹7,50,000, how much is left?",
+            "marks": 3,
+            "model_answer": "Total spent = ₹6,85,385 + ₹38,965 = ₹7,24,350.\nMoney left = ₹7,50,000 − ₹7,24,350 = ₹25,650.",
+            "marking_guide": "1 mark for correct addition. 1 mark for correct subtraction. 1 mark for both answers with ₹ symbol."
+          },
+          {
+            "id": "tb5",
+            "type": "short_answer",
+            "question": "The number of children in City A is 8,48,396 and in City B is 7,19,289. How many more children are there in City A? How many children are there in both cities together?",
+            "marks": 3,
+            "model_answer": "Difference: 8,48,396 − 7,19,289 = 1,29,107. City A has 1,29,107 more children.\nTotal: 8,48,396 + 7,19,289 = 15,67,685 children in both cities.",
+            "marking_guide": "1 mark for correct subtraction. 1 mark for correct addition. 1 mark for clear statements answering both parts."
+          }
+        ]
+      }
+    ],
+    "score_tiers": [
+      {
+        "min": 19,
+        "max": 20,
+        "message": "You are a champion! 🏆"
+      },
+      {
+        "min": 16,
+        "max": 18,
+        "message": "Good job! Keep it up! ⭐"
+      },
+      {
+        "min": 12,
+        "max": 15,
+        "message": "Nice effort, aim higher! ✨"
+      },
+      {
+        "min": 8,
+        "max": 11,
+        "message": "Room for improvement, try again! 💪"
+      },
+      {
+        "min": 0,
+        "max": 7,
+        "message": "You can do better, try again! 📚"
+      }
+    ]
+  },
+  "stage_0_deep_dive": {
+    "title": "Deep Dive — Operations on Large Numbers",
+    "description": "Detailed explanations with stories, visuals & step-by-step examples. Read anytime for reference.",
+    "topics": [
+      {
+        "id": "dd_addition",
+        "title": "Addition",
+        "icon": "➕",
+        "subtitle": "Adding big numbers is just careful counting, column by column",
+        "sections": [
+          {
+            "type": "story",
+            "title": "The Two Cricket Stadiums",
+            "content": "On a big match day, two stadiums in a city were packed. The first stadium had **35,436** fans. The second had **43,968** fans. A TV reporter wanted to announce the total number of cricket fans in the whole city.\n\nHow do you add such big numbers? You cannot count them one by one — that would take days! Instead, you line them up neatly, one below the other, and add **column by column**, starting from the right.\n\nWhen a column adds up to more than 9, you **carry** the extra to the next column. That is the secret to adding any big number, no matter how many digits!"
+          },
+          {
+            "type": "steps",
+            "title": "How to Add Large Numbers",
+            "steps": [
+              {
+                "title": "Line up the numbers by place value",
+                "text": "Write one number below the other so that ones are under ones, tens under tens, and so on. The right edges should line up.",
+                "example": "35,436 above 43,968 — the 6 and 8 (ones) line up, the 3 and 6 (tens) line up."
+              },
+              {
+                "title": "Start from the RIGHT (ones column)",
+                "text": "Always add the rightmost column first, then move left.",
+                "example": "6 + 8 = 14. Write 4, carry 1 to the tens column."
+              },
+              {
+                "title": "Carry when a column is more than 9",
+                "text": "If a column adds to 10 or more, write the ones digit and carry the tens digit to the next column.",
+                "example": "In the tens: 3 + 6 + 1 (carried) = 10. Write 0, carry 1."
+              },
+              {
+                "title": "Continue to the leftmost column",
+                "text": "Keep adding column by column, including any carried digits, until you reach the end.",
+                "example": "35,436 + 43,968 = 79,404."
+              }
+            ]
+          },
+          {
+            "type": "visual",
+            "svg": "<svg viewBox=\"0 0 500 280\" xmlns=\"http://www.w3.org/2000/svg\" style=\"font-family:monospace;max-width:420px;\"><rect width=\"500\" height=\"280\" rx=\"16\" fill=\"#FFF8EE\"/><text x=\"250\" y=\"32\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#2B1810\" font-family=\"Nunito,sans-serif\">Column Addition with Carrying</text><g font-size=\"34\" font-weight=\"900\" text-anchor=\"end\"><text x=\"140\" y=\"80\" font-size=\"16\" fill=\"#E87722\" font-family=\"Nunito,sans-serif\">carry</text><text x=\"200\" y=\"78\" font-size=\"20\" fill=\"#E87722\">1</text><text x=\"255\" y=\"78\" font-size=\"20\" fill=\"#E87722\">1</text><text x=\"310\" y=\"78\" font-size=\"20\" fill=\"#E87722\">1</text><text x=\"420\" y=\"125\" fill=\"#2B1810\">35,436</text><text x=\"420\" y=\"170\" fill=\"#2B1810\">43,968</text><text x=\"155\" y=\"170\" fill=\"#4A7C59\">+</text><line x1=\"150\" y1=\"185\" x2=\"420\" y2=\"185\" stroke=\"#2B1810\" stroke-width=\"3\"/><text x=\"420\" y=\"230\" fill=\"#4A7C59\">79,404</text></g><text x=\"250\" y=\"265\" text-anchor=\"middle\" font-size=\"12\" fill=\"#5C4332\" font-family=\"Nunito,sans-serif\">Add right to left. Carry the 1 when a column exceeds 9.</text></svg>",
+            "caption": "Adding 35,436 + 43,968 = 79,404 by carrying across columns"
+          },
+          {
+            "type": "interactive",
+            "title": "Addition Checker",
+            "html": "<div style=\"font-family:Nunito,sans-serif;background:#FFF8EE;border-radius:16px;padding:24px;text-align:center;\"><div style=\"font-size:14px;color:#5C4332;margin-bottom:14px;font-weight:700;\">Add two large numbers and check your answer!</div><div style=\"display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:12px;\"><input id=\"ad-a\" type=\"number\" value=\"457924\" style=\"font-size:18px;font-family:Fraunces,serif;text-align:center;width:130px;padding:8px;border:3px solid #4A7C59;border-radius:10px;color:#4A7C59;font-weight:700;outline:none;\"><span style=\"font-size:22px;color:#E87722;font-weight:900;\">+</span><input id=\"ad-b\" type=\"number\" value=\"155945\" style=\"font-size:18px;font-family:Fraunces,serif;text-align:center;width:130px;padding:8px;border:3px solid #4A7C59;border-radius:10px;color:#4A7C59;font-weight:700;outline:none;\"></div><button id=\"ad-go\" style=\"padding:10px 24px;border-radius:10px;border:none;background:#E87722;color:white;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;\">Add Them</button><div id=\"ad-result\" style=\"margin-top:16px;min-height:50px;\"></div></div>",
+            "js": "(function(){var a=document.getElementById('ad-a'),b=document.getElementById('ad-b'),btn=document.getElementById('ad-go'),res=document.getElementById('ad-result');function calc(){var x=parseInt(a.value),y=parseInt(b.value);if(isNaN(x)||isNaN(y)){res.innerHTML='<div style=\"color:#A09080;\">Enter two numbers</div>';return;}var sum=x+y;res.innerHTML='<div style=\"background:white;border-radius:12px;padding:16px;border:2px solid #E8DCC8;\"><div style=\"font-size:15px;color:#5C4332;\">'+x.toLocaleString('en-IN')+' + '+y.toLocaleString('en-IN')+' =</div><div style=\"font-size:30px;font-weight:900;color:#4A7C59;margin-top:6px;\">'+sum.toLocaleString('en-IN')+'</div></div>';}btn.onclick=calc;calc();})();"
+          },
+          {
+            "type": "tip",
+            "title": "Properties of Addition",
+            "content": "**Order does not matter** (commutative): 5 + 3 = 3 + 5.\n**Grouping does not matter** (associative): (2+3)+4 = 2+(3+4).\n**Adding zero changes nothing** (identity): 47 + 0 = 47.\n**Adding 1 gives the next number** (successor): 99 + 1 = 100."
+          },
+          {
+            "type": "funfact",
+            "icon": "🧮",
+            "content": "Before calculators, Indian merchants used a tool called the **abacus** to add huge numbers in seconds — by sliding beads across rods. Skilled abacus users can add faster than a person with a calculator!"
+          }
+        ]
+      },
+      {
+        "id": "dd_subtraction",
+        "title": "Subtraction",
+        "icon": "➖",
+        "subtitle": "Taking away big numbers using borrowing",
+        "sections": [
+          {
+            "type": "story",
+            "title": "The Bookshop Mystery",
+            "content": "A bookshop owner counted **16,560** storybooks in his shop. Over the festival sale, he sold some, and at the end only the English books were left. He knew he had started with **5,825** Hindi books. How many English books did he have?\n\nTo find out, he needed to **subtract**: 16,560 take away 5,825. Just like addition, you line the numbers up and work column by column from the right.\n\nBut subtraction has a twist: sometimes the top digit is smaller than the bottom one. When that happens, you **borrow** from the next column. It is like breaking a 100-rupee note into ten 10-rupee notes to pay a small bill!"
+          },
+          {
+            "type": "steps",
+            "title": "How to Subtract Large Numbers",
+            "steps": [
+              {
+                "title": "Put the bigger number on top",
+                "text": "Write the larger number above the smaller one, lined up by place value.",
+                "example": "16,560 on top, 5,825 below."
+              },
+              {
+                "title": "Start from the RIGHT (ones column)",
+                "text": "Subtract the bottom digit from the top digit, moving left.",
+                "example": "0 - 5? The top is smaller, so we must borrow."
+              },
+              {
+                "title": "Borrow when the top is too small",
+                "text": "Take 1 from the next column on the left. It becomes 10 in the current column. The column you borrowed from goes down by 1.",
+                "example": "The 0 becomes 10. 10 - 5 = 5. The 6 next door becomes 5."
+              },
+              {
+                "title": "Continue across all columns",
+                "text": "Keep subtracting (and borrowing when needed) until done.",
+                "example": "16,560 - 5,825 = 10,735."
+              }
+            ]
+          },
+          {
+            "type": "visual",
+            "svg": "<svg viewBox=\"0 0 500 280\" xmlns=\"http://www.w3.org/2000/svg\" style=\"font-family:monospace;max-width:420px;\"><rect width=\"500\" height=\"280\" rx=\"16\" fill=\"#FFF8EE\"/><text x=\"250\" y=\"32\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#2B1810\" font-family=\"Nunito,sans-serif\">Column Subtraction with Borrowing</text><g font-size=\"34\" font-weight=\"900\" text-anchor=\"end\"><text x=\"120\" y=\"80\" font-size=\"15\" fill=\"#B8385E\" font-family=\"Nunito,sans-serif\">borrow</text><text x=\"420\" y=\"125\" fill=\"#2B1810\">16,560</text><text x=\"420\" y=\"170\" fill=\"#2B1810\">&#8211;&#160;5,825</text><line x1=\"150\" y1=\"185\" x2=\"420\" y2=\"185\" stroke=\"#2B1810\" stroke-width=\"3\"/><text x=\"420\" y=\"230\" fill=\"#B8385E\">10,735</text></g><text x=\"250\" y=\"265\" text-anchor=\"middle\" font-size=\"12\" fill=\"#5C4332\" font-family=\"Nunito,sans-serif\">Subtract right to left. Borrow 10 when the top digit is too small.</text></svg>",
+            "caption": "Subtracting 16,560 - 5,825 = 10,735 by borrowing across columns"
+          },
+          {
+            "type": "interactive",
+            "title": "Subtraction Checker",
+            "html": "<div style=\"font-family:Nunito,sans-serif;background:#FFF8EE;border-radius:16px;padding:24px;text-align:center;\"><div style=\"font-size:14px;color:#5C4332;margin-bottom:14px;font-weight:700;\">Subtract and see the answer — plus a built-in check!</div><div style=\"display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:12px;\"><input id=\"sb-a\" type=\"number\" value=\"84101\" style=\"font-size:18px;font-family:Fraunces,serif;text-align:center;width:130px;padding:8px;border:3px solid #B8385E;border-radius:10px;color:#B8385E;font-weight:700;outline:none;\"><span style=\"font-size:22px;color:#E87722;font-weight:900;\">&#8211;</span><input id=\"sb-b\" type=\"number\" value=\"66348\" style=\"font-size:18px;font-family:Fraunces,serif;text-align:center;width:130px;padding:8px;border:3px solid #B8385E;border-radius:10px;color:#B8385E;font-weight:700;outline:none;\"></div><button id=\"sb-go\" style=\"padding:10px 24px;border-radius:10px;border:none;background:#E87722;color:white;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;\">Subtract</button><div id=\"sb-result\" style=\"margin-top:16px;min-height:50px;\"></div></div>",
+            "js": "(function(){var a=document.getElementById('sb-a'),b=document.getElementById('sb-b'),btn=document.getElementById('sb-go'),res=document.getElementById('sb-result');function calc(){var x=parseInt(a.value),y=parseInt(b.value);if(isNaN(x)||isNaN(y)){res.innerHTML='<div style=\"color:#A09080;\">Enter two numbers</div>';return;}if(y>x){res.innerHTML='<div style=\"color:#B8385E;font-weight:700;\">Put the bigger number on top!</div>';return;}var diff=x-y;res.innerHTML='<div style=\"background:white;border-radius:12px;padding:16px;border:2px solid #E8DCC8;\"><div style=\"font-size:15px;color:#5C4332;\">'+x.toLocaleString('en-IN')+' - '+y.toLocaleString('en-IN')+' =</div><div style=\"font-size:30px;font-weight:900;color:#B8385E;margin-top:6px;\">'+diff.toLocaleString('en-IN')+'</div><div style=\"font-size:13px;color:#4A7C59;margin-top:8px;font-weight:700;\">Check: '+diff.toLocaleString('en-IN')+' + '+y.toLocaleString('en-IN')+' = '+x.toLocaleString('en-IN')+'</div></div>';}btn.onclick=calc;calc();})();"
+          },
+          {
+            "type": "tip",
+            "title": "Properties of Subtraction",
+            "content": "**Subtracting zero changes nothing**: 47 - 0 = 47.\n**A number minus itself is zero**: 88 - 88 = 0.\n**Subtracting 1 gives the number before** (predecessor): 100 - 1 = 99.\n**Order DOES matter**: 10 - 3 is NOT the same as 3 - 10. Always put the bigger number first."
+          },
+          {
+            "type": "funfact",
+            "icon": "💰",
+            "content": "Banks subtract huge numbers every single day to track money! When you check how much is left in a savings account after spending, the bank is doing exactly the same column subtraction you just learned — only with very, very big numbers."
+          }
+        ]
+      },
+      {
+        "id": "dd_wordproblems",
+        "title": "Word Problems",
+        "icon": "📝",
+        "subtitle": "How to know whether to add or subtract",
+        "sections": [
+          {
+            "type": "story",
+            "title": "The Detective's Clue Words",
+            "content": "Solving a word problem is like being a detective. The story hides a secret: should you **add** or **subtract**? The clue words give it away!\n\nWhen you see words like **total, altogether, in all, combined, sum** — that is a signal to **ADD**.\n\nWhen you see words like **how many more, how many left, difference, remaining, fewer** — that is a signal to **SUBTRACT**.\n\nA good detective reads the whole story twice: first to understand it, then to spot the clue words and decide the operation."
+          },
+          {
+            "type": "steps",
+            "title": "Solving Any Word Problem",
+            "steps": [
+              {
+                "title": "Read the problem twice",
+                "text": "First read to understand the story. Second read to find the numbers and the question.",
+                "example": "A shop sold 685 books on Monday and 389 on Tuesday. Total sold?"
+              },
+              {
+                "title": "Find the clue words",
+                "text": "Look for words that tell you the operation. 'Total' and 'altogether' mean add. 'How many more' and 'left' mean subtract.",
+                "example": "'Total sold' is a clue to ADD: 685 + 389."
+              },
+              {
+                "title": "Write the number sentence",
+                "text": "Turn the words into a maths sentence with the right operation.",
+                "example": "685 + 389 = ?"
+              },
+              {
+                "title": "Solve and check it makes sense",
+                "text": "Do the calculation, then ask: is my answer reasonable? An addition answer should be bigger than both numbers.",
+                "example": "685 + 389 = 1,074. That is bigger than both — makes sense!"
+              }
+            ]
+          },
+          {
+            "type": "visual",
+            "svg": "<svg viewBox=\"0 0 700 220\" xmlns=\"http://www.w3.org/2000/svg\" style=\"font-family:Nunito,sans-serif;\"><rect width=\"700\" height=\"220\" rx=\"16\" fill=\"#FFF8EE\"/><text x=\"350\" y=\"30\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#2B1810\">Clue Words Decoder</text><g transform=\"translate(50,55)\"><rect x=\"0\" y=\"0\" width=\"280\" height=\"130\" rx=\"12\" fill=\"#4A7C59\" fill-opacity=\"0.12\" stroke=\"#4A7C59\" stroke-width=\"2\"/><text x=\"140\" y=\"28\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"900\" fill=\"#4A7C59\">&#43; ADD</text><text x=\"140\" y=\"55\" text-anchor=\"middle\" font-size=\"13\" fill=\"#2B1810\">total</text><text x=\"140\" y=\"78\" text-anchor=\"middle\" font-size=\"13\" fill=\"#2B1810\">altogether</text><text x=\"140\" y=\"101\" text-anchor=\"middle\" font-size=\"13\" fill=\"#2B1810\">in all / combined</text><text x=\"140\" y=\"124\" text-anchor=\"middle\" font-size=\"13\" fill=\"#2B1810\">sum</text></g><g transform=\"translate(370,55)\"><rect x=\"0\" y=\"0\" width=\"280\" height=\"130\" rx=\"12\" fill=\"#B8385E\" fill-opacity=\"0.12\" stroke=\"#B8385E\" stroke-width=\"2\"/><text x=\"140\" y=\"28\" text-anchor=\"middle\" font-size=\"18\" font-weight=\"900\" fill=\"#B8385E\">&#8211; SUBTRACT</text><text x=\"140\" y=\"55\" text-anchor=\"middle\" font-size=\"13\" fill=\"#2B1810\">how many more</text><text x=\"140\" y=\"78\" text-anchor=\"middle\" font-size=\"13\" fill=\"#2B1810\">how many left</text><text x=\"140\" y=\"101\" text-anchor=\"middle\" font-size=\"13\" fill=\"#2B1810\">difference</text><text x=\"140\" y=\"124\" text-anchor=\"middle\" font-size=\"13\" fill=\"#2B1810\">remaining / fewer</text></g></svg>",
+            "caption": "Clue words tell you whether to add or subtract"
+          },
+          {
+            "type": "tip",
+            "title": "Two-Step Problems",
+            "content": "Some problems need **both** operations. Example: 'Sumit bought a car for Rs 6,85,385 and a fridge for Rs 38,965. He had Rs 7,50,000. How much is left?'\n\nStep 1 (ADD): 6,85,385 + 38,965 = 7,24,350 (total spent).\nStep 2 (SUBTRACT): 7,50,000 - 7,24,350 = 25,650 (money left)."
+          },
+          {
+            "type": "funfact",
+            "icon": "🚀",
+            "content": "Scientists at ISRO solve giant word problems to launch rockets! They add up fuel, subtract weight, and calculate distances in lakhs of kilometres — all using the same add-and-subtract skills you are learning right now."
+          }
+        ]
+      }
+    ]
+  }
+}
+</script>
+
+<div class="container" id="app">
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <p style="color: var(--ink-soft); font-weight: 600;">Loading your chapter...</p>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const App = {
+  data: null,
+  currentStage: 1,
+  currentBranch: null,
+  currentSection: null,
+  currentPanelIdx: 0,
+  currentVocabGroup: null,
+  state: {
+    panelChecks: {}, cardFlips: {}, spotItAnswers: {}, practiceAnswers: {},
+    thinkSubmissions: {},      // p_id: { value, submitted }
+    testAnswers: {},           // q_id: { value }
+    testStartTime: null,       // null if not started
+    testTimeUp: false,
+    testSubmitted: false,
+    spotItModal: null,
+  },
+
+  async init() {
+    try {
+      // Bind events ONCE at startup, before any rendering
+      this.bindEvents();
+
+      const embedded = document.getElementById('embedded-chapter');
+      if (embedded && embedded.textContent.trim()) {
+        try {
+          this.data = JSON.parse(embedded.textContent.trim());
+          this.loadProgress();
+          this.render();
+          return;
+        } catch (e) { console.warn('Embedded JSON parse failed:', e.message); }
+      }
+      const params = new URLSearchParams(window.location.search);
+      const chapter = params.get('chapter');
+      const url = chapter ? `${chapter}.json` : 'content/class5/english/ch1-that-boy-next-door.json';
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Could not load: ${url} (status ${response.status})`);
+      this.data = await response.json();
+      this.validateSchema();
+      this.loadProgress();
+      this.render();
+    } catch (err) { this.renderError(err.message); }
+  },
+
+  validateSchema() {
+    const required = ['chapter_id', 'chapter_title', 'subject', 'stage_1_learn', 'stage_2_practice'];
+    const missing = required.filter(f => !this.data[f]);
+    if (missing.length > 0) throw new Error(`JSON missing fields: ${missing.join(', ')}`);
+  },
+
+  storageKey() { return `egurukul_${this.data.chapter_id}`; },
+
+  // Bump this when schema or state shape changes — old state will be discarded
+  STATE_VERSION: 6,
+
+  loadProgress() {
+    try {
+      const saved = localStorage.getItem(this.storageKey());
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (p.stateVersion !== this.STATE_VERSION) {
+          console.log('Old state version detected, starting fresh');
+          localStorage.removeItem(this.storageKey());
+          return;
+        }
+        this.state.panelChecks = p.panelChecks || {};
+        this.state.cardFlips = p.cardFlips || {};
+        this.state.spotItAnswers = p.spotItAnswers || {};
+        this.state.practiceAnswers = p.practiceAnswers || {};
+        this.state.thinkSubmissions = p.thinkSubmissions || {};
+        this.state.testAnswers = p.testSubmitted ? (p.testAnswers || {}) : {};
+        this.state.testSubmitted = p.testSubmitted || false;
+        this.state.manualMarksAwarded = p.manualMarksAwarded || {};
+        this.currentStage = p.currentStage || 1;
+        if (this.currentStage < 1) this.currentStage = 1; // Never restore to Stage 0 (Deep Dive)
+      }
+    } catch (e) { console.warn(e); }
+  },
+
+  saveProgress() {
+    try {
+      localStorage.setItem(this.storageKey(), JSON.stringify({
+        stateVersion: this.STATE_VERSION,
+        panelChecks: this.state.panelChecks,
+        cardFlips: this.state.cardFlips,
+        spotItAnswers: this.state.spotItAnswers,
+        practiceAnswers: this.state.practiceAnswers,
+        thinkSubmissions: this.state.thinkSubmissions,
+        testAnswers: this.state.testSubmitted ? this.state.testAnswers : {},
+        testSubmitted: this.state.testSubmitted,
+        manualMarksAwarded: this.state.manualMarksAwarded || {},
+        currentStage: this.currentStage,
+      }));
+    } catch (e) { console.warn(e); }
+  },
+
+  resetProgress() {
+    if (confirm('Reset all your progress in this chapter? You will start fresh from Stage 1.')) {
+      localStorage.removeItem(this.storageKey());
+      this.state.panelChecks = {};
+      this.state.cardFlips = {};
+      this.state.spotItAnswers = {};
+      this.state.practiceAnswers = {};
+      this.state.thinkSubmissions = {};
+      this.state.testAnswers = {};
+      this.state.testStartTime = null;
+      this.state.testTimeUp = false;
+      this.state.testSubmitted = false;
+      this.state.manualMarksAwarded = {};
+      this.currentStage = 1;
+      this.currentBranch = null;
+      this.currentSection = null;
+      this.currentPanelIdx = 0;
+      this.currentVocabGroup = null;
+      this.deepDiveTopicIdx = 0;
+      this.previousStage = 1;
+      this.stopTimer();
+      this.render();
+      window.scrollTo(0, 0);
+    }
+  },
+
+  isBranchComplete(branch) {
+    if (branch.type === 'story_panels') {
+      return branch.panels.every(p => !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined));
+    }
+    if (branch.type === 'vocabulary_cards') {
+      return branch.cards.every(c => this.state.spotItAnswers[c.id] !== undefined);
+    }
+    if (branch.type === 'concept_teaching') {
+      return branch.cards.every(c => !c.check || (this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined));
+    }
+    return false;
+  },
+
+  countAnsweredPanels(branch) {
+    if (!branch.panels) return 0;
+    return branch.panels.filter(p =>
+      !p.comprehension_check ||
+      (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined)
+    ).length;
+  },
+
+  isStage1Complete() { return this.data.stage_1_learn.branches.every(b => this.isBranchComplete(b)); },
+
+  isPracticeSectionComplete(section) {
+    return section.questions.every(q => this.state.practiceAnswers[q.id] && this.state.practiceAnswers[q.id].selected !== undefined);
+  },
+
+  isStage2Complete() { return this.data.stage_2_practice.sections.every(s => this.isPracticeSectionComplete(s)); },
+
+  isStage3Complete() {
+    const problems = this.data.stage_3_think.problems;
+    return problems.every(p => this.state.thinkSubmissions[p.id] && this.state.thinkSubmissions[p.id].submitted);
+  },
+
+  isStage4Complete() { return this.state.testSubmitted; },
+
+  isStageComplete(n) {
+    if (n === 1) return this.isStage1Complete();
+    if (n === 2) return this.isStage2Complete();
+    if (n === 3) return this.isStage3Complete();
+    if (n === 4) return this.isStage4Complete();
+    return false;
+  },
+
+  isStageUnlocked(n) {
+    if (n === 1) return true;
+    return this.isStageComplete(n - 1);
+  },
+
+  render() {
+    const app = document.getElementById('app');
+    const hasDeepDive = this.data.stage_0_deep_dive && this.data.stage_0_deep_dive.topics && this.data.stage_0_deep_dive.topics.length > 0;
+    app.innerHTML = `
+      ${this.renderHeader()}
+      ${this.currentStage === 0 ? '' : (hasDeepDive ? this.renderDeepDiveTrigger() : '')}
+      ${this.currentStage === 0 ? '' : this.renderProgressBar()}
+      <div>
+        ${this.currentStage === 0 ? this.renderStage0() : ''}
+        ${this.currentStage === 1 ? this.renderStage1() : ''}
+        ${this.currentStage === 2 ? this.renderStage2() : ''}
+        ${this.currentStage === 3 ? this.renderStage3() : ''}
+        ${this.currentStage === 4 ? this.renderStage4() : ''}
+      </div>
+      ${this.state.spotItModal ? this.renderSpotItModal() : ''}
+    `;
+    // Execute deferred JS for interactive Deep Dive sections (global scope so inline onclick works)
+    app.querySelectorAll('.dd-deferred-js').forEach(el => {
+      try {
+        const js = el.textContent;
+        if (js && js.trim()) {
+          const s = document.createElement('script');
+          s.textContent = js;
+          document.body.appendChild(s);
+          s.remove();
+        }
+      } catch(e) { console.warn('Interactive JS error:', e); }
+      el.remove();
+    });
+    // bindEvents is now called ONCE in init(), not here
+  },
+
+  renderError(msg) {
+    document.getElementById('app').innerHTML = `
+      <div class="error-screen">
+        <h2 style="font-family: 'Fraunces', serif; margin-bottom: 12px;">Couldn't load the chapter</h2>
+        <p>${this.escapeHtml(msg)}</p>
+        <p style="font-size: 13px; margin-top: 12px;">Make sure the JSON file is in the same folder, or paste it inside the embedded-chapter script tag.</p>
+      </div>
+    `;
+  },
+
+  renderHeader() {
+    const d = this.data;
+    let title = d.chapter_title;
+    if (d.chapter_number) title = `Chapter ${d.chapter_number} — ${title}`;
+    return `
+      <header class="app-header">
+        <div class="header-eyebrow">${this.escapeHtml(d.subject || '')} · Class 5</div>
+        <h1 class="header-title">${this.escapeHtml(title)}</h1>
+        ${d.chapter_author ? `<div class="header-author">by ${this.escapeHtml(d.chapter_author)}</div>` : ''}
+        <button class="reset-btn" data-reset-progress="1" title="Clear all progress and start fresh">↻ Reset</button>
+      </header>
+    `;
+  },
+
+  renderProgressBar() {
+    const stages = [{num:1,label:'Learn'},{num:2,label:'Practice'},{num:3,label:'Think'},{num:4,label:'Test'}];
+    return `<div class="progress-bar">${stages.map(s => {
+      const isActive = this.currentStage === s.num;
+      const isComplete = this.isStageComplete(s.num);
+      const isLocked = !this.isStageUnlocked(s.num) && !isActive;
+      let cls = '';
+      if (isActive) cls = 'active';
+      else if (isComplete) cls = 'complete';
+      else if (isLocked) cls = 'locked';
+      return `<div class="progress-step ${cls}" data-stage="${s.num}"><span class="step-num">${s.num}</span><span>${s.label}</span></div>`;
+    }).join('')}</div>`;
+  },
+
+  renderDeepDiveTrigger() {
+    const dd = this.data.stage_0_deep_dive;
+    return `
+      <button class="deep-dive-trigger" data-open-deep-dive="1">
+        <span class="dd-icon">📚</span>
+        <span class="dd-text">
+          <span class="dd-title">${this.escapeHtml(dd.title || 'Deep Dive — Concept Reference')}</span>
+          <span class="dd-sub">${this.escapeHtml(dd.description || 'Detailed explanations, stories & visuals — always available for reference')}</span>
+        </span>
+      </button>
+    `;
+  },
+
+  renderStage0() {
+    const dd = this.data.stage_0_deep_dive;
+    if (!dd || !dd.topics || dd.topics.length === 0) return '';
+    const currentIdx = this.deepDiveTopicIdx || 0;
+    const topic = dd.topics[currentIdx];
+
+    return `
+      <div class="dd-screen">
+        <div class="dd-header">
+          <button class="btn btn-secondary" data-close-deep-dive="1">← Back to Dashboard</button>
+          <div>
+            <h2 class="stage-title" style="font-size:22px;margin:0;">📚 ${this.escapeHtml(dd.title || 'Deep Dive')}</h2>
+            <p class="stage-description" style="font-size:13px;">${this.escapeHtml(dd.description || '')}</p>
+          </div>
+        </div>
+        <div class="dd-nav">
+          ${dd.topics.map((t, i) => `
+            <button class="dd-nav-btn ${i === currentIdx ? 'active' : ''}" data-dd-topic="${i}">
+              ${t.icon || '📖'} ${this.escapeHtml(t.title)}
+            </button>
+          `).join('')}
+        </div>
+        <div class="dd-topic">
+          <div class="dd-topic-title">${topic.icon || ''} ${this.escapeHtml(topic.title)}</div>
+          ${topic.subtitle ? `<div class="dd-topic-subtitle">${this.escapeHtml(topic.subtitle)}</div>` : ''}
+          ${(topic.sections || []).map(sec => this.renderDeepDiveSection(sec)).join('')}
+        </div>
+        <div class="panel-nav">
+          <button class="btn btn-secondary" data-dd-topic="${currentIdx - 1}" ${currentIdx === 0 ? 'disabled' : ''}>← Previous Topic</button>
+          ${currentIdx < dd.topics.length - 1
+            ? `<button class="btn btn-primary" data-dd-topic="${currentIdx + 1}">Next Topic →</button>`
+            : `<button class="btn btn-success" data-close-deep-dive="1">✓ Back to Dashboard</button>`
+          }
+        </div>
+      </div>
+    `;
+  },
+
+  renderDeepDiveSection(sec) {
+    if (sec.type === 'story') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label story">📖 Story</span>
+          <div class="dd-story">
+            ${sec.title ? `<div class="dd-story-title">${this.escapeHtml(sec.title)}</div>` : ''}
+            <div class="dd-story-text">${this.renderDDText(sec.content)}</div>
+          </div>
+          ${sec.image_svg ? `<div class="dd-visual">${sec.image_svg}${sec.image_caption ? `<div class="dd-visual-caption">${this.escapeHtml(sec.image_caption)}</div>` : ''}</div>` : ''}
+        </div>
+      `;
+    }
+    if (sec.type === 'steps') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label steps">🪜 Step by Step</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-steps">
+            ${(sec.steps || []).map((step, i) => `
+              <div class="dd-step">
+                <div class="dd-step-num">${i + 1}</div>
+                <div class="dd-step-content">
+                  <div class="dd-step-title">${this.escapeHtml(step.title)}</div>
+                  <div class="dd-step-text">${this.renderDDText(step.text)}</div>
+                  ${step.example ? `<div class="dd-step-example">💡 ${this.renderDDText(step.example)}</div>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'visual') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label visual">🎨 Visual</span>
+          <div class="dd-visual">
+            ${sec.svg || ''}
+            ${sec.caption ? `<div class="dd-visual-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'video') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label video">🎬 Video</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-video">
+            <iframe src="${this.escapeAttr(sec.url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            ${sec.caption ? `<div class="dd-video-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'video_embedded') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label video">🎬 Video</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-video">
+            <video controls playsinline preload="metadata" style="width:100%;border-radius:12px;">
+              <source src="${sec.data_url || ''}" type="video/webm">
+              <source src="${sec.data_url || ''}" type="video/mp4">
+              Your browser does not support embedded video.
+            </video>
+            ${sec.caption ? `<div class="dd-video-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'tip') {
+      return `
+        <div class="dd-section">
+          <div class="dd-tip">
+            <div class="dd-tip-title">💡 ${this.escapeHtml(sec.title || 'Remember')}</div>
+            <div class="dd-tip-text">${this.renderDDText(sec.content)}</div>
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'text') {
+      return `
+        <div class="dd-section">
+          ${sec.label ? `<span class="dd-section-label tip">${this.escapeHtml(sec.label)}</span>` : ''}
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:10px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-rich-text">${this.renderDDText(sec.content)}</div>
+        </div>
+      `;
+    }
+    if (sec.type === 'funfact') {
+      return `
+        <div class="dd-section">
+          <div class="dd-funfact">
+            <span class="dd-funfact-icon">${sec.icon || '🤯'}</span>
+            <div class="dd-funfact-content">
+              <div class="dd-funfact-label">Did You Know?</div>
+              <div class="dd-funfact-text">${this.renderDDText(sec.content)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'interactive') {
+      const safeId = 'dd-int-' + Math.random().toString(36).substr(2, 8);
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label visual">🎮 Interactive</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-interactive" id="${safeId}">${sec.html || ''}</div>
+          ${sec.js ? `<div class="dd-deferred-js" style="display:none;" data-target="${safeId}">${this.escapeHtml(sec.js)}</div>` : ''}
+        </div>
+      `;
+    }
+    return '';
+  },
+
+  renderDDText(text) {
+    if (!text) return '';
+    // Simple markdown-like rendering: **bold**, *italic*, `code`, \n for line breaks
+    let html = this.escapeHtml(text);
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    html = html.replace(/`(.+?)`/g, '<code style="background:var(--paper-dark);padding:2px 6px;border-radius:4px;font-size:0.9em;">$1</code>');
+    return html;
+  },
+
+  renderStage1() {
+    const s = this.data.stage_1_learn;
+    if (this.currentBranch) {
+      const branch = s.branches.find(b => b.id === this.currentBranch);
+      if (branch) {
+        if (branch.type === 'story_panels') return this.renderStoryPanelView(branch);
+        if (branch.type === 'vocabulary_cards') return this.renderVocabCardsView(branch);
+        if (branch.type === 'concept_teaching') return this.renderConceptTeachingView(branch);
+      }
+    }
+    const s1Stars = this.computeStage1Stars();
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s1Stars.earned} / ${s1Stars.total}</strong></p>
+      </div>
+      <div class="branches-grid">${s.branches.map(b => {
+        const complete = this.isBranchComplete(b);
+        let progress = '';
+        if (b.type === 'story_panels') {
+          const total = b.panels.length;
+          const done = b.panels.filter(p => !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined)).length;
+          progress = `${done} / ${total} panels`;
+        } else if (b.type === 'vocabulary_cards') {
+          const total = b.cards.length;
+          const done = b.cards.filter(c => this.state.spotItAnswers[c.id] !== undefined).length;
+          progress = `${done} / ${total} words`;
+        } else if (b.type === 'concept_teaching') {
+          const total = b.cards.length;
+          const done = b.cards.filter(c => !c.check || (this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined)).length;
+          progress = `${done} / ${total} concepts`;
+        }
+        let starDisplay = '';
+        if (b.type === 'concept_teaching' && b.cards) {
+          const totalStars = b.cards.filter(c => c.check).length;
+          const earnedStars = b.cards.filter(c => {
+            if (!c.check) return false;
+            const a = this.state.panelChecks[c.id];
+            return a && a.selected === c.check.correct;
+          }).length;
+          starDisplay = `${earnedStars} / ${totalStars} ⭐`;
+        } else {
+          starDisplay = `${b.marks} marks`;
+        }
+        return `<div class="branch-card ${complete ? 'complete' : ''}" data-enter-branch="${this.escapeAttr(b.id)}">
+          <div class="branch-icon">${b.icon || '📖'}</div>
+          <div class="branch-title">${this.escapeHtml(b.title)}</div>
+          <div class="branch-meta">${starDisplay}</div>
+          <div class="branch-progress">${progress}</div>
+        </div>`;
+      }).join('')}</div>
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderStoryPanelView(branch) {
+    const idx = this.currentPanelIdx;
+    const panel = branch.panels[idx];
+    const total = branch.panels.length;
+    const check = this.state.panelChecks[panel.id] || {};
+    const isAnswered = check.selected !== undefined;
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">${this.escapeHtml(branch.story_title || '')}${branch.story_author ? ' · by ' + this.escapeHtml(branch.story_author) : ''}</p>
+        </div>
+      </div>
+      <div class="panel-dots">
+        ${branch.panels.map((p, i) => {
+          const answered = !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined);
+          const isCurrent = i === idx;
+          let cls = 'panel-dot';
+          if (isCurrent) cls += ' current';
+          if (answered) cls += ' answered';
+          return `<button class="${cls}" data-jump-to-panel="${i}" title="Panel ${i+1}: ${this.escapeAttr(p.panel_title)}">${i+1}${answered ? ' ✓' : ''}</button>`;
+        }).join('')}
+      </div>
+      <div class="panel-container">
+        <div class="panel-meta">
+          <span class="panel-counter">Panel ${idx + 1} of ${total}</span>
+          <span style="font-size:11px;color:var(--ink-soft);font-weight:700;">${this.countAnsweredPanels(branch)} of ${total} checks answered</span>
+        </div>
+        <h3 class="panel-title">${this.escapeHtml(panel.panel_title)}</h3>
+        <div class="narration-text">${this.renderNarrationWithHighlights(panel)}</div>
+        ${panel.comprehension_check ? this.renderComprehensionCheck(panel) : ''}
+      </div>
+      <div class="panel-nav">
+        ${idx > 0 ? `<button class="btn btn-secondary" data-panel-nav="prev">← Previous Panel</button>` : `<button class="btn btn-secondary" disabled>← Previous Panel</button>`}
+        ${idx < total - 1
+          ? `<button class="btn btn-primary" data-panel-nav="next" ${panel.comprehension_check && !isAnswered ? 'disabled' : ''}>Next Panel →</button>`
+          : `<button class="btn btn-success" data-panel-nav="finish-branch" ${!this.isBranchComplete(branch) ? 'disabled' : ''}>${this.isBranchComplete(branch) ? '✓ Finish ' + this.escapeHtml(branch.title) : 'Answer all panels to finish'}</button>`}
+      </div>
+    `;
+  },
+
+  renderNarrationWithHighlights(panel) {
+    let text = panel.narration_text;
+    if (panel.highlighted_words && panel.highlighted_words.length > 0) {
+      const sorted = [...panel.highlighted_words].sort((a, b) => b.word.length - a.word.length);
+      sorted.forEach((hw) => {
+        const escaped = hw.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b(${escaped})\\b`, 'gi');
+        const dataIdx = panel.highlighted_words.indexOf(hw);
+        text = text.replace(regex, (match) => `<span class="highlight-word" data-word-idx="${dataIdx}" data-panel-id="${this.escapeAttr(panel.id)}">${match}</span>`);
+      });
+    }
+    return text;
+  },
+
+  renderComprehensionCheck(panel) {
+    const check = panel.comprehension_check;
+    const ans = this.state.panelChecks[panel.id] || {};
+    const isAnswered = ans.selected !== undefined;
+    return `
+      <div class="comprehension-check">
+        <span class="check-label">Quick Check${check.marks ? ' · ' + check.marks + ' marks' : ''}</span>
+        <p class="check-question">${this.escapeHtml(check.question)}</p>
+        <ul class="options-list">${check.options.map((opt, i) => {
+          let cls = 'option-btn';
+          if (isAnswered) {
+            if (i === check.correct) cls += ' correct';
+            else if (i === ans.selected) cls += ' incorrect';
+          }
+          return `<li><button class="${cls}" data-panel-check="${this.escapeAttr(panel.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+          </button></li>`;
+        }).join('')}</ul>
+        ${isAnswered && check.explanation ? `
+          <div class="feedback-box explanation">
+            <span class="feedback-label">${ans.selected === check.correct ? '✓ Correct!' : "Let's understand"}</span>
+            ${this.escapeHtml(check.explanation)}
+          </div>` : ''}
+      </div>
+    `;
+  },
+
+  renderVocabCardsView(branch) {
+    // Group cards by source for cleaner browsing
+    const groups = {};
+    branch.cards.forEach(c => {
+      const src = c.source || 'Words';
+      if (!groups[src]) groups[src] = [];
+      groups[src].push(c);
+    });
+
+    // If we don't have a sub-view selected, default to first group
+    const sources = Object.keys(groups);
+    if (!this.currentVocabGroup || !groups[this.currentVocabGroup]) {
+      this.currentVocabGroup = sources[0];
+    }
+    const activeCards = groups[this.currentVocabGroup] || [];
+
+    // Group completion stats
+    const groupTabs = sources.map(src => {
+      const cards = groups[src];
+      const done = cards.filter(c => this.state.spotItAnswers[c.id] !== undefined).length;
+      const isActive = src === this.currentVocabGroup;
+      return `<button class="vocab-group-tab ${isActive ? 'active' : ''}" data-vocab-group="${this.escapeAttr(src)}">
+        ${this.escapeHtml(src)} <span style="opacity:0.7;font-size:11px;">(${done}/${cards.length})</span>
+      </button>`;
+    }).join('');
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">Tap each card to see meaning, then test yourself with "Spot it!"</p>
+        </div>
+      </div>
+      <div class="vocab-group-tabs">${groupTabs}</div>
+      <div class="cards-grid">${activeCards.map(c => this.renderVocabCard(c)).join('')}</div>
+      <div class="stage-nav">
+        <div></div>
+        <button class="btn ${this.isBranchComplete(branch) ? 'btn-success' : 'btn-secondary'}" data-back-to-branches="1">${this.isBranchComplete(branch) ? '✓ Branch Complete · Back' : 'Save & Back'}</button>
+      </div>
+    `;
+  },
+
+  renderVocabCard(card) {
+    const flipped = this.state.cardFlips[card.id];
+    const spotAnswered = this.state.spotItAnswers[card.id] !== undefined;
+    return `
+      <div class="vocab-card ${flipped ? 'flipped' : ''} ${spotAnswered ? 'complete' : ''}" data-flip-card="${this.escapeAttr(card.id)}">
+        <div class="vocab-card-inner">
+          <div class="vocab-face front">
+            <div class="vocab-source-tag">${this.escapeHtml(card.source || 'Word')}</div>
+            <div class="vocab-word">${this.escapeHtml(card.word)}</div>
+            <div class="vocab-flip-hint">Tap to reveal</div>
+          </div>
+          <div class="vocab-face back">
+            <div class="vocab-meaning">${this.escapeHtml(card.meaning)}</div>
+            ${card.example_from_story ? `<div><span class="vocab-example-label">From the story</span><p class="vocab-example">${this.escapeHtml(card.example_from_story)}</p></div>` : ''}
+            ${card.indian_context_example ? `<div style="margin-top:6px;"><span class="vocab-example-label">Example</span><p class="vocab-example">${this.escapeHtml(card.indian_context_example)}</p></div>` : ''}
+            ${card.spot_it ? `<div class="spot-it-cta" data-open-spot-it="${this.escapeAttr(card.id)}">${spotAnswered ? '✓ Spot it answered' : '🎯 Spot it! Tap to test yourself'}</div>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  renderSpotItModal() {
+    const cardId = this.state.spotItModal;
+    let card = null;
+    for (const branch of this.data.stage_1_learn.branches) {
+      if (branch.cards) { card = branch.cards.find(c => c.id === cardId); if (card) break; }
+    }
+    if (!card || !card.spot_it) return '';
+    const ans = this.state.spotItAnswers[card.id];
+    const spot = card.spot_it;
+    const isAnswered = ans !== undefined;
+    return `
+      <div class="modal-overlay" data-close-modal="1">
+        <div class="modal-content" data-stop-propagation="1">
+          <div class="modal-title">Spot it: <span class="modal-word">${this.escapeHtml(card.word)}</span></div>
+          <p style="margin:12px 0 16px 0;color:var(--ink-soft);font-size:14px;">${this.escapeHtml(spot.question)}</p>
+          <ul class="options-list">${spot.options.map((opt, i) => {
+            let cls = 'option-btn';
+            if (isAnswered) {
+              if (i === spot.correct) cls += ' correct';
+              else if (i === ans.selected) cls += ' incorrect';
+            }
+            return `<li><button class="${cls}" data-spot-answer="${this.escapeAttr(card.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+              <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+            </button></li>`;
+          }).join('')}</ul>
+          ${isAnswered ? `
+            <div class="feedback-box explanation" style="margin-bottom:12px;">
+              <span class="feedback-label">${ans.selected === spot.correct ? '✓ Correct!' : 'Not quite — see the right answer above'}</span>
+            </div>
+            <button class="btn btn-primary" data-close-modal="1" style="width:100%;">Continue</button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  },
+
+  renderConceptTeachingView(branch) {
+    const cards = branch.cards || [];
+    const currentCard = cards[this.currentPanelIdx] || cards[0];
+    if (!currentCard) return '';
+    const idx = this.currentPanelIdx;
+    const total = cards.length;
+    const isAnswered = currentCard.check && this.state.panelChecks[currentCard.id] && this.state.panelChecks[currentCard.id].selected !== undefined;
+    const ans = this.state.panelChecks[currentCard.id] || {};
+    const isCorrect = isAnswered && ans.selected === currentCard.check.correct;
+    const isLast = idx === total - 1;
+    const allDone = this.isBranchComplete(branch);
+    // Count stars earned (1 per correct quick check)
+    const starsEarned = cards.filter(c => {
+      if (!c.check) return false;
+      const a = this.state.panelChecks[c.id];
+      return a && a.selected === c.check.correct;
+    }).length;
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          ${branch.concept_title ? `<p class="stage-description" style="font-size:13px;">${this.escapeHtml(branch.concept_title)}</p>` : ''}
+        </div>
+        <span class="marks-tag">⭐ ${starsEarned} / ${total}</span>
+      </div>
+      ${branch.intro ? `<p style="color:var(--ink-soft);font-size:14px;margin-bottom:16px;">${this.escapeHtml(branch.intro)}</p>` : ''}
+      <div class="panel-dots">
+        ${cards.map((c, i) => {
+          const done = c.check && this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined;
+          const correct = done && this.state.panelChecks[c.id].selected === c.check.correct;
+          const cls = i === idx ? (done ? 'current answered' : 'current') : (done ? 'answered' : '');
+          return `<button class="panel-dot ${cls}" data-jump-to-panel="${i}">${i + 1}${correct ? ' ⭐' : (done ? ' ✗' : '')}</button>`;
+        }).join('')}
+      </div>
+      <div class="concept-card ${isAnswered ? 'answered' : ''}">
+        <div class="panel-meta">
+          <span class="panel-counter">Concept ${idx + 1} of ${total}</span>
+        </div>
+        <div class="concept-name">${this.escapeHtml(currentCard.concept_name)}</div>
+        <div class="concept-definition">${this.escapeHtml(currentCard.definition)}</div>
+        ${currentCard.examples && currentCard.examples.length > 0 ? `
+          <div class="concept-examples">
+            <span class="concept-examples-label">Examples</span>
+            ${currentCard.examples.map(ex => `<div class="concept-example-item">• ${this.escapeHtml(ex)}</div>`).join('')}
+          </div>
+        ` : ''}
+        ${currentCard.check ? `
+          <div class="concept-check">
+            <span class="check-label">Quick Check</span>
+            <p class="check-question">${this.escapeHtml(currentCard.check.question)}</p>
+            <ul class="options-list">${currentCard.check.options.map((opt, i) => {
+              let cls = '';
+              if (isAnswered) {
+                if (i === currentCard.check.correct) cls = 'correct';
+                else if (i === ans.selected && i !== currentCard.check.correct) cls = 'incorrect';
+              }
+              return `<li><button class="option-btn ${cls}" data-panel-check="${this.escapeAttr(currentCard.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+                <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+              </button></li>`;
+            }).join('')}</ul>
+            ${isAnswered ? `
+              <div class="feedback-box ${isCorrect ? 'explanation' : 'hint'}">
+                <span class="feedback-label">${isCorrect ? '✓ Correct! ⭐ Star earned!' : '✗ That\'s not right. Here\'s why:'}</span>
+                ${this.escapeHtml(currentCard.check.explanation || '')}
+                ${!isCorrect ? `<div style="margin-top:12px;padding:14px;background:rgba(74,124,89,0.08);border-radius:10px;border-left:4px solid var(--leaf);">
+                  <strong style="color:var(--leaf);">✅ The correct answer is ${String.fromCharCode(65 + currentCard.check.correct)}: ${this.escapeHtml(currentCard.check.options[currentCard.check.correct])}</strong>
+                  <p style="margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink);">You chose ${String.fromCharCode(65 + ans.selected)}: ${this.escapeHtml(currentCard.check.options[ans.selected])}. Go through the explanation above step by step. If it's still not clear, tap <strong>← Previous</strong> to re-read the concept card, then come back.</p>
+                </div>` : ''}
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+      </div>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" data-panel-nav="prev" ${idx === 0 ? 'disabled' : ''}>← Previous</button>
+        ${isLast
+          ? `<button class="btn ${allDone ? 'btn-success' : 'btn-primary'}" data-panel-nav="finish-branch">${allDone ? '✓ Done' : 'Back to Topics'}</button>`
+          : `<button class="btn btn-primary" data-panel-nav="next">Next →</button>`
+        }
+      </div>
+    `;
+  },
+
+  renderStage2() {
+    if (!this.isStageUnlocked(2)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Stage 1 First</div>
+          <p class="placeholder-detail">Finish all three branches in Learn before moving to Practice.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    const s = this.data.stage_2_practice;
+    if (this.currentSection) {
+      const section = s.sections.find(sec => sec.id === this.currentSection);
+      if (section) return this.renderPracticeSectionView(section);
+    }
+    const s2Stars = this.computeStage2Stars();
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s2Stars.earned} / ${s2Stars.total}</strong></p>
+      </div>
+      <div class="branches-grid">${s.sections.map(sec => {
+        const complete = this.isPracticeSectionComplete(sec);
+        const total = sec.questions.length;
+        const done = sec.questions.filter(q => this.state.practiceAnswers[q.id] && this.state.practiceAnswers[q.id].selected !== undefined).length;
+        const correct = sec.questions.filter(q => {
+          const a = this.state.practiceAnswers[q.id];
+          return a && a.selected === q.correct;
+        }).length;
+        return `<div class="branch-card ${complete ? 'complete' : ''}" data-enter-section="${this.escapeAttr(sec.id)}">
+          <div class="branch-icon">${sec.icon || '📑'}</div>
+          <div class="branch-title">${this.escapeHtml(sec.title)}</div>
+          <div class="branch-meta">${correct} / ${total} ⭐</div>
+          <div class="branch-progress">${done} / ${total} answered</div>
+        </div>`;
+      }).join('')}</div>
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderPracticeSectionView(section) {
+    const correct = section.questions.filter(q => {
+      const a = this.state.practiceAnswers[q.id];
+      return a && a.selected === q.correct;
+    }).length;
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-sections="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(section.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">${section.questions.length} questions · ⭐ ${correct} / ${section.questions.length}</p>
+        </div>
+      </div>
+      ${section.questions.map((q, i) => this.renderPracticeQuestion(q, i + 1)).join('')}
+      <div class="stage-nav">
+        <div></div>
+        <button class="btn ${this.isPracticeSectionComplete(section) ? 'btn-success' : 'btn-secondary'}" data-back-to-sections="1">${this.isPracticeSectionComplete(section) ? '✓ Section Complete · Back' : 'Save & Back'}</button>
+      </div>
+    `;
+  },
+
+  renderPracticeQuestion(q, num) {
+    const ans = this.state.practiceAnswers[q.id] || {};
+    const isAnswered = ans.selected !== undefined;
+    return `
+      <div class="question-card">
+        <div>
+          <span class="question-number">${num}</span>
+          ${q.category ? `<span style="display:inline-block;margin-left:10px;padding:4px 12px;background:var(--paper-dark);border-radius:12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);vertical-align:middle;">${this.escapeHtml(q.category)}</span>` : ''}
+        </div>
+        ${q.passage_excerpt ? `<div class="passage-excerpt">${this.escapeHtml(q.passage_excerpt)}</div>` : ''}
+        <p class="question-text">${this.escapeHtml(q.question)}</p>
+        <ul class="options-list">${q.options.map((opt, i) => {
+          let cls = 'option-btn';
+          if (isAnswered) {
+            if (i === q.correct) cls += ' correct';
+            else if (i === ans.selected) cls += ' incorrect';
+          }
+          return `<li><button class="${cls}" data-practice-answer="${this.escapeAttr(q.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+          </button></li>`;
+        }).join('')}</ul>
+        ${!isAnswered && q.hint ? `<div class="question-actions"><button class="btn btn-secondary" data-show-hint="${this.escapeAttr(q.id)}">💡 Show hint</button></div>` : ''}
+        ${ans.showHint && q.hint ? `<div class="feedback-box hint"><span class="feedback-label">Hint</span>${this.escapeHtml(q.hint)}</div>` : ''}
+        ${isAnswered && q.explanation ? `<div class="feedback-box ${ans.selected === q.correct ? 'explanation' : 'hint'}">
+          <span class="feedback-label">${ans.selected === q.correct ? '✓ Correct! ⭐' : '✗ That\'s not right. Here\'s why:'}</span>
+          ${this.escapeHtml(q.explanation)}
+          ${ans.selected !== q.correct ? `<div style="margin-top:12px;padding:14px;background:rgba(74,124,89,0.08);border-radius:10px;border-left:4px solid var(--leaf);">
+            <strong style="color:var(--leaf);">✅ The correct answer is ${String.fromCharCode(65 + q.correct)}: ${this.escapeHtml(q.options[q.correct])}</strong>
+            <p style="margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink);">You chose ${String.fromCharCode(65 + ans.selected)}: ${this.escapeHtml(q.options[ans.selected])}. Read the explanation above carefully to understand the difference.</p>
+          </div>` : ''}
+        </div>` : ''}
+      </div>
+    `;
+  },
+
+  // ============================================================
+  // STAGE 3: THINK DEEPER
+  // ============================================================
+  renderStage3() {
+    if (!this.isStageUnlocked(3)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Practice First</div>
+          <p class="placeholder-detail">Finish all of Practice before unlocking Think Deeper.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    const s = this.data.stage_3_think;
+    const s3Stars = this.computeStage3Stars();
+
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s3Stars.earned} / ${s3Stars.total}</strong></p>
+      </div>
+      ${s.problems.map((p, i) => this.renderThinkProblem(p, i + 1)).join('')}
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderThinkProblem(p, num) {
+    const sub = this.state.thinkSubmissions[p.id] || {};
+    const isSubmitted = !!sub.submitted;
+    const userAnswer = sub.value || '';
+    const hasCriteria = p.self_check_criteria && p.self_check_criteria.length > 0;
+    const starsEarned = isSubmitted && hasCriteria ? (sub.selfChecks || []).length : 0;
+    const starsMax = hasCriteria ? p.self_check_criteria.length : 0;
+
+    return `
+      <div class="think-card ${isSubmitted ? 'submitted' : ''}" data-think-id="${this.escapeAttr(p.id)}">
+        <div>
+          <span class="question-number">${num}</span>
+          ${p.category ? `<span class="question-category">${this.escapeHtml(p.category)}</span>` : ''}
+          ${hasCriteria ? `<span class="marks-tag">⭐ ${starsEarned} / ${starsMax}</span>` : ''}
+          ${isSubmitted ? `<span class="submitted-tag">✓ Submitted</span>` : ''}
+        </div>
+        ${p.scenario ? `<div class="scenario-box">${this.escapeHtml(p.scenario)}</div>` : ''}
+        <p class="question-text">${this.escapeHtml(p.question)}</p>
+        <textarea
+          class="text-input"
+          rows="5"
+          placeholder="Write your answer here..."
+          data-think-input="${this.escapeAttr(p.id)}"
+          ${isSubmitted ? 'readonly' : ''}>${this.escapeHtml(userAnswer)}</textarea>
+        <div class="question-actions">
+          ${!isSubmitted
+            ? `<button class="btn btn-success" data-think-submit="${this.escapeAttr(p.id)}">✓ Submit Answer</button>`
+            : `<button class="btn btn-secondary" data-think-edit="${this.escapeAttr(p.id)}">✎ Edit Answer</button>`}
+        </div>
+        ${isSubmitted ? `
+          <div class="model-answer-box">
+            <span class="feedback-label">Model answer</span>
+            <p class="answer-text">${this.escapeHtml(p.model_answer)}</p>
+            ${p.explanation ? `
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--paper-dark);">
+                <span class="feedback-label" style="color: var(--leaf);">Why this works</span>
+                <p class="answer-text">${this.escapeHtml(p.explanation)}</p>
+              </div>
+            ` : ''}
+          </div>
+          ${hasCriteria ? `
+            <div class="self-check-box">
+              <div class="self-check-title">⭐ Self-Check — Rate Your Answer</div>
+              ${p.self_check_criteria.map((c, ci) => {
+                const checks = sub.selfChecks || [];
+                const isChecked = checks.includes(ci);
+                return `<div class="self-check-item" data-self-check="${this.escapeAttr(p.id)}" data-check-idx="${ci}">
+                  <span class="self-check-tick ${isChecked ? 'checked' : ''}">${isChecked ? '✓' : ''}</span>
+                  <span class="self-check-label">${this.escapeHtml(c)}</span>
+                </div>`;
+              }).join('')}
+              <div class="self-check-stars">
+                ⭐ ${starsEarned} / ${starsMax} checks passed
+              </div>
+            </div>
+          ` : ''}
+        ` : ''}
+      </div>
+    `;
+  },
+
+  countWords(s) {
+    if (!s || !s.trim()) return 0;
+    return s.trim().split(/\s+/).length;
+  },
+
+  wordCounterClass(count, limit) {
+    if (!limit) return '';
+    const m = limit.match(/(\d+)\s*[-–]\s*(\d+)/);
+    if (!m) return '';
+    const min = parseInt(m[1], 10), max = parseInt(m[2], 10);
+    if (count >= min && count <= max) return 'in-range';
+    if (count > max) return 'over';
+    return '';
+  },
+
+  // ============================================================
+  // STAGE 4: TEST
+  // ============================================================
+  renderStage4() {
+    if (!this.isStageUnlocked(4)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Think Deeper First</div>
+          <p class="placeholder-detail">Finish all five Think Deeper questions before taking the test.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    if (this.state.testSubmitted) return this.renderResults();
+    if (this.state.testStartTime === null) return this.renderTestIntro();
+    return this.renderTestActive();
+  },
+
+  renderTestIntro() {
+    const s = this.data.stage_4_test;
+    const minutes = Math.floor((s.duration_seconds || 2400) / 60);
+    const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+
+    return `
+      <div class="test-intro">
+        <div class="test-intro-icon">🏆</div>
+        <h2>${this.escapeHtml(s.title)}</h2>
+        <p class="test-intro-subtitle">${this.escapeHtml(s.subtitle || '')}</p>
+        <div class="test-stats">
+          <div class="test-stat">
+            <div class="test-stat-num">${totalQuestions}</div>
+            <div class="test-stat-label">Questions</div>
+          </div>
+          <div class="test-stat">
+            <div class="test-stat-num">${s.total_marks}</div>
+            <div class="test-stat-label">Marks</div>
+          </div>
+          <div class="test-stat">
+            <div class="test-stat-num">${minutes}</div>
+            <div class="test-stat-label">Minutes</div>
+          </div>
+        </div>
+        <div class="test-sections-preview">
+          ${s.sections.map(sec => `
+            <div class="test-section-preview">
+              <strong>${this.escapeHtml(sec.title)}</strong> · ${sec.marks} marks · ${sec.questions.length} questions
+            </div>
+          `).join('')}
+        </div>
+        <button class="test-start-btn" data-start-test="1">Start Test →</button>
+      </div>
+    `;
+  },
+
+  renderTestActive() {
+    const s = this.data.stage_4_test;
+    const elapsed = Math.floor((Date.now() - this.state.testStartTime) / 1000);
+    const remaining = Math.max(0, (s.duration_seconds || 2400) - elapsed);
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    let timerClass = '';
+    if (remaining < 60) timerClass = 'urgent';
+    else if (remaining < 300) timerClass = 'warning';
+
+    if (remaining === 0 && !this.state.testTimeUp) {
+      this.state.testTimeUp = true;
+      setTimeout(() => this.submitTest(), 100);
+    }
+
+    const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+    const answeredCount = Object.keys(this.state.testAnswers).filter(k => {
+      const v = this.state.testAnswers[k];
+      return v && v.value !== undefined && String(v.value).trim() !== '';
+    }).length;
+
+    return `
+      <div class="timer-bar">
+        <div class="timer-display ${timerClass}" id="timer-display">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</div>
+        <div class="timer-progress" id="timer-progress">${answeredCount} / ${totalQuestions} answered</div>
+      </div>
+      ${s.sections.map((sec, sidx) => this.renderTestSection(sec, sidx + 1)).join('')}
+      <div class="test-submit-zone">
+        <p style="margin-bottom: 12px; color: var(--ink-soft); font-size: 14px;">When you're done, submit your test.</p>
+        <button class="btn btn-primary test-submit-btn" data-submit-test="1">Submit Test ✓</button>
+      </div>
+    `;
+  },
+
+  renderTestSection(section, sidx) {
+    return `
+      <div class="test-section">
+        <div class="test-section-header">
+          <h3>${this.escapeHtml(section.title)}</h3>
+          <span class="test-section-marks">${section.marks} marks</span>
+        </div>
+        ${section.instructions ? `<p class="test-section-instructions">${this.escapeHtml(section.instructions)}</p>` : ''}
+        ${section.passage ? this.renderTestPassage(section.passage) : ''}
+        ${section.questions.map((q, i) => this.renderTestQuestion(q, sidx, i + 1)).join('')}
+      </div>
+    `;
+  },
+
+  renderTestPassage(passage) {
+    return `
+      <div class="test-passage">
+        <div class="test-passage-title">${this.escapeHtml(passage.title)}</div>
+        ${passage.author ? `<div class="test-passage-author">${this.escapeHtml(passage.author)}</div>` : ''}
+        <div class="test-passage-text">${this.escapeHtml(passage.text)}</div>
+        ${passage.is_ai_generated ? `<div class="test-passage-note">📝 ${this.escapeHtml(passage.review_note || 'AI-generated passage — parent please review.')}</div>` : ''}
+      </div>
+    `;
+  },
+
+  renderTestQuestion(q, sidx, qnum) {
+    const ans = this.state.testAnswers[q.id] || {};
+    const value = ans.value !== undefined ? String(ans.value) : '';
+
+    let inputHtml = '';
+    if (q.type === 'mcq') {
+      inputHtml = `
+        <ul class="options-list">
+          ${q.options.map((opt, i) => {
+            const letter = String.fromCharCode(65 + i);
+            const selected = ans.value === letter;
+            return `<li><button class="option-btn ${selected ? 'test-selected' : ''}" data-test-mcq="${this.escapeAttr(q.id)}" data-value="${this.escapeAttr(letter)}">
+              <span class="option-letter">${letter}</span><span>${this.escapeHtml(opt)}</span>
+            </button></li>`;
+          }).join('')}
+        </ul>
+      `;
+    } else if (q.type === 'fill_blank') {
+      inputHtml = `<input type="text" class="text-input" data-test-input="${this.escapeAttr(q.id)}" value="${this.escapeAttr(value)}" placeholder="Type your answer...">`;
+    } else if (q.type === 'short_answer' || q.type === 'subjective') {
+      const wlimit = q.word_limit || '';
+      const wc = this.countWords(value);
+      const wccls = this.wordCounterClass(wc, wlimit);
+      inputHtml = `
+        ${wlimit ? `<div class="word-limit-tag">📝 Word limit: ${this.escapeHtml(wlimit)}</div>` : ''}
+        <textarea class="text-input" rows="${q.type === 'subjective' ? 6 : 4}" data-test-input="${this.escapeAttr(q.id)}" placeholder="Write your answer here...">${this.escapeHtml(value)}</textarea>
+        <div class="word-counter ${wccls}" data-counter-for="${this.escapeAttr(q.id)}">
+          ${wc} word${wc === 1 ? '' : 's'}${wlimit ? ` · target: ${this.escapeHtml(wlimit)}` : ''}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="test-question">
+        <div class="test-q-header">
+          <span class="test-q-num">Q${qnum}</span>
+          <span class="test-q-type">${q.type.replace('_', ' ').toUpperCase()}</span>
+          <span class="marks-tag">${q.marks} mark${q.marks > 1 ? 's' : ''}</span>
+        </div>
+        <p class="question-text">${this.escapeHtml(q.question)}</p>
+        ${inputHtml}
+      </div>
+    `;
+  },
+
+  startTest() {
+    this.state.testStartTime = Date.now();
+    this.state.testAnswers = {};
+    this.state.testTimeUp = false;
+    this.state.testSubmitted = false;
+    this.startTimer();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  captureTestInputs() {
+    document.querySelectorAll('[data-test-input]').forEach(el => {
+      const qid = el.dataset.testInput;
+      this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value: el.value };
+    });
+  },
+
+  submitTest() {
+    this.captureTestInputs();
+    this.stopTimer();
+    this.state.testSubmitted = true;
+    this.saveProgress();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  retakeTest() {
+    if (!confirm('Retake the test? Your previous test answers will be cleared. (Other progress in Stages 1-3 stays.)')) return;
+    this.state.testStartTime = null;
+    this.state.testAnswers = {};
+    this.state.testTimeUp = false;
+    this.state.testSubmitted = false;
+    this.saveProgress();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  // ============================================================
+  // TIMER
+  // ============================================================
+  timerInterval: null,
+  startTimer() {
+    this.stopTimer();
+    this.timerInterval = setInterval(() => {
+      if (this.state.testSubmitted || this.state.testStartTime === null) {
+        this.stopTimer();
+        return;
+      }
+      const s = this.data.stage_4_test;
+      const elapsed = Math.floor((Date.now() - this.state.testStartTime) / 1000);
+      const remaining = Math.max(0, (s.duration_seconds || 2400) - elapsed);
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      const display = document.getElementById('timer-display');
+      if (display) {
+        display.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        display.className = 'timer-display ' + (remaining < 60 ? 'urgent' : (remaining < 300 ? 'warning' : ''));
+      }
+      const progress = document.getElementById('timer-progress');
+      if (progress) {
+        const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+        // Capture current input values to keep "answered count" live without re-rendering
+        document.querySelectorAll('[data-test-input]').forEach(el => {
+          const qid = el.dataset.testInput;
+          this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value: el.value };
+        });
+        const answered = Object.keys(this.state.testAnswers).filter(k => {
+          const v = this.state.testAnswers[k];
+          return v && v.value !== undefined && String(v.value).trim() !== '';
+        }).length;
+        progress.textContent = `${answered} / ${totalQuestions} answered`;
+      }
+      if (remaining === 0 && !this.state.testTimeUp) {
+        this.state.testTimeUp = true;
+        this.stopTimer();
+        this.submitTest();
+      }
+    }, 1000);
+  },
+
+  stopTimer() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  },
+
+  // ============================================================
+  // RESULTS / SCORING
+  // ============================================================
+  computeStageScores() {
+    // Stage 1: 25 marks total. Use branch.marks weights × completion fraction within each branch.
+    const s1 = this.data.stage_1_learn;
+    let s1Score = 0;
+    s1.branches.forEach(b => {
+      if (b.type === 'story_panels') {
+        const totalChecks = b.panels.filter(p => p.comprehension_check).length;
+        if (totalChecks === 0) {
+          if (this.isBranchComplete(b)) s1Score += b.marks;
+        } else {
+          const correctChecks = b.panels.filter(p => {
+            if (!p.comprehension_check) return false;
+            const a = this.state.panelChecks[p.id];
+            return a && a.selected === p.comprehension_check.correct;
+          }).length;
+          s1Score += Math.round((correctChecks / totalChecks) * b.marks);
+        }
+      } else if (b.type === 'vocabulary_cards') {
+        const total = b.cards.length;
+        const correctSpots = b.cards.filter(c => {
+          const a = this.state.spotItAnswers[c.id];
+          return a && a.correct;
+        }).length;
+        s1Score += total > 0 ? Math.round((correctSpots / total) * b.marks) : 0;
+      } else if (b.type === 'concept_teaching') {
+        const totalChecks = b.cards.filter(c => c.check).length;
+        if (totalChecks === 0) {
+          if (this.isBranchComplete(b)) s1Score += b.marks;
+        } else {
+          const correctChecks = b.cards.filter(c => {
+            if (!c.check) return false;
+            const a = this.state.panelChecks[c.id];
+            return a && a.selected === c.check.correct;
+          }).length;
+          s1Score += Math.round((correctChecks / totalChecks) * b.marks);
+        }
+      }
+    });
+
+    // Stage 2: 25 marks. Sum of (correct/total) × section.marks across sections.
+    const s2 = this.data.stage_2_practice;
+    let s2Score = 0;
+    s2.sections.forEach(sec => {
+      const total = sec.questions.length;
+      if (total === 0) return;
+      const correct = sec.questions.filter(q => {
+        const a = this.state.practiceAnswers[q.id];
+        return a && a.selected === q.correct;
+      }).length;
+      s2Score += Math.round((correct / total) * sec.marks);
+    });
+
+    // Stage 3: 25 marks. Based on self_check_criteria ticks.
+    const s3 = this.data.stage_3_think;
+    let s3Score = 0;
+    const s3Problems = s3.problems;
+    const hasSelfChecks = s3Problems.some(p => p.self_check_criteria && p.self_check_criteria.length > 0);
+    if (hasSelfChecks) {
+      let totalStars = 0;
+      let maxStars = 0;
+      s3Problems.forEach(p => {
+        const sub = this.state.thinkSubmissions[p.id] || {};
+        const criteria = p.self_check_criteria || [];
+        maxStars += criteria.length;
+        if (sub.submitted) {
+          totalStars += (sub.selfChecks || []).length;
+        }
+      });
+      s3Score = maxStars > 0 ? Math.round((totalStars / maxStars) * 25) : 0;
+    } else {
+      const submittedCount = s3Problems.filter(p => this.state.thinkSubmissions[p.id] && this.state.thinkSubmissions[p.id].submitted).length;
+      s3Score = Math.round((submittedCount / s3Problems.length) * 25);
+    }
+
+    // Stage 4: scale to 25.
+    const s4 = this.data.stage_4_test;
+    const breakdown = this.gradeTestQuestions();
+    const autoScore = breakdown.reduce((sum, b) => sum + b.marks_awarded, 0);
+    const manualPotential = breakdown.filter(b => b.needs_manual).reduce((sum, b) => sum + b.q.marks, 0);
+    // Optimistic for display
+    const optimisticTotal = autoScore + manualPotential;
+    const s4Max = s4.total_marks || 25;
+    const s4Score = Math.round((optimisticTotal / s4Max) * 25);
+
+    return {
+      stage1: { score: s1Score, max: 25 },
+      stage2: { score: s2Score, max: 25 },
+      stage3: { score: s3Score, max: 25 },
+      stage4: { score: s4Score, max: 25, manualMarks: manualPotential, breakdown, rawAutoScore: autoScore, rawTotal: s4Max },
+      grandTotal: s1Score + s2Score + s3Score + s4Score,
+    };
+  },
+
+  gradeTestQuestions() {
+    const s = this.data.stage_4_test;
+    const out = [];
+    s.sections.forEach(sec => {
+      sec.questions.forEach(q => {
+        const ans = this.state.testAnswers[q.id] || {};
+        const userAnswer = (ans.value !== undefined ? String(ans.value) : '').trim();
+
+        if (q.type === 'mcq') {
+          const correct = userAnswer.toLowerCase() === String(q.correct_answer || '').toLowerCase();
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: q.correct_answer || '',
+            is_correct: correct,
+            marks_awarded: correct ? q.marks : 0,
+            needs_manual: false,
+          });
+        } else if (q.type === 'fill_blank') {
+          const norm = (s) => s.toLowerCase().trim().replace(/[.,;:!?'"]/g, '').replace(/\s+/g, ' ');
+          const correct = norm(userAnswer) === norm(String(q.correct_answer || ''));
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: q.correct_answer || '',
+            is_correct: correct,
+            marks_awarded: correct ? q.marks : 0,
+            needs_manual: false,
+          });
+        } else {
+          // short_answer or subjective — needs manual grading
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: '(See model answer)',
+            is_correct: null,
+            marks_awarded: 0,
+            needs_manual: true,
+          });
+        }
+      });
+    });
+    return out;
+  },
+
+  renderResults() {
+    const scores = this.computeStageScores();
+    const s4 = this.data.stage_4_test;
+    const s4Max = s4.total_marks || 20;
+    const breakdown = scores.stage4.breakdown;
+    const autoScore = scores.stage4.rawAutoScore;
+    const manualMarks = scores.stage4.manualMarks;
+    // Manual marks state — parent can adjust
+    const manualState = this.state.manualMarksAwarded || {};
+    let manualAwarded = 0;
+    breakdown.filter(b => b.needs_manual).forEach(b => {
+      manualAwarded += (manualState[b.q.id] !== undefined ? manualState[b.q.id] : 0);
+    });
+    const testScore = autoScore + manualAwarded;
+
+    // Badge and message from score_tiers in JSON
+    const tiers = s4.score_tiers || [];
+    let tierMsg = 'Keep practising!';
+    let tierEmoji = '🌱';
+    for (const tier of tiers) {
+      if (testScore >= tier.min && testScore <= tier.max) { tierMsg = tier.message; break; }
+    }
+    if (testScore >= s4Max * 0.95) tierEmoji = '🏆';
+    else if (testScore >= s4Max * 0.8) tierEmoji = '⭐';
+    else if (testScore >= s4Max * 0.6) tierEmoji = '✨';
+    else tierEmoji = '🌱';
+
+    const quotes = this.data.motivational_quotes || ["Every champion was once a beginner."];
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    const confetti = testScore >= s4Max * 0.8 ? this.generateConfetti() : '';
+
+    // Stars for stages 1-3
+    const s1Stars = this.computeStage1Stars();
+    const s2Stars = this.computeStage2Stars();
+    const s3Stars = this.computeStage3Stars();
+
+    return `
+      <div class="results-screen">
+        <div class="results-hero">
+          ${confetti}
+          <div class="badge-circle ${testScore < s4Max * 0.6 ? 'no-badge' : ''}">
+            <span class="badge-emoji">${tierEmoji}</span>
+          </div>
+          <h2 class="badge-name">${this.escapeHtml(tierMsg)}</h2>
+          <div class="results-percentage">
+            <div class="percentage-num">${testScore}/${s4Max}</div>
+            <div class="percentage-label">Test Score</div>
+          </div>
+        </div>
+
+        <div class="motivational-quote">${this.escapeHtml(quote)}</div>
+
+        <div class="section-scores">
+          <h3>How You Did In Each Section</h3>
+          <div class="scores-table">
+            ${this.renderStarCell('📖', 'Learn', s1Stars.earned, s1Stars.total)}
+            ${this.renderStarCell('✏️', 'Practice', s2Stars.earned, s2Stars.total)}
+            ${this.renderStarCell('💭', 'Think', s3Stars.earned, s3Stars.total)}
+            ${this.renderMarksCell('🏆', 'Test', testScore, s4Max)}
+          </div>
+        </div>
+
+        <div class="reattempt-card">
+          <h4>Think you can do better? 🎯</h4>
+          <p>Take the test again — try to beat your score!</p>
+          <button class="reattempt-btn" data-retake-test="1">↻ Retake Test</button>
+        </div>
+
+        <div class="results-detail">
+          <h4>Test — Your Answers Reviewed</h4>
+          ${breakdown.map((b, i) => {
+            const qType = b.q.type || '';
+            const optionLetters = ['A','B','C','D','E','F'];
+            let userDisplay = b.user_answer || '(not answered)';
+            let correctDisplay = b.correct_display || '';
+
+            // For MCQs show option letter + text
+            if (qType === 'mcq' && b.q.options) {
+              const userIdx = optionLetters.indexOf(b.user_answer.toUpperCase());
+              if (userIdx >= 0 && b.q.options[userIdx]) {
+                userDisplay = b.user_answer.toUpperCase() + ': ' + b.q.options[userIdx];
+              }
+              const correctIdx = optionLetters.indexOf((b.q.correct_answer || '').toUpperCase());
+              if (correctIdx >= 0 && b.q.options[correctIdx]) {
+                correctDisplay = b.q.correct_answer.toUpperCase() + ': ' + b.q.options[correctIdx];
+              }
+            }
+
+            return `
+            <div class="review-item">
+              <div class="review-q">
+                <strong>Q${i+1}.</strong> <em>${this.escapeHtml(b.section.title)}</em><br>
+                ${this.escapeHtml(b.q.question)}
+              </div>
+              <div class="review-content">
+                ${b.needs_manual ? `
+                  <div class="review-row"><strong>Your answer:</strong> "${this.escapeHtml(b.user_answer || '(not answered)')}"</div>
+                  ${b.q.model_answer ? `<div class="review-row"><strong>Model:</strong> ${this.escapeHtml(b.q.model_answer)}</div>` : ''}
+                  ${b.q.marking_guide ? `<div class="review-row" style="font-style:italic;color:var(--ink-soft);font-size:13px;"><strong>For parent:</strong> ${this.escapeHtml(b.q.marking_guide)}</div>` : ''}
+                  <div class="review-result manual" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span>Marks (out of ${b.q.marks}):</span>
+                    <button class="btn btn-secondary" style="padding:4px 10px;min-width:32px;" data-manual-marks-dec="${this.escapeAttr(b.q.id)}">−</button>
+                    <strong style="font-size:18px;min-width:24px;text-align:center;">${manualState[b.q.id] !== undefined ? manualState[b.q.id] : 0}</strong>
+                    <button class="btn btn-secondary" style="padding:4px 10px;min-width:32px;" data-manual-marks-inc="${this.escapeAttr(b.q.id)}">+</button>
+                  </div>
+                ` : `
+                  <div class="review-row"><strong>Your answer:</strong> ${this.escapeHtml(userDisplay)}</div>
+                  <div class="review-row"><strong>Correct:</strong> ${this.escapeHtml(correctDisplay)}</div>
+                  <div class="review-result ${b.is_correct ? 'correct' : 'incorrect'}">${b.is_correct ? `✓ +${b.marks_awarded}` : `✗ 0 / ${b.q.marks}`}</div>
+                `}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+
+        <div class="results-actions">
+          <button class="btn btn-secondary" data-back-home="1">← Back to Stages</button>
+        </div>
+      </div>
+    `;
+  },
+
+  computeStage1Stars() {
+    const s1 = this.data.stage_1_learn;
+    let earned = 0, total = 0;
+    s1.branches.forEach(b => {
+      if (b.type === 'concept_teaching' && b.cards) {
+        b.cards.forEach(c => {
+          if (c.check) {
+            total++;
+            const a = this.state.panelChecks[c.id];
+            if (a && a.selected === c.check.correct) earned++;
+          }
+        });
+      } else if (b.type === 'story_panels' && b.panels) {
+        b.panels.forEach(p => {
+          if (p.comprehension_check) {
+            total++;
+            const a = this.state.panelChecks[p.id];
+            if (a && a.selected === p.comprehension_check.correct) earned++;
+          }
+        });
+      } else if (b.type === 'vocabulary_cards' && b.cards) {
+        b.cards.forEach(c => {
+          total++;
+          const a = this.state.spotItAnswers[c.id];
+          if (a && a.correct) earned++;
+        });
+      }
+    });
+    return { earned, total };
+  },
+
+  computeStage2Stars() {
+    const s2 = this.data.stage_2_practice;
+    let earned = 0, total = 0;
+    s2.sections.forEach(sec => {
+      sec.questions.forEach(q => {
+        total++;
+        const a = this.state.practiceAnswers[q.id];
+        if (a && a.selected === q.correct) earned++;
+      });
+    });
+    return { earned, total };
+  },
+
+  computeStage3Stars() {
+    const s3 = this.data.stage_3_think;
+    let earned = 0, total = 0;
+    s3.problems.forEach(p => {
+      if (p.self_check_criteria) {
+        total += p.self_check_criteria.length;
+        const sub = this.state.thinkSubmissions[p.id] || {};
+        earned += (sub.selfChecks || []).length;
+      }
+    });
+    return { earned, total };
+  },
+
+  renderStarCell(icon, label, earned, total) {
+    const pct = total > 0 ? (earned / total) * 100 : 0;
+    let cls = '', tag = '';
+    if (pct >= 80) { cls = 'strong'; tag = '<span class="score-cell-tag strong-tag">Strong</span>'; }
+    else if (pct < 50) { cls = 'improvement'; tag = '<span class="score-cell-tag improve-tag">Practice More</span>'; }
+    else { tag = '<span class="score-cell-tag neutral-tag">Good</span>'; }
+    return `
+      <div class="score-cell ${cls}">
+        <div class="score-cell-icon">${icon}</div>
+        <div class="score-cell-label">${label}</div>
+        <div class="score-cell-num">${earned} ⭐</div>
+        <div class="score-cell-out-of">out of ${total}</div>
+        ${tag}
+      </div>
+    `;
+  },
+
+  renderMarksCell(icon, label, score, max) {
+    const pct = max > 0 ? (score / max) * 100 : 0;
+    let cls = '', tag = '';
+    if (pct >= 80) { cls = 'strong'; tag = '<span class="score-cell-tag strong-tag">Strong</span>'; }
+    else if (pct < 50) { cls = 'improvement'; tag = '<span class="score-cell-tag improve-tag">Practice More</span>'; }
+    else { tag = '<span class="score-cell-tag neutral-tag">Good</span>'; }
+    return `
+      <div class="score-cell ${cls}">
+        <div class="score-cell-icon">${icon}</div>
+        <div class="score-cell-label">${label}</div>
+        <div class="score-cell-num">${score}</div>
+        <div class="score-cell-out-of">out of ${max}</div>
+        ${tag}
+      </div>
+    `;
+  },
+
+  generateConfetti() {
+    const colors = ['#E87722', '#F4A82C', '#D4A53A', '#4A7C59', '#5B8DB8', '#B8385E', '#FFFFFF'];
+    let html = '';
+    for (let i = 0; i < 30; i++) {
+      const left = Math.random() * 100;
+      const delay = Math.random() * 3;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const rotate = Math.random() * 360;
+      html += `<div class="confetti-piece" style="left:${left}%;background:${color};animation-delay:${delay}s;transform:rotate(${rotate}deg);"></div>`;
+    }
+    return html;
+  },
+
+  renderStageNav() {
+    const canPrev = this.currentStage > 1;
+    const canNext = this.currentStage < 4 && this.isStageUnlocked(this.currentStage + 1);
+    const stageLabels = ['', 'Learn', 'Practice', 'Think', 'Test'];
+    return `
+      <div class="stage-nav">
+        ${canPrev ? `<button class="btn btn-secondary" data-stage-nav="prev">← Back to ${stageLabels[this.currentStage - 1]}</button>` : '<div></div>'}
+        ${canNext ? `<button class="btn btn-primary" data-stage-nav="next">Next: ${stageLabels[this.currentStage + 1]} →</button>` : (this.currentStage < 4 ? `<button class="btn btn-primary" disabled title="Complete current stage first">Next: ${stageLabels[this.currentStage + 1]} →</button>` : '<div></div>')}
+      </div>
+    `;
+  },
+
+  bindEvents() {
+    // Use document.body so the listener survives across renders.
+    // Called ONCE in init().
+    document.body.addEventListener('click', (e) => {
+      const t = e.target;
+
+      if (t.dataset && t.dataset.closeModal) { this.state.spotItModal = null; this.render(); return; }
+      if (t.classList && t.classList.contains('highlight-word')) { this.showWordTooltip(t); return; }
+
+      const target = t.closest('[data-stage], [data-enter-branch], [data-back-to-branches], [data-panel-nav], [data-panel-check], [data-flip-card], [data-open-spot-it], [data-spot-answer], [data-enter-section], [data-back-to-sections], [data-practice-answer], [data-show-hint], [data-stage-nav], [data-vocab-group], [data-reset-progress], [data-jump-to-panel], [data-think-submit], [data-think-edit], [data-start-test], [data-submit-test], [data-retake-test], [data-back-home], [data-test-mcq], [data-self-check], [data-manual-marks-inc], [data-manual-marks-dec], [data-open-deep-dive], [data-close-deep-dive], [data-dd-topic]');
+      if (!target) return;
+
+      if (target.dataset.resetProgress) {
+        this.resetProgress();
+        return;
+      }
+      if (target.dataset.jumpToPanel !== undefined) {
+        const idx = parseInt(target.dataset.jumpToPanel, 10);
+        if (!isNaN(idx)) {
+          this.currentPanelIdx = idx;
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      // Deep Dive navigation
+      if (target.dataset.openDeepDive !== undefined) {
+        this.previousStage = this.currentStage;
+        this.currentStage = 0;
+        this.deepDiveTopicIdx = 0;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.closeDeepDive !== undefined) {
+        this.currentStage = this.previousStage || 1;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.ddTopic !== undefined) {
+        const idx = parseInt(target.dataset.ddTopic, 10);
+        const dd = this.data.stage_0_deep_dive;
+        if (dd && idx >= 0 && idx < dd.topics.length) {
+          this.deepDiveTopicIdx = idx;
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      if (target.dataset.stage) {
+        const num = parseInt(target.dataset.stage, 10);
+        if (this.isStageUnlocked(num) || num === this.currentStage) {
+          this.currentStage = num;
+          this.currentBranch = null;
+          this.currentSection = null;
+          this.saveProgress();
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      if (target.dataset.enterBranch) {
+        this.currentBranch = target.dataset.enterBranch;
+        this.currentPanelIdx = 0;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.backToBranches) {
+        this.currentBranch = null;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.panelNav) {
+        const branch = this.data.stage_1_learn.branches.find(b => b.id === this.currentBranch);
+        const items = branch.panels || branch.cards || [];
+        if (target.dataset.panelNav === 'prev' && this.currentPanelIdx > 0) this.currentPanelIdx--;
+        else if (target.dataset.panelNav === 'next' && this.currentPanelIdx < items.length - 1) this.currentPanelIdx++;
+        else if (target.dataset.panelNav === 'finish-branch') { this.currentBranch = null; this.saveProgress(); }
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.panelCheck) {
+        const panelId = target.dataset.panelCheck;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.panelChecks[panelId] && this.state.panelChecks[panelId].selected !== undefined) return;
+        this.state.panelChecks[panelId] = { ...(this.state.panelChecks[panelId] || {}), selected: opt };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.flipCard) {
+        if (e.target.closest('[data-open-spot-it]')) return;
+        const id = target.dataset.flipCard;
+        this.state.cardFlips[id] = !this.state.cardFlips[id];
+        // Toggle the class directly on the live element so CSS transition animates.
+        // No full re-render — that would destroy the element and skip the animation.
+        target.classList.toggle('flipped');
+        this.saveProgress();
+        return;
+      }
+      if (target.dataset.vocabGroup) {
+        this.currentVocabGroup = target.dataset.vocabGroup;
+        this.render();
+        return;
+      }
+      if (target.dataset.openSpotIt) {
+        e.stopPropagation();
+        this.state.spotItModal = target.dataset.openSpotIt;
+        this.render();
+        return;
+      }
+      if (target.dataset.spotAnswer) {
+        const id = target.dataset.spotAnswer;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.spotItAnswers[id] !== undefined) return;
+        let card = null;
+        for (const branch of this.data.stage_1_learn.branches) {
+          if (branch.cards) { card = branch.cards.find(c => c.id === id); if (card) break; }
+        }
+        if (!card) return;
+        this.state.spotItAnswers[id] = { selected: opt, correct: opt === card.spot_it.correct };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.enterSection) {
+        this.currentSection = target.dataset.enterSection;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.backToSections) {
+        this.currentSection = null;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.practiceAnswer) {
+        const qid = target.dataset.practiceAnswer;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.practiceAnswers[qid] && this.state.practiceAnswers[qid].selected !== undefined) return;
+        this.state.practiceAnswers[qid] = { ...(this.state.practiceAnswers[qid] || {}), selected: opt };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.showHint) {
+        const qid = target.dataset.showHint;
+        this.state.practiceAnswers[qid] = { ...(this.state.practiceAnswers[qid] || {}), showHint: true };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — submit a Think problem
+      if (target.dataset.thinkSubmit) {
+        const pid = target.dataset.thinkSubmit;
+        const ta = document.querySelector(`[data-think-input="${CSS.escape(pid)}"]`);
+        const value = ta ? ta.value.trim() : '';
+        if (!value) {
+          alert('Please write your answer first before submitting.');
+          return;
+        }
+        this.state.thinkSubmissions[pid] = { value, submitted: true };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — edit (un-submit)
+      if (target.dataset.thinkEdit) {
+        const pid = target.dataset.thinkEdit;
+        const existing = this.state.thinkSubmissions[pid] || {};
+        this.state.thinkSubmissions[pid] = { ...existing, submitted: false };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — self-check criteria toggle
+      if (target.dataset.selfCheck) {
+        const pid = target.dataset.selfCheck;
+        const ci = parseInt(target.dataset.checkIdx, 10);
+        const existing = this.state.thinkSubmissions[pid] || {};
+        const checks = [...(existing.selfChecks || [])];
+        const idx = checks.indexOf(ci);
+        if (idx >= 0) checks.splice(idx, 1); else checks.push(ci);
+        this.state.thinkSubmissions[pid] = { ...existing, selfChecks: checks };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Results — manual marks adjustment
+      if (target.dataset.manualMarksInc) {
+        const qid = target.dataset.manualMarksInc;
+        if (!this.state.manualMarksAwarded) this.state.manualMarksAwarded = {};
+        const q = this.findTestQuestion(qid);
+        const max = q ? q.marks : 5;
+        const current = this.state.manualMarksAwarded[qid] || 0;
+        if (current < max) { this.state.manualMarksAwarded[qid] = current + 1; this.saveProgress(); this.render(); }
+        return;
+      }
+      if (target.dataset.manualMarksDec) {
+        const qid = target.dataset.manualMarksDec;
+        if (!this.state.manualMarksAwarded) this.state.manualMarksAwarded = {};
+        const current = this.state.manualMarksAwarded[qid] || 0;
+        if (current > 0) { this.state.manualMarksAwarded[qid] = current - 1; this.saveProgress(); this.render(); }
+        return;
+      }
+      // Stage 4 — start the test
+      if (target.dataset.startTest) {
+        this.startTest();
+        return;
+      }
+      // Stage 4 — MCQ click
+      if (target.dataset.testMcq) {
+        // Capture text inputs first so we don't lose typed values on re-render
+        this.captureTestInputs();
+        const qid = target.dataset.testMcq;
+        const value = target.dataset.value;
+        this.state.testAnswers[qid] = { value };
+        this.render();
+        return;
+      }
+      // Stage 4 — submit
+      if (target.dataset.submitTest) {
+        if (!confirm('Submit your test? You will not be able to change your answers after this.')) return;
+        this.submitTest();
+        return;
+      }
+      // Results — retake test
+      if (target.dataset.retakeTest) {
+        this.retakeTest();
+        return;
+      }
+      // Results — back home
+      if (target.dataset.backHome) {
+        this.currentStage = 1;
+        this.saveProgress();
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.stageNav === 'prev') {
+        this.currentStage = Math.max(1, this.currentStage - 1);
+        this.currentBranch = null; this.currentSection = null;
+        this.stopTimer();
+        this.saveProgress();
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.stageNav === 'next') {
+        if (this.isStageUnlocked(this.currentStage + 1)) {
+          this.currentStage = Math.min(4, this.currentStage + 1);
+          this.currentBranch = null; this.currentSection = null;
+          this.stopTimer();
+          this.saveProgress();
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+    });
+
+    // Input listener for Think textareas + Test text inputs — live word count, save state
+    document.body.addEventListener('input', (e) => {
+      const t = e.target;
+      // Stage 3 — Think problems
+      if (t.dataset && t.dataset.thinkInput) {
+        const pid = t.dataset.thinkInput;
+        const value = t.value;
+        const existing = this.state.thinkSubmissions[pid] || {};
+        this.state.thinkSubmissions[pid] = { ...existing, value, submitted: false };
+        // Update word counter directly without re-render (preserves cursor)
+        const counter = document.querySelector(`[data-counter-for="${CSS.escape(pid)}"]`);
+        if (counter) {
+          const wc = this.countWords(value);
+          // Find the original problem to read word_limit
+          const problem = this.data.stage_3_think.problems.find(p => p.id === pid);
+          const limit = problem ? problem.word_limit : '';
+          counter.textContent = `${wc} word${wc === 1 ? '' : 's'}${limit ? ` · target: ${limit}` : ''}`;
+          counter.className = 'word-counter ' + this.wordCounterClass(wc, limit);
+        }
+        return;
+      }
+      // Stage 4 — Test text inputs
+      if (t.dataset && t.dataset.testInput) {
+        const qid = t.dataset.testInput;
+        const value = t.value;
+        this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value };
+        // Update word counter for short_answer / subjective
+        const counter = document.querySelector(`[data-counter-for="${CSS.escape(qid)}"]`);
+        if (counter) {
+          const wc = this.countWords(value);
+          let limit = '';
+          // Find the question for word_limit
+          for (const sec of this.data.stage_4_test.sections) {
+            const q = sec.questions.find(q => q.id === qid);
+            if (q) { limit = q.word_limit || ''; break; }
+          }
+          counter.textContent = `${wc} word${wc === 1 ? '' : 's'}${limit ? ` · target: ${limit}` : ''}`;
+          counter.className = 'word-counter ' + this.wordCounterClass(wc, limit);
+        }
+        return;
+      }
+    });
+  },
+
+  showWordTooltip(el) {
+    document.querySelectorAll('.word-tooltip').forEach(t => t.remove());
+    const panelId = el.dataset.panelId;
+    const idx = parseInt(el.dataset.wordIdx, 10);
+    const branch = this.data.stage_1_learn.branches.find(b => b.id === this.currentBranch);
+    if (!branch) return;
+    const panel = branch.panels.find(p => p.id === panelId);
+    if (!panel || !panel.highlighted_words || !panel.highlighted_words[idx]) return;
+    const tip = document.createElement('span');
+    tip.className = 'word-tooltip';
+    tip.textContent = panel.highlighted_words[idx].meaning;
+    el.appendChild(tip);
+    setTimeout(() => tip.remove(), 3000);
+  },
+
+  escapeHtml(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  },
+
+  findTestQuestion(qid) {
+    if (!this.data.stage_4_test) return null;
+    for (const sec of this.data.stage_4_test.sections) {
+      const q = sec.questions.find(q => q.id === qid);
+      if (q) return q;
+    }
+    return null;
+  },
+  escapeAttr(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+
+</body>
+</html>
