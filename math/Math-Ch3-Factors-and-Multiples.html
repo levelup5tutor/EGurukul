@@ -1,0 +1,3501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-Gurukul · Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #E87722; --marigold: #F4A82C; --cream: #FFF8EE; --paper: #FDF6E8;
+  --paper-dark: #F5EBD3; --ink: #2B1810; --ink-soft: #5C4332; --leaf: #4A7C59;
+  --leaf-light: #E8F4EA; --berry: #B8385E; --berry-light: #FBE9EE; --gold: #D4A53A;
+  --sky: #5B8DB8; --sky-light: #E5F0F8; --shadow: rgba(43,24,16,0.12); --shadow-strong: rgba(43,24,16,0.25);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); font-family: 'Nunito', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle at 20% 30%, rgba(232,119,34,0.04) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(244,168,44,0.06) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+.container { max-width: 920px; margin: 0 auto; padding: 24px 20px 80px; position: relative; z-index: 1; }
+header.app-header { margin-bottom: 28px; padding: 24px 28px; background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 100%); border-radius: 24px; color: white; box-shadow: 0 8px 24px var(--shadow); position: relative; overflow: hidden; }
+header.app-header::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%); border-radius: 50%; }
+.header-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9; margin-bottom: 6px; }
+.header-title { font-family: 'Fraunces', serif; font-weight: 900; font-size: clamp(26px, 5vw, 38px); line-height: 1.15; letter-spacing: -0.5px; }
+.header-meta { margin-top: 10px; font-size: 14px; opacity: 0.95; font-weight: 600; }
+.header-author { margin-top: 6px; font-size: 14px; opacity: 0.85; font-weight: 500; font-style: italic; }
+.header-theme-pill { display: inline-block; margin-top: 12px; background: rgba(0,0,0,0.25); color: white; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; backdrop-filter: blur(4px); }
+.reset-btn { position: absolute; top: 16px; right: 16px; background: var(--ink); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 7px 14px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s ease; z-index: 2; }
+.reset-btn:hover { background: #1a0e07; border-color: white; transform: translateY(-1px); }
+.progress-bar { display: flex; gap: 8px; margin-bottom: 32px; }
+.progress-step { flex: 1; padding: 12px 8px; background: var(--paper-dark); border-radius: 12px; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-soft); cursor: pointer; transition: all 0.25s ease; border: 2px solid transparent; user-select: none; position: relative; }
+.progress-step:hover { background: var(--cream); border-color: var(--marigold); }
+.progress-step.active { background: var(--ink); color: var(--cream); }
+.progress-step.complete { background: var(--leaf); color: white; }
+.progress-step.locked { opacity: 0.5; cursor: not-allowed; }
+.progress-step.locked:hover { background: var(--paper-dark); border-color: transparent; }
+.progress-step.complete::after { content: '✓'; position: absolute; top: 4px; right: 6px; font-size: 11px; font-weight: 900; }
+.progress-step.locked::after { content: '🔒'; position: absolute; top: 4px; right: 6px; font-size: 10px; }
+.step-num { display: block; font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; }
+.stage-header { margin-bottom: 24px; }
+.stage-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(24px, 4vw, 32px); color: var(--ink); letter-spacing: -0.3px; margin-bottom: 6px; }
+.stage-description { color: var(--ink-soft); font-size: 15px; }
+.branches-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.branch-card { background: var(--cream); border: 2px solid var(--paper-dark); border-radius: 18px; padding: 24px 20px; cursor: pointer; transition: all 0.25s ease; text-align: center; position: relative; }
+.branch-card:hover { border-color: var(--marigold); transform: translateY(-3px); box-shadow: 0 6px 16px var(--shadow); }
+.branch-card.complete { border-color: var(--leaf); background: var(--leaf-light); }
+.branch-card.complete::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; background: var(--leaf); color: white; border-radius: 50%; line-height: 24px; font-weight: 900; font-size: 14px; }
+.branch-icon { font-size: 40px; margin-bottom: 12px; }
+.branch-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.branch-meta { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.branch-progress { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+.panel-container { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 20px; }
+.panel-dots { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+.panel-dot { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; min-width: 44px; }
+.panel-dot:hover { border-color: var(--marigold); }
+.panel-dot.current { background: var(--ink); color: var(--cream); }
+.panel-dot.answered { background: var(--leaf); color: white; }
+.panel-dot.current.answered { background: var(--ink); border-color: var(--leaf); border-width: 3px; }
+.panel-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--paper-dark); }
+.panel-counter { font-size: 12px; font-weight: 800; color: var(--saffron); letter-spacing: 1.5px; text-transform: uppercase; }
+.panel-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+.narration-text { font-size: 16px; line-height: 1.75; color: var(--ink); margin-bottom: 16px; }
+.narration-text .highlight-word { background: linear-gradient(180deg, transparent 60%, rgba(244,168,44,0.4) 60%); cursor: pointer; font-weight: 700; color: var(--ink); border-radius: 2px; transition: background 0.2s ease; position: relative; }
+.narration-text .highlight-word:hover { background: linear-gradient(180deg, transparent 30%, rgba(244,168,44,0.7) 30%); }
+.word-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--cream); padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; line-height: 1.4; width: max-content; max-width: 240px; text-align: center; z-index: 100; box-shadow: 0 6px 20px rgba(0,0,0,0.25); pointer-events: none; }
+.word-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--ink); }
+.tts-controls { display: flex; gap: 10px; align-items: center; background: var(--sky-light); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.tts-btn { background: var(--sky); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.tts-btn:hover { background: #4a7a9c; }
+.tts-btn.playing { background: var(--berry); animation: pulse 1.5s ease-in-out infinite; }
+.tts-status { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+.comprehension-check { background: var(--cream); border: 2px solid var(--marigold); border-radius: 16px; padding: 20px; margin-top: 16px; }
+.check-label { display: inline-block; background: var(--saffron); color: white; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.check-question { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+.options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.option-btn { background: white; border: 2px solid var(--paper-dark); padding: 12px 16px; border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit; font-size: 14px; color: var(--ink); transition: all 0.2s ease; width: 100%; display: flex; align-items: center; gap: 10px; }
+.option-btn:hover:not(:disabled) { border-color: var(--marigold); background: var(--paper); transform: translateX(2px); }
+.option-letter { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--paper-dark); border-radius: 8px; font-weight: 700; font-size: 12px; flex-shrink: 0; color: var(--ink-soft); }
+.option-btn.correct { background: var(--leaf-light); border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
+.option-btn.correct .option-letter { background: var(--leaf); color: white; }
+.option-btn.incorrect { background: var(--berry-light); border-color: var(--berry); color: var(--berry); }
+.option-btn.incorrect .option-letter { background: var(--berry); color: white; }
+.option-btn:disabled { cursor: default; }
+.feedback-box { margin-top: 12px; padding: 14px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; animation: slideDown 0.3s ease; }
+.feedback-box.hint { background: #FFF4D6; border-left: 4px solid var(--gold); color: var(--ink); }
+.feedback-box.explanation { background: var(--leaf-light); border-left: 4px solid var(--leaf); color: var(--ink); }
+.feedback-label { font-weight: 800; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.panel-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.vocab-group-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.vocab-group-tab { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 10px 18px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+.vocab-group-tab:hover { border-color: var(--marigold); }
+.vocab-group-tab.active { background: var(--saffron); color: white; }
+.vocab-card { height: 280px; cursor: pointer; perspective: 1000px; }
+.vocab-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1); transform-style: preserve-3d; }
+.vocab-card.flipped .vocab-card-inner { transform: rotateY(180deg); }
+.vocab-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; box-shadow: 0 4px 16px var(--shadow); overflow: hidden; }
+.vocab-face.front { background: var(--cream); border: 2px solid var(--paper-dark); align-items: center; justify-content: center; text-align: center; }
+.vocab-face.back { background: linear-gradient(135deg, var(--saffron), var(--marigold)); color: white; transform: rotateY(180deg); overflow-y: auto; text-align: left; }
+.vocab-card.complete .vocab-face.front { border-color: var(--leaf); background: var(--leaf-light); }
+.vocab-card.complete .vocab-face.front::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; background: var(--leaf); color: white; border-radius: 50%; line-height: 24px; font-weight: 900; font-size: 14px; }
+.vocab-word { font-family: 'Fraunces', serif; font-weight: 700; font-size: 30px; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.5px; }
+.vocab-source-tag { display: inline-block; background: var(--paper-dark); color: var(--ink-soft); padding: 2px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.vocab-flip-hint { margin-top: 12px; font-size: 11px; color: var(--ink-soft); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; }
+.vocab-meaning { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; line-height: 1.4; margin-bottom: 10px; }
+.vocab-example { font-size: 12px; line-height: 1.45; margin-bottom: 6px; opacity: 0.95; }
+.vocab-example-label { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 2px; display: block; }
+.spot-it-cta { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 10px; text-align: center; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.4); }
+.spot-it-cta:hover { background: rgba(255,255,255,0.3); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(43,24,16,0.7); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content { background: var(--cream); border-radius: 20px; padding: 28px; max-width: 480px; width: 100%; box-shadow: 0 12px 40px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
+.modal-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.modal-word { color: var(--saffron); font-style: italic; }
+.question-card { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); }
+.question-number { display: inline-block; background: var(--ink); color: var(--cream); font-family: 'Fraunces', serif; font-weight: 700; width: 36px; height: 36px; line-height: 36px; text-align: center; border-radius: 50%; font-size: 16px; margin-bottom: 12px; }
+.passage-excerpt { background: var(--paper); padding: 12px 16px; border-radius: 12px; border-left: 4px solid var(--sky); margin-bottom: 12px; font-style: italic; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
+.question-text { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+.question-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.btn { padding: 10px 18px; border-radius: 12px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary { background: var(--paper-dark); color: var(--ink); }
+.btn-secondary:hover:not(:disabled) { background: var(--marigold); color: white; }
+.btn-primary { background: var(--saffron); color: white; box-shadow: 0 4px 12px rgba(232,119,34,0.3); }
+.btn-primary:hover:not(:disabled) { background: var(--ink); transform: translateY(-2px); }
+.btn-success { background: var(--leaf); color: white; box-shadow: 0 4px 12px rgba(74,124,89,0.3); }
+.btn-success:hover:not(:disabled) { background: #3a6248; transform: translateY(-2px); }
+.stage-nav { margin-top: 32px; display: flex; justify-content: space-between; gap: 12px; }
+.placeholder-card { background: var(--cream); border: 2px dashed var(--paper-dark); border-radius: 20px; padding: 48px 32px; text-align: center; color: var(--ink-soft); }
+.placeholder-icon { font-size: 60px; margin-bottom: 16px; opacity: 0.5; }
+.placeholder-title { font-family: 'Fraunces', serif; font-size: 22px; color: var(--ink); margin-bottom: 8px; }
+.placeholder-detail { font-size: 14px; line-height: 1.6; max-width: 480px; margin: 0 auto; }
+.loading-screen, .error-screen { text-align: center; padding: 48px 20px; }
+.spinner { width: 48px; height: 48px; border: 4px solid var(--paper-dark); border-top-color: var(--saffron); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-screen { background: var(--berry-light); border: 2px solid var(--berry); color: var(--berry); border-radius: 16px; }
+/* === STAGE 0: DEEP DIVE REFERENCE === */
+.deep-dive-trigger { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, var(--sky) 0%, #3d6d8f 100%); color: white; border: none; padding: 20px 28px; border-radius: 18px; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.25s ease; margin-bottom: 28px; width: 100%; box-shadow: 0 4px 16px rgba(91,141,184,0.3); }
+.deep-dive-trigger:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(91,141,184,0.4); }
+.deep-dive-trigger .dd-icon { font-size: 36px; }
+.deep-dive-trigger .dd-text { text-align: left; }
+.deep-dive-trigger .dd-title { font-family: 'Fraunces', serif; font-size: 22px; display: block; }
+.deep-dive-trigger .dd-sub { font-size: 14px; opacity: 0.9; font-weight: 500; display: block; margin-top: 2px; }
+
+.dd-screen { padding: 0; }
+.dd-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.dd-nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.dd-nav-btn { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 10px 16px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+.dd-nav-btn:hover { border-color: var(--sky); }
+.dd-nav-btn.active { background: var(--sky); color: white; }
+
+.dd-topic { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 24px; }
+.dd-topic-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.dd-topic-subtitle { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; }
+
+.dd-section { margin-bottom: 28px; }
+.dd-section-label { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 8px; margin-bottom: 12px; }
+.dd-section-label.story { background: var(--berry-light); color: var(--berry); }
+.dd-section-label.steps { background: var(--leaf-light); color: var(--leaf); }
+.dd-section-label.visual { background: var(--sky-light); color: var(--sky); }
+.dd-section-label.video { background: #FFF4D6; color: var(--gold); }
+.dd-section-label.tip { background: var(--cream); color: var(--saffron); }
+
+.dd-story { background: var(--cream); border-radius: 16px; padding: 24px; border-left: 5px solid var(--berry); margin-bottom: 16px; }
+.dd-story-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--berry); margin-bottom: 10px; }
+.dd-story-text { font-size: 15px; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+
+.dd-steps { counter-reset: ddstep; }
+.dd-step { display: flex; gap: 16px; margin-bottom: 18px; align-items: flex-start; }
+.dd-step-num { counter-increment: ddstep; flex-shrink: 0; width: 36px; height: 36px; background: var(--leaf); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; }
+.dd-step-content { flex: 1; }
+.dd-step-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.dd-step-text { font-size: 14px; line-height: 1.7; color: var(--ink); }
+.dd-step-example { background: var(--paper); border-radius: 10px; padding: 12px 14px; margin-top: 8px; font-size: 14px; font-family: 'Nunito', sans-serif; border-left: 3px solid var(--marigold); color: var(--ink); }
+
+.dd-visual { text-align: center; margin: 20px 0; }
+.dd-visual svg { max-width: 100%; height: auto; border-radius: 12px; }
+.dd-visual-caption { font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic; }
+
+.dd-video { margin: 20px 0; border-radius: 16px; overflow: hidden; background: var(--ink); }
+.dd-video iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+.dd-video-caption { padding: 10px 16px; font-size: 12px; color: var(--ink-soft); background: var(--paper); }
+
+.dd-tip { background: #FFF4D6; border-radius: 14px; padding: 18px 20px; border-left: 4px solid var(--gold); margin: 16px 0; }
+.dd-tip-title { font-weight: 800; font-size: 13px; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.dd-tip-text { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+.dd-funfact { background: linear-gradient(135deg, #FFF4D6 0%, #FFEEBB 100%); border-radius: 16px; padding: 20px 22px; border: 2px solid var(--gold); margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+.dd-funfact-icon { font-size: 32px; flex-shrink: 0; }
+.dd-funfact-content { flex: 1; }
+.dd-funfact-label { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.dd-funfact-text { font-size: 15px; line-height: 1.6; color: var(--ink); font-weight: 600; }
+
+.dd-rich-text { font-size: 15px; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+.dd-rich-text strong, .dd-rich-text b { font-weight: 700; color: var(--ink); }
+
+/* === CONCEPT TEACHING CARDS (Math) === */
+.concept-card { background: white; border-radius: 20px; padding: 28px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 20px; border: 2px solid var(--paper-dark); }
+.concept-card.answered { border-color: var(--leaf); }
+.concept-name { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--saffron); margin-bottom: 8px; }
+.concept-definition { font-size: 15px; line-height: 1.7; color: var(--ink); margin-bottom: 14px; white-space: pre-wrap; }
+.concept-examples { background: var(--paper); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.concept-examples-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px; display: block; }
+.concept-example-item { font-size: 14px; line-height: 1.6; color: var(--ink); padding: 4px 0; font-family: 'Nunito', sans-serif; }
+.concept-check { background: var(--cream); border: 2px solid var(--marigold); border-radius: 16px; padding: 20px; margin-top: 16px; }
+
+/* === SELF-CHECK CRITERIA (Stage 3) === */
+.self-check-box { background: var(--paper); border-radius: 14px; padding: 16px 18px; margin-top: 14px; border: 2px solid var(--paper-dark); }
+.self-check-title { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--saffron); margin-bottom: 10px; }
+.self-check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; cursor: pointer; user-select: none; }
+.self-check-item + .self-check-item { border-top: 1px solid var(--paper-dark); }
+.self-check-tick { width: 24px; height: 24px; border: 2px solid var(--paper-dark); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; transition: all 0.2s ease; background: white; }
+.self-check-tick.checked { background: var(--leaf); border-color: var(--leaf); color: white; }
+.self-check-label { font-size: 14px; color: var(--ink); line-height: 1.4; }
+.self-check-stars { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--gold); }
+
+/* === STAGE 3: THINK DEEPER === */
+.think-card { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); transition: border-color 0.3s ease; }
+.think-card.submitted { border-color: var(--leaf); background: linear-gradient(135deg, var(--cream), var(--leaf-light)); }
+.scenario-box { background: var(--cream); padding: 16px 18px; border-radius: 12px; border-left: 5px solid var(--saffron); margin: 12px 0 14px 0; color: var(--ink); font-size: 16px; line-height: 1.7; font-weight: 600; }
+.word-limit-tag { display: inline-block; background: var(--sky); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px; }
+.text-input { width: 100%; padding: 14px 16px; border: 2px solid var(--paper-dark); border-radius: 12px; font-family: inherit; font-size: 15px; background: white; color: var(--ink); transition: border-color 0.2s ease; line-height: 1.5; }
+.text-input:focus { outline: none; border-color: var(--saffron); }
+textarea.text-input { resize: vertical; min-height: 100px; }
+textarea.text-input[readonly] { background: var(--paper); cursor: default; }
+.word-counter { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); text-align: right; transition: color 0.2s ease; }
+.word-counter.in-range { color: var(--leaf); }
+.word-counter.over { color: var(--berry); }
+.model-answer-box { margin-top: 14px; padding: 16px 18px; background: linear-gradient(135deg, var(--cream), var(--paper-dark)); border-radius: 12px; border: 2px dashed var(--marigold); animation: slideDown 0.4s ease; }
+.model-answer-box .feedback-label { color: var(--saffron); }
+.answer-text { margin-top: 6px; line-height: 1.6; color: var(--ink); font-size: 14px; }
+.submitted-tag { display: inline-block; margin-left: 8px; background: var(--leaf); color: white; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.marks-tag { display: inline-block; margin-left: 8px; background: var(--ink); color: var(--cream); padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.question-category { display: inline-block; margin-left: 10px; padding: 4px 12px; background: var(--paper-dark); border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); vertical-align: middle; }
+
+/* === STAGE 4: TEST === */
+.test-intro { background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 100%); color: white; padding: 40px 32px; border-radius: 24px; text-align: center; margin-bottom: 28px; box-shadow: 0 8px 24px var(--shadow-strong); position: relative; overflow: hidden; }
+.test-intro::before { content: ''; position: absolute; top: -50px; left: -50px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%); border-radius: 50%; }
+.test-intro-icon { font-size: 60px; margin-bottom: 12px; position: relative; z-index: 2; }
+.test-intro h2 { font-family: 'Fraunces', serif; font-weight: 900; font-size: 32px; margin-bottom: 8px; position: relative; z-index: 2; }
+.test-intro-subtitle { font-size: 15px; opacity: 0.95; margin-bottom: 8px; position: relative; z-index: 2; }
+.test-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0; position: relative; z-index: 2; }
+.test-stat { background: rgba(255,255,255,0.2); padding: 14px; border-radius: 14px; backdrop-filter: blur(10px); }
+.test-stat-num { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; line-height: 1; }
+.test-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-top: 4px; }
+.test-sections-preview { background: rgba(0,0,0,0.15); border-radius: 14px; padding: 16px; margin: 20px 0; text-align: left; position: relative; z-index: 2; }
+.test-section-preview { padding: 6px 0; font-size: 13px; }
+.test-section-preview + .test-section-preview { border-top: 1px solid rgba(255,255,255,0.2); }
+.test-start-btn { background: white; color: var(--saffron); padding: 16px 36px; font-size: 16px; font-weight: 800; border-radius: 14px; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; z-index: 2; }
+.test-start-btn:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+
+.timer-bar { position: sticky; top: 12px; z-index: 10; background: var(--ink); color: var(--cream); padding: 14px 22px; border-radius: 14px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px var(--shadow-strong); }
+.timer-display { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.timer-display.warning { color: var(--marigold); }
+.timer-display.urgent { color: #FF8B6E; animation: pulse 1s ease-in-out infinite; }
+.timer-progress { font-size: 13px; font-weight: 700; opacity: 0.85; }
+
+.test-section { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); }
+.test-section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 2px solid var(--paper-dark); margin-bottom: 14px; }
+.test-section-header h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); }
+.test-section-marks { background: var(--saffron); color: white; padding: 4px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
+.test-section-instructions { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; font-style: italic; }
+.test-passage { background: var(--paper); border-radius: 14px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--sky); }
+.test-passage-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.test-passage-author { font-size: 12px; color: var(--ink-soft); font-style: italic; margin-bottom: 12px; }
+.test-passage-text { font-size: 14px; line-height: 1.7; color: var(--ink); white-space: pre-wrap; }
+.test-passage-note { margin-top: 12px; font-size: 12px; color: var(--ink-soft); padding: 8px 12px; background: rgba(244, 168, 44, 0.15); border-radius: 8px; }
+
+.test-question { padding: 18px 0; border-bottom: 1px solid var(--paper-dark); }
+.test-question:last-child { border-bottom: none; }
+.test-q-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.test-q-num { font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; color: var(--saffron); }
+.test-q-type { font-size: 10px; font-weight: 800; letter-spacing: 1px; color: var(--ink-soft); background: var(--paper-dark); padding: 3px 8px; border-radius: 6px; }
+.option-btn.test-selected { background: var(--cream); border-color: var(--saffron); color: var(--ink); font-weight: 700; }
+.option-btn.test-selected .option-letter { background: var(--saffron); color: white; }
+
+.test-submit-zone { text-align: center; margin: 32px 0; padding: 28px; background: var(--cream); border-radius: 18px; border: 2px solid var(--paper-dark); }
+.test-submit-btn { padding: 14px 32px; font-size: 16px; }
+
+/* === RESULTS === */
+.results-screen { padding: 24px 0; position: relative; }
+.results-hero { background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 50%, var(--gold) 100%); color: white; padding: 48px 32px; border-radius: 28px; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 12px 36px var(--shadow-strong); text-align: center; }
+.results-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.25) 0%, transparent 25%), radial-gradient(circle at 85% 80%, rgba(255,255,255,0.18) 0%, transparent 30%); pointer-events: none; }
+
+.confetti-piece { position: absolute; width: 8px; height: 14px; border-radius: 2px; animation: confettiFall 3s ease-in-out infinite; opacity: 0.85; pointer-events: none; }
+@keyframes confettiFall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(700px) rotate(720deg); opacity: 0; } }
+
+.badge-circle { width: 160px; height: 160px; margin: 0 auto 20px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 36px rgba(0,0,0,0.2), inset 0 0 20px rgba(244, 168, 44, 0.2); position: relative; z-index: 2; animation: badgePop 0.8s cubic-bezier(0.5, 1.5, 0.7, 1); }
+.badge-circle.no-badge { background: rgba(255,255,255,0.85); }
+@keyframes badgePop { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+.badge-circle::before { content: ''; position: absolute; inset: -10px; border-radius: 50%; border: 4px dashed white; opacity: 0.6; animation: spin 20s linear infinite; }
+.badge-emoji { font-size: 80px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+.badge-name { font-family: 'Fraunces', serif; font-weight: 900; font-size: 36px; margin-bottom: 6px; color: white; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); position: relative; z-index: 2; }
+.badge-tagline { font-size: 17px; opacity: 0.95; margin-bottom: 24px; position: relative; z-index: 2; font-weight: 600; }
+.results-percentage { background: white; color: var(--saffron); display: inline-block; padding: 18px 40px; border-radius: 18px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); margin-top: 8px; position: relative; z-index: 2; }
+.percentage-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 56px; line-height: 1; }
+.percentage-label { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 6px; }
+
+.motivational-quote { background: var(--cream); border: 2px solid var(--marigold); border-radius: 18px; padding: 22px 24px; margin: 24px auto; max-width: 600px; font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; color: var(--ink); line-height: 1.5; position: relative; text-align: center; }
+.motivational-quote::before { content: '"'; font-family: 'Fraunces', serif; font-size: 80px; color: var(--marigold); position: absolute; top: -20px; left: 12px; line-height: 1; opacity: 0.4; }
+
+.section-scores { background: white; border-radius: 20px; padding: 24px; margin: 24px auto; max-width: 700px; box-shadow: 0 6px 20px var(--shadow); border: 2px solid var(--paper-dark); }
+.section-scores h3 { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; color: var(--ink); margin-bottom: 20px; text-align: center; }
+.scores-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.score-cell { background: var(--paper); border-radius: 14px; padding: 16px 10px; text-align: center; border: 2px solid var(--paper-dark); transition: transform 0.2s ease; }
+.score-cell:hover { transform: translateY(-2px); }
+.score-cell.strong { background: var(--leaf-light); border-color: var(--leaf); }
+.score-cell.improvement { background: var(--berry-light); border-color: var(--berry); }
+.score-cell-icon { font-size: 26px; margin-bottom: 4px; }
+.score-cell-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-soft); margin-bottom: 6px; }
+.score-cell-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 26px; color: var(--ink); line-height: 1; }
+.score-cell-out-of { font-size: 12px; color: var(--ink-soft); margin-top: 4px; font-weight: 600; }
+.score-cell-tag { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 8px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+.score-cell-tag.strong-tag { background: var(--leaf); color: white; }
+.score-cell-tag.improve-tag { background: var(--berry); color: white; }
+.score-cell-tag.neutral-tag { background: var(--paper-dark); color: var(--ink-soft); }
+
+.reattempt-card { background: linear-gradient(135deg, var(--sky) 0%, #4a7a9c 100%); color: white; padding: 24px 28px; border-radius: 20px; margin: 24px auto; max-width: 600px; text-align: center; box-shadow: 0 6px 20px rgba(91, 141, 184, 0.3); }
+.reattempt-card h4 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.reattempt-card p { font-size: 15px; opacity: 0.95; margin-bottom: 16px; }
+.reattempt-btn { background: white; color: var(--sky); padding: 12px 28px; border: none; border-radius: 12px; font-family: inherit; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.reattempt-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+
+.manual-grading-note { margin-top: 20px; padding: 14px 18px; background: #FFF4D6; border-radius: 12px; font-size: 13px; color: var(--ink-soft); border-left: 4px solid var(--gold); max-width: 700px; margin-left: auto; margin-right: auto; }
+
+.results-detail { background: var(--cream); border-radius: 18px; padding: 22px 24px; margin: 16px auto; max-width: 700px; text-align: left; border: 2px solid var(--paper-dark); }
+.results-detail h4 { font-family: 'Fraunces', serif; font-size: 18px; margin-bottom: 12px; color: var(--ink); }
+.review-item { padding: 14px 0; border-bottom: 1px solid var(--paper-dark); }
+.review-item:last-child { border-bottom: none; }
+.review-q { font-weight: 700; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+.review-content { font-size: 13px; color: var(--ink-soft); }
+.review-row { padding: 4px 0; line-height: 1.5; }
+.review-result { display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; }
+.review-result.correct { background: var(--leaf-light); color: var(--leaf); }
+.review-result.incorrect { background: var(--berry-light); color: var(--berry); }
+.review-result.manual { background: #FFF4D6; color: #B8830A; }
+
+.results-actions { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+@media (max-width: 600px) { .container { padding: 16px 14px 60px; } header.app-header { padding: 20px; border-radius: 18px; } .progress-bar { gap: 5px; } .progress-step { padding: 8px 4px; font-size: 9px; } .step-num { font-size: 16px; } .branches-grid { grid-template-columns: 1fr; } .panel-container { padding: 22px; } .panel-title { font-size: 22px; } .narration-text { font-size: 15px; } .cards-grid { grid-template-columns: 1fr; } .vocab-card { height: 260px; } .panel-nav { flex-direction: column; } .test-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; } .test-stat { padding: 10px 6px; } .test-stat-num { font-size: 22px; } .badge-circle { width: 130px; height: 130px; } .badge-emoji { font-size: 60px; } .badge-name { font-size: 28px; } .percentage-num { font-size: 44px; } .results-hero { padding: 32px 20px; } .scores-table { grid-template-columns: 1fr 1fr; } .score-cell { padding: 14px 8px; } .score-cell-num { font-size: 22px; } .think-card, .test-section { padding: 18px; } }
+</style>
+</head>
+<body>
+
+<script type="application/json" id="embedded-chapter">
+{
+  "schema_version": "2.0",
+  "chapter_id": "math-ch3-factors-multiples",
+  "chapter_number": 3,
+  "chapter_title": "Factors and Multiples",
+  "subject": "Mathematics",
+  "summary": "Factors, multiples, divisibility rules, prime and composite numbers, prime factorisation, HCF, LCM, and the relationship between HCF and LCM.",
+  "stage_0_deep_dive": {
+    "title": "Deep Dive — Factors and Multiples",
+    "description": "Stories, step-by-step methods, factor trees, and interactive checkers. Explore here anytime — it never affects your stars.",
+    "topics": [
+      {
+        "id": "dd_factors_multiples",
+        "title": "Factors vs Multiples",
+        "icon": "🔢",
+        "subtitle": "Two words that sound similar but mean opposite things",
+        "sections": [
+          {
+            "type": "story",
+            "title": "Arranging the Marigolds",
+            "content": "Riya has **6 marigold flowers** to decorate for Diwali. She wants to arrange them in neat rows and columns.\n\nShe tries: 1 row of 6, or 6 rows of 1, or 2 rows of 3, or 3 rows of 2 — every arrangement works because *1, 2, 3 and 6 divide 6 exactly*.\n\nThose numbers — 1, 2, 3, 6 — are the **factors** of 6. And 6 is a **multiple** of each of them. Same relationship, looked at from two ends.",
+            "image_caption": "6 marigolds can be arranged as 2 rows of 3"
+          },
+          {
+            "type": "text",
+            "label": "💡 The key idea",
+            "title": "Factors divide IN, multiples count OUT",
+            "content": "A **factor** of a number divides it *exactly* (no remainder). A **multiple** is what you get when you multiply a number by 1, 2, 3, 4 …\n\nSo `6 = 2 × 3`. Here 2 and 3 are **factors** of 6, and 6 is a **multiple** of both 2 and 3.\n\n*Every number has a limited number of factors, but endless multiples.*"
+          },
+          {
+            "type": "tip",
+            "title": "Never forget these two",
+            "content": "1 is a factor of every number. Every number is a factor of itself. So 1 and the number itself are always on the factor list."
+          }
+        ]
+      },
+      {
+        "id": "dd_divisibility",
+        "title": "The Divisibility Shortcuts",
+        "icon": "➗",
+        "subtitle": "Test if a number divides without doing the full division",
+        "sections": [
+          {
+            "type": "steps",
+            "title": "The rules, one by one",
+            "steps": [
+              {
+                "title": "Divisible by 2",
+                "text": "Look only at the ones digit.",
+                "example": "Ones digit is 0, 2, 4, 6 or 8 → yes. 3,216 ends in 6 → divisible by 2."
+              },
+              {
+                "title": "Divisible by 3",
+                "text": "Add all the digits. If the sum is divisible by 3, the number is too.",
+                "example": "3,216 → 3+2+1+6 = 12, and 12 ÷ 3 = 4 → yes."
+              },
+              {
+                "title": "Divisible by 4",
+                "text": "Check only the last two digits.",
+                "example": "3,216 → last two digits 16, and 16 ÷ 4 = 4 → yes."
+              },
+              {
+                "title": "Divisible by 5 and 10",
+                "text": "By 5: ones digit is 0 or 5. By 10: ones digit is 0.",
+                "example": "3,216 ends in 6 → not divisible by 5 or 10."
+              },
+              {
+                "title": "Divisible by 6",
+                "text": "Must be divisible by BOTH 2 and 3.",
+                "example": "3,216 is divisible by 2 and by 3 → yes."
+              },
+              {
+                "title": "Divisible by 8",
+                "text": "Check only the last three digits.",
+                "example": "3,216 → 216 ÷ 8 = 27 → yes."
+              },
+              {
+                "title": "Divisible by 9",
+                "text": "Add all digits. If the sum is divisible by 9, so is the number.",
+                "example": "3,216 → sum 12, and 12 is not divisible by 9 → no."
+              },
+              {
+                "title": "Divisible by 11",
+                "text": "Find the difference between the sum of digits at odd places and even places. If it is 0 or divisible by 11, yes.",
+                "example": "3,216: odd-place sum 3+1 = 4, even-place sum 2+6 = 8, difference 8−4 = 4 → not 0 or 11 → no."
+              }
+            ]
+          },
+          {
+            "type": "interactive",
+            "title": "Try it: Divisibility Checker",
+            "html": "<div style=\"font-family:inherit\"><input id=\"dd_div_input\" type=\"number\" placeholder=\"Type a number\" style=\"padding:10px;font-size:16px;border:2px solid #d9a441;border-radius:8px;width:160px\"> <button onclick=\"ddCheckDiv()\" style=\"padding:10px 16px;font-size:16px;border:none;border-radius:8px;background:#d9a441;color:#fff;cursor:pointer\">Check</button><div id=\"dd_div_out\" style=\"margin-top:12px;font-size:15px;line-height:1.9\"></div></div>",
+            "js": "function ddCheckDiv(){var n=parseInt(document.getElementById('dd_div_input').value);var o=document.getElementById('dd_div_out');if(isNaN(n)||n<1){o.innerHTML='Please type a whole number bigger than 0.';return;}var ds=String(n).split('').reduce(function(a,d){return a+(+d);},0);var r=[];function row(d,ok){r.push((ok?'✅':'❌')+' divisible by '+d);}row(2,n%2===0);row(3,ds%3===0);row(4,n%4===0);row(5,n%5===0);row(6,n%2===0&&n%3===0);row(8,n%8===0);row(9,ds%9===0);row(10,n%10===0);row(11,n%11===0);o.innerHTML=r.join('<br>');}"
+          }
+        ]
+      },
+      {
+        "id": "dd_prime_factorisation",
+        "title": "Building the Factor Tree",
+        "icon": "🌳",
+        "subtitle": "Break any number down to its prime building blocks",
+        "sections": [
+          {
+            "type": "story",
+            "title": "Breaking 30 into its bricks",
+            "content": "Think of a number like a LEGO model. **Prime factorisation** takes it apart until only the smallest, unbreakable bricks — the **prime numbers** — are left.\n\nFor 30: split into 2 × 15, then 15 splits into 3 × 5. Now 2, 3 and 5 cannot be broken further. So `30 = 2 × 3 × 5`.\n\nNo matter how you start the tree, you always land on the **same set of primes**. That uniqueness is what makes prime factorisation so powerful."
+          },
+          {
+            "type": "visual",
+            "svg": "<svg viewBox='0 0 360 220' xmlns='http://www.w3.org/2000/svg' font-family='sans-serif'><line x1='180' y1='40' x2='110' y2='95' stroke='#b08038' stroke-width='2'/><line x1='180' y1='40' x2='250' y2='95' stroke='#b08038' stroke-width='2'/><line x1='250' y1='115' x2='200' y2='170' stroke='#b08038' stroke-width='2'/><line x1='250' y1='115' x2='300' y2='170' stroke='#b08038' stroke-width='2'/><circle cx='180' cy='30' r='24' fill='#8aa05a'/><text x='180' y='36' text-anchor='middle' fill='#fff' font-size='16'>30</text><circle cx='110' cy='105' r='22' fill='#e7a7c0'/><text x='110' y='111' text-anchor='middle' fill='#7a3a55' font-size='15'>2</text><circle cx='250' cy='105' r='22' fill='#8aa05a'/><text x='250' y='111' text-anchor='middle' fill='#fff' font-size='15'>15</text><circle cx='200' cy='180' r='22' fill='#e7a7c0'/><text x='200' y='186' text-anchor='middle' fill='#7a3a55' font-size='15'>3</text><circle cx='300' cy='180' r='22' fill='#e7a7c0'/><text x='300' y='186' text-anchor='middle' fill='#7a3a55' font-size='15'>5</text></svg>",
+            "caption": "Factor tree of 30 → 2 × 3 × 5 (pink circles are the primes)"
+          },
+          {
+            "type": "steps",
+            "title": "The successive short-division method",
+            "steps": [
+              {
+                "title": "Divide by the smallest prime that fits",
+                "text": "Start with 2 if the number is even, else try 3, 5, 7 …",
+                "example": "28 ÷ 2 = 14"
+              },
+              {
+                "title": "Keep dividing the quotient",
+                "text": "Use the smallest prime that divides each new quotient.",
+                "example": "14 ÷ 2 = 7"
+              },
+              {
+                "title": "Stop when the quotient is 1",
+                "text": "Multiply all the prime divisors together — that is the prime factorisation.",
+                "example": "7 ÷ 7 = 1, so 28 = 2 × 2 × 7"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "dd_hcf_lcm",
+        "title": "HCF and LCM — Twins, Not Triplets",
+        "icon": "⚖️",
+        "subtitle": "Highest shared factor vs lowest shared multiple",
+        "sections": [
+          {
+            "type": "text",
+            "label": "📖 Two definitions",
+            "title": "What each one means",
+            "content": "**HCF** (Highest Common Factor) = the *largest* number that divides all the given numbers exactly. Also called GCD.\n\n**LCM** (Lowest Common Multiple) = the *smallest* number that all the given numbers divide into exactly.\n\nMemory hook: HCF is about **dividing** (it's a factor, so it's smaller-or-equal). LCM is about **multiplying** (it's a multiple, so it's larger-or-equal)."
+          },
+          {
+            "type": "steps",
+            "title": "Short-division method (works for both)",
+            "steps": [
+              {
+                "title": "Write the numbers in a row",
+                "text": "Divide all of them by a common prime factor.",
+                "example": "For HCF of 40 and 48: 2 | 40, 48"
+              },
+              {
+                "title": "Keep dividing by common factors",
+                "text": "For HCF, stop when there is no common factor left. Multiply the divisors on the left → HCF.",
+                "example": "2|40,48 → 2|20,24 → 2|10,12 → 5,6. HCF = 2×2×2 = 8"
+              },
+              {
+                "title": "For LCM, keep going further",
+                "text": "Divide until the bottom row is all 1s. Multiply every divisor AND every leftover → LCM.",
+                "example": "LCM of 4 and 6 = 12"
+              }
+            ]
+          },
+          {
+            "type": "funfact",
+            "title": "Did You Know?",
+            "content": "For any two numbers: First number × Second number = HCF × LCM. So if you know three of these four values, you can always find the fourth!"
+          },
+          {
+            "type": "interactive",
+            "title": "Try it: HCF & LCM Finder",
+            "html": "<div style=\"font-family:inherit\"><input id=\"dd_hl_a\" type=\"number\" placeholder=\"First number\" style=\"padding:10px;font-size:16px;border:2px solid #d9a441;border-radius:8px;width:130px\"> <input id=\"dd_hl_b\" type=\"number\" placeholder=\"Second number\" style=\"padding:10px;font-size:16px;border:2px solid #d9a441;border-radius:8px;width:130px\"> <button onclick=\"ddHcfLcm()\" style=\"padding:10px 16px;font-size:16px;border:none;border-radius:8px;background:#d9a441;color:#fff;cursor:pointer\">Find</button><div id=\"dd_hl_out\" style=\"margin-top:12px;font-size:16px;line-height:1.9\"></div></div>",
+            "js": "function ddGcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){var t=b;b=a%b;a=t;}return a;}function ddHcfLcm(){var a=parseInt(document.getElementById('dd_hl_a').value);var b=parseInt(document.getElementById('dd_hl_b').value);var o=document.getElementById('dd_hl_out');if(isNaN(a)||isNaN(b)||a<1||b<1){o.innerHTML='Type two whole numbers bigger than 0.';return;}var h=ddGcd(a,b);var l=a/h*b;o.innerHTML='HCF = <b>'+h+'</b><br>LCM = <b>'+l+'</b><br><span style=\"color:#7a5\">Check: '+a+' × '+b+' = '+(a*b)+' = '+h+' × '+l+'</span>';}"
+          }
+        ]
+      }
+    ]
+  },
+  "stage_1_learn": {
+    "title": "Learn",
+    "description": "Work through each topic. Answer the quick check on every card to earn a ⭐.",
+    "branches": [
+      {
+        "id": "branch_factors_multiples",
+        "title": "Factors & Multiples",
+        "icon": "🔢",
+        "type": "concept_teaching",
+        "marks": 4,
+        "concept_title": "Factors, Multiples & Common Ones",
+        "intro": "Let's understand what factors and multiples are, and what 'common' factors and multiples mean.",
+        "cards": [
+          {
+            "id": "c_fm_factor",
+            "concept_name": "What is a Factor?",
+            "definition": "A factor of a number divides it exactly, leaving no remainder.\n\nTo find all factors, find every pair of numbers whose product is that number.\n\n1 is a factor of every number, and every number is a factor of itself. So 1 and the number itself are always factors. Any number greater than 1 has at least two factors.",
+            "examples": [
+              "6 = 1 × 6 and 6 = 2 × 3, so the factors of 6 are 1, 2, 3 and 6",
+              "10 = 1 × 10 and 10 = 2 × 5, so the factors of 10 are 1, 2, 5 and 10"
+            ],
+            "check": {
+              "question": "Why is 4 NOT a factor of 10?",
+              "options": [
+                "Because 10 is an even number",
+                "Because 10 ÷ 4 leaves a remainder",
+                "Because 4 is bigger than 10",
+                "Because 4 is not a prime number"
+              ],
+              "correct": 1,
+              "explanation": "A factor must divide the number exactly. 10 ÷ 4 = 2 remainder 2, so 4 leaves a remainder and is not a factor of 10."
+            }
+          },
+          {
+            "id": "c_fm_multiple",
+            "concept_name": "What is a Multiple?",
+            "definition": "A multiple of a number is what you get by multiplying it by 1, 2, 3, 4, and so on.\n\nA number has only a limited set of factors, but it has endless multiples — you can always multiply by a bigger number.\n\nA number is always a multiple of each of its factors.",
+            "examples": [
+              "First six multiples of 7 are 7, 14, 21, 28, 35, 42",
+              "6 is a multiple of 1, 2, 3 and 6 — the very same numbers that are its factors"
+            ],
+            "check": {
+              "question": "Which statement is always true?",
+              "options": [
+                "A number has a fixed, limited number of multiples",
+                "A number has endless factors",
+                "A number has endless multiples",
+                "1 is a multiple of every number"
+              ],
+              "correct": 2,
+              "explanation": "You can keep multiplying by larger numbers forever, so every number has endless (infinite) multiples. Factors, on the other hand, are limited."
+            }
+          },
+          {
+            "id": "c_fm_common_factor",
+            "concept_name": "Common Factors",
+            "definition": "A common factor of two or more numbers is a number that is a factor of all of them.\n\nTo find them, list the factors of each number, then pick the ones that appear in every list.",
+            "examples": [
+              "Factors of 8: 1, 2, 4, 8.  Factors of 12: 1, 2, 3, 4, 6, 12.  Common factors of 8 and 12: 1, 2 and 4",
+              "1 is always a common factor of any two numbers"
+            ],
+            "check": {
+              "question": "What are the common factors of 8 and 12?",
+              "options": [
+                "1, 2, 4",
+                "1, 2, 3, 4",
+                "2, 4, 8",
+                "1, 4, 8"
+              ],
+              "correct": 0,
+              "explanation": "Factors of 8 are 1, 2, 4, 8 and factors of 12 are 1, 2, 3, 4, 6, 12. The numbers in both lists are 1, 2 and 4."
+            }
+          },
+          {
+            "id": "c_fm_common_multiple",
+            "concept_name": "Common Multiples",
+            "definition": "A common multiple of two or more numbers is a number that is a multiple of all of them.\n\nList the multiples of each number and look for the values that appear in both lists. The very first one you find is the smallest common multiple.",
+            "examples": [
+              "Multiples of 5: 5, 10, 15, 20, 25, 30, 35, 40, 45 …  Multiples of 9: 9, 18, 27, 36, 45 …",
+              "45 appears in both lists, so 45 is the first common multiple of 5 and 9"
+            ],
+            "check": {
+              "question": "What is the FIRST common multiple of 5 and 9?",
+              "options": [
+                "14",
+                "45",
+                "90",
+                "5"
+              ],
+              "correct": 1,
+              "explanation": "Listing multiples of 5 and 9, the first value common to both lists is 45 (it is the 9th multiple of 5 and the 5th multiple of 9)."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_divisibility",
+        "title": "Divisibility Rules",
+        "icon": "➗",
+        "type": "concept_teaching",
+        "marks": 5,
+        "concept_title": "Quick Tests for Divisibility",
+        "intro": "These shortcuts tell you if one number divides another without doing the full division.",
+        "cards": [
+          {
+            "id": "c_div_2_5_10",
+            "concept_name": "Divisible by 2, 5 and 10",
+            "definition": "These rules only need the ONES digit.\n\nBy 2: the ones digit is 0, 2, 4, 6 or 8 (an even number).\nBy 5: the ones digit is 0 or 5.\nBy 10: the ones digit is 0.",
+            "examples": [
+              "3,210 ends in 0 → divisible by 2, by 5 and by 10",
+              "3,216 ends in 6 → divisible by 2, but NOT by 5 or 10"
+            ],
+            "check": {
+              "question": "A number ends in 5. Which is true?",
+              "options": [
+                "Divisible by 2 and 5",
+                "Divisible by 5 and 10",
+                "Divisible by 5 but not by 2 or 10",
+                "Divisible by 10 only"
+              ],
+              "correct": 2,
+              "explanation": "Ending in 5 makes it divisible by 5. But for 2 and 10 the ones digit must be even / be 0 — 5 is neither, so it is not divisible by 2 or 10."
+            }
+          },
+          {
+            "id": "c_div_3_9",
+            "concept_name": "Divisible by 3 and 9",
+            "definition": "These rules use the SUM of all the digits.\n\nBy 3: the digit sum is divisible by 3.\nBy 9: the digit sum is divisible by 9.\n\nNote: every number divisible by 9 is also divisible by 3, but not the other way round.",
+            "examples": [
+              "3,216 → 3+2+1+6 = 12. 12 ÷ 3 = 4 → divisible by 3. But 12 is not divisible by 9 → NOT divisible by 9",
+              "4,896 → 4+8+9+6 = 27. 27 is divisible by both 3 and 9 → divisible by both"
+            ],
+            "check": {
+              "question": "The digits of a number add up to 12. The number is…",
+              "options": [
+                "divisible by 3 and by 9",
+                "divisible by 9 but not 3",
+                "divisible by 3 but not 9",
+                "divisible by neither"
+              ],
+              "correct": 2,
+              "explanation": "12 ÷ 3 = 4 (so divisible by 3), but 12 ÷ 9 is not a whole number, so it is NOT divisible by 9."
+            }
+          },
+          {
+            "id": "c_div_4_8",
+            "concept_name": "Divisible by 4 and 8",
+            "definition": "By 4: look at the number formed by the LAST TWO digits — if it is divisible by 4, so is the whole number.\nBy 8: look at the number formed by the LAST THREE digits — if it is divisible by 8, so is the whole number.",
+            "examples": [
+              "3,216 → last two digits 16, and 16 ÷ 4 = 4 → divisible by 4",
+              "3,216 → last three digits 216, and 216 ÷ 8 = 27 → divisible by 8"
+            ],
+            "check": {
+              "question": "To test if 7,420 is divisible by 8, which part do you check?",
+              "options": [
+                "the ones digit (0)",
+                "the last two digits (20)",
+                "the last three digits (420)",
+                "the sum of all digits"
+              ],
+              "correct": 2,
+              "explanation": "The rule for 8 uses the last THREE digits. 420 ÷ 8 = 52.5, so 7,420 is actually NOT divisible by 8 — but you must check 420 to know that."
+            }
+          },
+          {
+            "id": "c_div_6",
+            "concept_name": "Divisible by 6",
+            "definition": "A number is divisible by 6 only if it is divisible by BOTH 2 and 3.\n\nSo first check the ones digit (rule for 2), then check the digit sum (rule for 3). Both must pass.",
+            "examples": [
+              "3,216: ones digit 6 → divisible by 2; digit sum 12 → divisible by 3. Both pass → divisible by 6",
+              "27 is divisible by 3 but is odd, so NOT by 2 → NOT divisible by 6"
+            ],
+            "check": {
+              "question": "Why is 27 NOT divisible by 6, even though it is divisible by 3?",
+              "options": [
+                "Because 27 is too small",
+                "Because 27 is not divisible by 2",
+                "Because 27 is a prime number",
+                "Because the digit sum is 9"
+              ],
+              "correct": 1,
+              "explanation": "Divisibility by 6 needs BOTH 2 and 3. 27 is odd, so it fails the test for 2 — that breaks the rule for 6."
+            }
+          },
+          {
+            "id": "c_div_11",
+            "concept_name": "Divisible by 11",
+            "definition": "Add the digits in the ODD places and the digits in the EVEN places separately. Find the difference. If the difference is 0 or divisible by 11, the number is divisible by 11.\n\n(Count places from the right, or be consistent from the left — the difference comes out the same.)",
+            "examples": [
+              "3,216: odd-place digits 3 and 1 → sum 4; even-place digits 2 and 6 → sum 8; difference 8 − 4 = 4. Not 0 or 11 → NOT divisible by 11",
+              "1,331: odd-place 1+3 = 4, even-place 3+1 = 4, difference 0 → divisible by 11"
+            ],
+            "check": {
+              "question": "For 1,331 the two place-sums are both 4. What does a difference of 0 tell you?",
+              "options": [
+                "It is divisible by 11",
+                "It is NOT divisible by 11",
+                "It is divisible by 2",
+                "Nothing useful"
+              ],
+              "correct": 0,
+              "explanation": "A difference of 0 (or any multiple of 11) means the number IS divisible by 11. 1,331 = 11 × 121."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_prime_composite",
+        "title": "Prime, Composite & Coprime",
+        "icon": "🧱",
+        "type": "concept_teaching",
+        "marks": 4,
+        "concept_title": "Sorting Numbers by Their Factors",
+        "intro": "Numbers can be grouped by how many factors they have. Let's learn the three special words.",
+        "cards": [
+          {
+            "id": "c_pc_prime",
+            "concept_name": "Prime Numbers",
+            "definition": "A prime number has exactly TWO factors: 1 and the number itself.\n\nThe smallest prime is 2, and 2 is the only EVEN prime number — every other even number can also be divided by 2, giving it more than two factors.",
+            "examples": [
+              "2, 3, 5, 7, 11, 13 … are prime numbers",
+              "7 has only the factors 1 and 7, so it is prime"
+            ],
+            "check": {
+              "question": "Which of these is a prime number?",
+              "options": [
+                "21",
+                "33",
+                "37",
+                "51"
+              ],
+              "correct": 2,
+              "explanation": "37 has only 1 and 37 as factors → prime. The others are composite: 21 = 3×7, 33 = 3×11, 51 = 3×17."
+            }
+          },
+          {
+            "id": "c_pc_composite",
+            "concept_name": "Composite Numbers",
+            "definition": "A composite number has MORE than two factors.\n\nSo besides 1 and itself, it has at least one other factor. Every composite number can be written as a product of prime numbers.",
+            "examples": [
+              "4, 6, 8, 9, 12, 15 … are composite numbers",
+              "12 has factors 1, 2, 3, 4, 6, 12 — that is six factors, so it is composite"
+            ],
+            "check": {
+              "question": "A number has exactly 5 factors. It is…",
+              "options": [
+                "prime",
+                "composite",
+                "neither prime nor composite",
+                "coprime"
+              ],
+              "correct": 1,
+              "explanation": "Primes have exactly 2 factors. Having 5 factors (more than 2) makes the number composite. For example, 16 has factors 1, 2, 4, 8, 16."
+            }
+          },
+          {
+            "id": "c_pc_one_two",
+            "concept_name": "The Special Cases: 1 and 2",
+            "definition": "1 is NEITHER prime NOR composite — its only factor is 1 itself, so it does not have the two factors a prime needs, nor more than two.\n\n2 is the only EVEN prime number. Every other even number is divisible by 2, so it has more than two factors and is composite.",
+            "examples": [
+              "1 → only factor is 1 → neither prime nor composite",
+              "2 → factors 1 and 2 only → prime, and it is even"
+            ],
+            "check": {
+              "question": "Why is 1 neither prime nor composite?",
+              "options": [
+                "It is too small to count",
+                "It has only one factor (itself)",
+                "It is an odd number",
+                "It is divisible by every number"
+              ],
+              "correct": 1,
+              "explanation": "A prime needs exactly two factors and a composite needs more than two. 1 has only ONE factor (1 itself), so it fits neither group."
+            }
+          },
+          {
+            "id": "c_pc_coprime",
+            "concept_name": "Coprime Numbers",
+            "definition": "Two numbers are coprime if they have NO common factor other than 1.\n\nThe numbers themselves do not need to be prime — they just must not share any factor bigger than 1. (Coprime numbers have HCF = 1.)",
+            "examples": [
+              "25 and 34 are coprime — their only common factor is 1",
+              "17 and 18 are coprime, even though 18 is not prime"
+            ],
+            "check": {
+              "question": "Why are 8 and 9 coprime, even though neither is prime?",
+              "options": [
+                "Because both are even",
+                "Because their only common factor is 1",
+                "Because 9 is bigger than 8",
+                "Because 8 + 9 = 17, a prime"
+              ],
+              "correct": 1,
+              "explanation": "Factors of 8 are 1, 2, 4, 8 and factors of 9 are 1, 3, 9. The only factor they share is 1, so they are coprime."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_prime_factorisation",
+        "title": "Prime Factorisation",
+        "icon": "🌳",
+        "type": "concept_teaching",
+        "marks": 3,
+        "concept_title": "Breaking Numbers into Primes",
+        "intro": "Every composite number can be written as a product of prime numbers. Let's learn two ways to do it.",
+        "cards": [
+          {
+            "id": "c_pf_what",
+            "concept_name": "What Prime Factorisation Means",
+            "definition": "Writing a composite number as a product of ONLY prime numbers is called prime factorisation.\n\nA prime number that is a factor of a composite number is called a prime factor. The prime factorisation of a number is always unique — you always get the same set of primes.",
+            "examples": [
+              "30 = 2 × 3 × 5  (all three are prime)",
+              "120 = 2 × 2 × 2 × 3 × 5"
+            ],
+            "check": {
+              "question": "Which of these is a correct prime factorisation?",
+              "options": [
+                "30 = 5 × 6",
+                "30 = 2 × 15",
+                "30 = 2 × 3 × 5",
+                "30 = 1 × 2 × 3 × 5"
+              ],
+              "correct": 2,
+              "explanation": "Prime factorisation uses only prime numbers. In '5 × 6' the 6 is composite; in '2 × 15' the 15 is composite; 1 is never included. Only 2 × 3 × 5 uses all primes."
+            }
+          },
+          {
+            "id": "c_pf_tree",
+            "concept_name": "The Factor Tree Method",
+            "definition": "Write the number, then split it into any two factors. Keep splitting each composite branch until every branch ends in a prime. The product of all the leaf primes is the prime factorisation.\n\nDifferent starting splits still give the same final primes.",
+            "examples": [
+              "440 → 4 and 110 → (2,2) and (2,55) → 55 = 5 × 11, so 440 = 2 × 2 × 2 × 5 × 11",
+              "30 → 2 and 15 → 15 = 3 × 5, so 30 = 2 × 3 × 5"
+            ],
+            "check": {
+              "question": "In a factor tree, when do you stop splitting a branch?",
+              "options": [
+                "When the branch reaches 1",
+                "When the branch is a prime number",
+                "When the branch is an even number",
+                "After exactly three splits"
+              ],
+              "correct": 1,
+              "explanation": "You stop a branch when it is a prime, because a prime cannot be broken into smaller factors. The leaf primes multiplied together give the answer."
+            }
+          },
+          {
+            "id": "c_pf_division",
+            "concept_name": "The Short-Division Method",
+            "definition": "Divide the number by its smallest prime factor. Then divide each new quotient by its smallest prime factor. Keep going until the quotient is 1. The divisors on the left, multiplied together, are the prime factorisation.",
+            "examples": [
+              "28 ÷ 2 = 14, 14 ÷ 2 = 7, 7 ÷ 7 = 1, so 28 = 2 × 2 × 7",
+              "270 ÷ 2 = 135, ÷3 = 45, ÷3 = 15, ÷3 = 5, ÷5 = 1, so 270 = 2 × 3 × 3 × 3 × 5"
+            ],
+            "check": {
+              "question": "Using short division, 28 ÷ 2 = 14, then 14 ÷ 2 = 7. What is the next step?",
+              "options": [
+                "Divide 7 by 2",
+                "Divide 7 by 7",
+                "Stop — you already have the answer",
+                "Multiply 7 by 2"
+              ],
+              "correct": 1,
+              "explanation": "7 is prime, so its smallest prime factor is 7 itself: 7 ÷ 7 = 1. Now the quotient is 1, so 28 = 2 × 2 × 7."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_hcf",
+        "title": "Highest Common Factor (HCF)",
+        "icon": "🔗",
+        "type": "concept_teaching",
+        "marks": 3,
+        "concept_title": "The Largest Shared Factor",
+        "intro": "The HCF is the biggest number that divides all the given numbers exactly. Let's learn two methods.",
+        "cards": [
+          {
+            "id": "c_hcf_what",
+            "concept_name": "What is the HCF?",
+            "definition": "The Highest Common Factor (HCF) of two or more numbers is the LARGEST number that divides all of them without leaving a remainder.\n\nIt is also called the Greatest Common Divisor (GCD). Two numbers whose HCF is 1 are coprime.",
+            "examples": [
+              "Common factors of 8 and 12 are 1, 2, 4 — the highest is 4, so HCF(8, 12) = 4",
+              "HCF of 17 and 18 is 1, so they are coprime"
+            ],
+            "check": {
+              "question": "The common factors of two numbers are 1, 2, 3 and 6. What is their HCF?",
+              "options": [
+                "1",
+                "2",
+                "6",
+                "12"
+              ],
+              "correct": 2,
+              "explanation": "The HCF is the HIGHEST common factor. Among 1, 2, 3, 6 the largest is 6."
+            }
+          },
+          {
+            "id": "c_hcf_prime",
+            "concept_name": "HCF by Prime Factorisation",
+            "definition": "Write the prime factorisation of each number. Pick the prime factors that are COMMON to all of them (take each common factor only once, the lowest power). Multiply those common primes — that product is the HCF.",
+            "examples": [
+              "60 = 2 × 2 × 3 × 5 and 75 = 3 × 5 × 5. Common primes: 3 and 5. HCF = 3 × 5 = 15",
+              "135 = 3×3×3×5, 180 = 2×2×3×3×5, 225 = 3×3×5×5. Common: 3×3×5 = 45"
+            ],
+            "check": {
+              "question": "60 = 2×2×3×5 and 75 = 3×5×5. What is their HCF?",
+              "options": [
+                "5",
+                "15",
+                "30",
+                "300"
+              ],
+              "correct": 1,
+              "explanation": "The primes common to both are 3 and 5 (each taken once). HCF = 3 × 5 = 15."
+            }
+          },
+          {
+            "id": "c_hcf_division",
+            "concept_name": "HCF by Short Division",
+            "definition": "Write the numbers in a row. Divide them all by a common factor, write the quotients below, and repeat. Stop when the numbers share no common factor except 1. Multiply all the divisors on the left — that product is the HCF.",
+            "examples": [
+              "40, 48 → ÷2 → 20, 24 → ÷2 → 10, 12 → ÷2 → 5, 6 (no common factor left). HCF = 2×2×2 = 8",
+              "92, 12, 20 → ÷2 → 46, 6, 10 → ÷2 → 23, 3, 5. HCF = 2×2 = 4"
+            ],
+            "check": {
+              "question": "Dividing 40 and 48 by 2 three times gives 5 and 6, which share no common factor. What is the HCF?",
+              "options": [
+                "2",
+                "6",
+                "8",
+                "30"
+              ],
+              "correct": 2,
+              "explanation": "Multiply the divisors you used: 2 × 2 × 2 = 8. So HCF(40, 48) = 8."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_lcm",
+        "title": "Lowest Common Multiple (LCM)",
+        "icon": "🔁",
+        "type": "concept_teaching",
+        "marks": 3,
+        "concept_title": "The Smallest Shared Multiple",
+        "intro": "The LCM is the smallest number that all the given numbers divide into exactly.",
+        "cards": [
+          {
+            "id": "c_lcm_what",
+            "concept_name": "What is the LCM?",
+            "definition": "The Lowest Common Multiple (LCM) of two or more numbers is the SMALLEST number that is a multiple of all of them.\n\nList the multiples of each number; the first value that appears in every list is the LCM.",
+            "examples": [
+              "Multiples of 4: 4, 8, 12 …  Multiples of 6: 6, 12 …  The first shared multiple is 12, so LCM(4, 6) = 12",
+              "LCM of two coprime numbers is just their product: LCM(18, 19) = 342"
+            ],
+            "check": {
+              "question": "The first multiple shared by 4 and 6 is 12. What does that make 12?",
+              "options": [
+                "the HCF of 4 and 6",
+                "the LCM of 4 and 6",
+                "a factor of 4 and 6",
+                "a prime number"
+              ],
+              "correct": 1,
+              "explanation": "The smallest multiple common to both numbers is the LCM. So LCM(4, 6) = 12."
+            }
+          },
+          {
+            "id": "c_lcm_division",
+            "concept_name": "LCM by Short Division",
+            "definition": "Write the numbers in a row and divide by a common prime factor. If a number is not divisible, carry it down unchanged. Keep dividing until the bottom row is all 1s. Multiply ALL the divisors together — that product is the LCM.",
+            "examples": [
+              "35 = 5 × 7, 60 = 2×2×3×5. LCM = 2×2×3×5×7 = 420",
+              "54, 72, 90 → ÷2 → 27,36,45 → ÷3 → 9,12,15 → ÷3 → 3,4,5. LCM = 2×3×3×3×4×5 = 1080"
+            ],
+            "check": {
+              "question": "When finding the LCM, what do you do with a number that is NOT divisible by the chosen factor?",
+              "options": [
+                "Remove it from the row",
+                "Carry it down unchanged",
+                "Round it to the nearest multiple",
+                "Divide it anyway with a remainder"
+              ],
+              "correct": 1,
+              "explanation": "Unlike HCF (where every number must divide), for LCM you carry a non-divisible number straight down and keep going until all become 1."
+            }
+          },
+          {
+            "id": "c_lcm_word",
+            "concept_name": "LCM in Word Problems",
+            "definition": "LCM answers questions about events that repeat together — bells ringing, lights blinking, classes recurring. Find when they next coincide by taking the LCM of their intervals.",
+            "examples": [
+              "Seema has piano every 6 days, swimming every 4 days, singing every 8 days. LCM(6,4,8) = 24, so all three fall together every 24 days",
+              "Bells at 15, 25, 30 min → LCM = 150 min after they last rang together"
+            ],
+            "check": {
+              "question": "Two bells ring every 6 and 8 minutes and ring together now. When do they ring together NEXT?",
+              "options": [
+                "after 14 minutes (6+8)",
+                "after 24 minutes (LCM)",
+                "after 2 minutes (HCF)",
+                "after 48 minutes (6×8)"
+              ],
+              "correct": 1,
+              "explanation": "Events repeating together are governed by the LCM. LCM(6, 8) = 24, so they next ring together after 24 minutes."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_relationship",
+        "title": "HCF – LCM Relationship",
+        "icon": "⚖️",
+        "type": "concept_teaching",
+        "marks": 2,
+        "concept_title": "Linking HCF and LCM",
+        "intro": "There is a neat rule connecting two numbers with their HCF and LCM.",
+        "cards": [
+          {
+            "id": "c_rel_formula",
+            "concept_name": "Product of Two Numbers = HCF × LCM",
+            "definition": "For any two numbers: First number × Second number = HCF × LCM.\n\nThis means if you know any three of these four values, you can find the missing one.",
+            "examples": [
+              "For 24 and 36: HCF = 12, LCM = 72. Check: 24 × 36 = 864 = 12 × 72 ✓",
+              "Product 4500, HCF 15 → LCM = 4500 ÷ 15 = 300"
+            ],
+            "check": {
+              "question": "The product of two numbers is 4500 and their HCF is 15. What is their LCM?",
+              "options": [
+                "300",
+                "150",
+                "450",
+                "67500"
+              ],
+              "correct": 0,
+              "explanation": "Product = HCF × LCM, so LCM = Product ÷ HCF = 4500 ÷ 15 = 300."
+            }
+          },
+          {
+            "id": "c_rel_missing",
+            "concept_name": "Finding the Missing Number",
+            "definition": "If you know the HCF, the LCM, and one of the two numbers, find the other using: Other number = (HCF × LCM) ÷ known number.",
+            "examples": [
+              "LCM = 1008, HCF = 24, one number = 144 → other = (1008 × 24) ÷ 144 = 168",
+              "HCF = 11, LCM = 1100, one number = 550 → other = (11 × 1100) ÷ 550 = 22"
+            ],
+            "check": {
+              "question": "HCF = 24, LCM = 1008, one number = 144. What is the other number?",
+              "options": [
+                "168",
+                "144",
+                "24",
+                "1008"
+              ],
+              "correct": 0,
+              "explanation": "Other = (HCF × LCM) ÷ known = (24 × 1008) ÷ 144 = 24192 ÷ 144 = 168."
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "stage_2_practice": {
+    "title": "Practice",
+    "description": "Mixed questions on the whole chapter. Earn a ⭐ for each correct answer.",
+    "sections": [
+      {
+        "id": "prac_factors",
+        "title": "Factors, Multiples & Divisibility",
+        "questions": [
+          {
+            "id": "p1",
+            "question": "Which of these is NOT a factor of 84?",
+            "options": [
+              "6",
+              "7",
+              "8",
+              "12"
+            ],
+            "correct": 2,
+            "hint": "Try dividing 84 by each option. A factor leaves no remainder.",
+            "explanation": "84 ÷ 8 = 10.5, which leaves a remainder, so 8 is not a factor. 84 = 2×2×3×7, and 6, 7, 12 all divide it exactly."
+          },
+          {
+            "id": "p2",
+            "question": "How many factors does 36 have?",
+            "options": [
+              "6",
+              "8",
+              "9",
+              "12"
+            ],
+            "correct": 2,
+            "hint": "List factor pairs of 36: 1×36, 2×18, 3×12, 4×9, 6×6.",
+            "explanation": "Factors of 36 are 1, 2, 3, 4, 6, 9, 12, 18, 36 — that is 9 factors (6 appears once because 6×6 = 36)."
+          },
+          {
+            "id": "p3",
+            "question": "Which number is divisible by 9?",
+            "options": [
+              "3,216",
+              "5,172",
+              "3,204",
+              "1,234"
+            ],
+            "correct": 2,
+            "hint": "Add the digits of each. The number is divisible by 9 if the digit sum is divisible by 9.",
+            "explanation": "3,204 → 3+2+0+4 = 9, divisible by 9. The others: 3,216→12, 5,172→15, 1,234→10 — none divisible by 9."
+          },
+          {
+            "id": "p4",
+            "question": "Which numbers have BOTH 2 and 3 as common factors?",
+            "options": [
+              "35 and 53",
+              "30 and 36",
+              "46 and 53",
+              "35 and 46"
+            ],
+            "correct": 1,
+            "hint": "A number with 2 and 3 as factors is even AND has a digit sum divisible by 3.",
+            "explanation": "30 (even, digits 3) and 36 (even, digits 9) are both divisible by 2 and 3. The others fail one test — 35, 53, 46 are not divisible by 3 (or 2)."
+          },
+          {
+            "id": "p5",
+            "question": "To test if 6,305 is divisible by 11, you compute (6+0) − (3+5). What is the result, and is it divisible by 11?",
+            "options": [
+              "−2, no",
+              "2, no",
+              "0, yes",
+              "8, no"
+            ],
+            "correct": 0,
+            "hint": "Sum the digits in odd places and even places, then subtract.",
+            "explanation": "Odd-place digits 6 and 0 → 6; even-place digits 3 and 5 → 8; difference 6 − 8 = −2. Not 0 or a multiple of 11, so 6,305 is NOT divisible by 11."
+          }
+        ]
+      },
+      {
+        "id": "prac_primes",
+        "title": "Primes & Prime Factorisation",
+        "questions": [
+          {
+            "id": "p6",
+            "question": "Which of these is a composite number?",
+            "options": [
+              "13",
+              "17",
+              "21",
+              "23"
+            ],
+            "correct": 2,
+            "hint": "A composite number has more than two factors. Check if any number besides 1 and itself divides it.",
+            "explanation": "21 = 3 × 7, so it has factors 1, 3, 7, 21 (more than two) → composite. 13, 17, 23 are all primes."
+          },
+          {
+            "id": "p7",
+            "question": "What is the prime factorisation of 120?",
+            "options": [
+              "2 × 60",
+              "2 × 2 × 30",
+              "2 × 2 × 2 × 3 × 5",
+              "2 × 3 × 4 × 5"
+            ],
+            "correct": 2,
+            "hint": "Keep dividing by primes until you reach 1. Every factor in the answer must be prime.",
+            "explanation": "120 ÷ 2 = 60 ÷ 2 = 30 ÷ 2 = 15 ÷ 3 = 5 ÷ 5 = 1. So 120 = 2 × 2 × 2 × 3 × 5. The others contain composite numbers (60, 30, 4)."
+          },
+          {
+            "id": "p8",
+            "question": "Which pair of numbers is coprime?",
+            "options": [
+              "8 and 12",
+              "9 and 16",
+              "6 and 15",
+              "10 and 25"
+            ],
+            "correct": 1,
+            "hint": "Coprime means the only common factor is 1.",
+            "explanation": "9 = 3×3 and 16 = 2×2×2×2 share no factor except 1 → coprime. The others share a factor: 8&12 share 4, 6&15 share 3, 10&25 share 5."
+          },
+          {
+            "id": "p9",
+            "question": "Which statement about the number 2 is correct?",
+            "options": [
+              "It is the only even composite number",
+              "It is the only even prime number",
+              "It is neither prime nor composite",
+              "It has more than two factors"
+            ],
+            "correct": 1,
+            "hint": "List the factors of 2 and think about other even numbers.",
+            "explanation": "2 has only the factors 1 and 2, so it is prime — and it is the only even prime, because every other even number is also divisible by 2 and so has more factors."
+          }
+        ]
+      },
+      {
+        "id": "prac_hcf_lcm",
+        "title": "HCF, LCM & Their Relationship",
+        "questions": [
+          {
+            "id": "p10",
+            "question": "What is the HCF of 24 and 36?",
+            "options": [
+              "6",
+              "12",
+              "18",
+              "72"
+            ],
+            "correct": 1,
+            "hint": "24 = 2×2×2×3 and 36 = 2×2×3×3. Take the common primes.",
+            "explanation": "Common primes are 2×2×3 = 12. So HCF(24, 36) = 12. (72 is the LCM, not the HCF.)"
+          },
+          {
+            "id": "p11",
+            "question": "What is the LCM of 9 and 12?",
+            "options": [
+              "3",
+              "21",
+              "36",
+              "108"
+            ],
+            "correct": 2,
+            "hint": "9 = 3×3, 12 = 2×2×3. Multiply all factors, taking the common 3 once.",
+            "explanation": "LCM = 2 × 2 × 3 × 3 = 36. (3 is the HCF; 108 = 9×12 over-counts the shared factor.)"
+          },
+          {
+            "id": "p12",
+            "question": "The HCF of two numbers is 1. What can you say about them?",
+            "options": [
+              "They are both prime",
+              "They are coprime",
+              "They are equal",
+              "They are both even"
+            ],
+            "correct": 1,
+            "hint": "Recall the definition that connects HCF = 1 to a special name.",
+            "explanation": "Two numbers with HCF = 1 share no common factor except 1, which is exactly what 'coprime' means. They need not be prime (e.g. 8 and 9)."
+          },
+          {
+            "id": "p13",
+            "question": "The product of two numbers is 1,170 and their HCF is 3. What is their LCM?",
+            "options": [
+              "390",
+              "351",
+              "3,510",
+              "1,167"
+            ],
+            "correct": 0,
+            "hint": "Use Product = HCF × LCM, so LCM = Product ÷ HCF.",
+            "explanation": "LCM = 1,170 ÷ 3 = 390."
+          },
+          {
+            "id": "p14",
+            "question": "Three traffic lights change every 8, 12 and 16 minutes. They just changed together. After how many minutes will they change together again?",
+            "options": [
+              "36",
+              "48",
+              "24",
+              "96"
+            ],
+            "correct": 1,
+            "hint": "Events that recur together use the LCM. Find LCM(8, 12, 16).",
+            "explanation": "8 = 2³, 12 = 2²×3, 16 = 2⁴. LCM = 2⁴ × 3 = 48. So they change together again after 48 minutes."
+          }
+        ]
+      }
+    ]
+  },
+  "stage_3_think": {
+    "title": "Think Deeper",
+    "description": "Solve each problem on paper, then compare with the model answer and tick what you got right. Each tick is a ⭐.",
+    "problems": [
+      {
+        "id": "tp1",
+        "category": "hcf_application",
+        "marks": 5,
+        "scenario": "For a Republic Day display, Aarav has two ribbons: one 96 cm long and the other 72 cm long. He wants to cut both ribbons into equal pieces with no ribbon left over, and he wants the pieces to be as long as possible.",
+        "question": "What is the greatest possible length of each piece, and how many pieces will he get in total?",
+        "model_answer": "The greatest length must divide both 96 and 72 exactly → it is the HCF. 96 = 2×2×2×2×2×3 and 72 = 2×2×2×3×3. Common primes: 2×2×2×3 = 24. So each piece is 24 cm. Pieces: 96÷24 = 4 and 72÷24 = 3, total 4 + 3 = 7 pieces.",
+        "explanation": "'Equal pieces, longest possible, no leftover' is the signal for HCF. After finding HCF = 24 cm, divide each ribbon's length by 24 to count the pieces.",
+        "self_check_criteria": [
+          "Did I recognise that I needed the HCF of 96 and 72?",
+          "Did I calculate the HCF correctly as 24 cm?",
+          "Did I find the number of pieces from each ribbon (4 and 3)?",
+          "Did I add them to get the total of 7 pieces?"
+        ]
+      },
+      {
+        "id": "tp2",
+        "category": "lcm_application",
+        "marks": 5,
+        "scenario": "During Diwali, Riya sets up two strings of lights. The first string blinks every 8 seconds and the second blinks every 12 seconds. They blink together at the start.",
+        "question": "After how many seconds will both strings blink together again?",
+        "model_answer": "Lights blinking together recur at the LCM of their intervals. 8 = 2×2×2 and 12 = 2×2×3. LCM = 2×2×2×3 = 24. So both strings blink together again after 24 seconds.",
+        "explanation": "Repeating events that must coincide are governed by the LCM, not the HCF. Take the LCM of 8 and 12.",
+        "self_check_criteria": [
+          "Did I recognise this needs the LCM of 8 and 12?",
+          "Did I write the prime factorisation of both numbers?",
+          "Did I compute the LCM correctly as 24?",
+          "Did I state the answer in seconds (24 seconds)?"
+        ]
+      },
+      {
+        "id": "tp3",
+        "category": "divisibility_reasoning",
+        "marks": 5,
+        "scenario": "A jersey number for a cricket camp is the 4-digit number 73_8, where the blank is a single missing digit. The camp wants the number to be divisible by 9.",
+        "question": "What is the smallest digit that can fill the blank so the number is divisible by 9? Show how you know.",
+        "model_answer": "A number is divisible by 9 when the sum of its digits is divisible by 9. Known digits: 7 + 3 + 8 = 18, plus the missing digit d gives 18 + d. We need 18 + d divisible by 9. Since 18 is already divisible by 9, d = 0 works (sum 18). The next option is d = 9 (sum 27). The smallest digit is 0, giving the number 7,308.",
+        "explanation": "Use the rule for 9 (digit sum). Because 18 is already a multiple of 9, the smallest digit that keeps the sum a multiple of 9 is 0.",
+        "self_check_criteria": [
+          "Did I use the digit-sum rule for divisibility by 9?",
+          "Did I add the known digits to get 18?",
+          "Did I test which digits make 18 + d divisible by 9?",
+          "Did I choose the smallest valid digit (0) and state the number 7,308?"
+        ]
+      },
+      {
+        "id": "tp4",
+        "category": "prime_factorisation",
+        "marks": 5,
+        "scenario": "A teacher asks the class to express the number 360 as a product of prime numbers using the short-division method.",
+        "question": "Write the full prime factorisation of 360, showing each division step.",
+        "model_answer": "360 ÷ 2 = 180; 180 ÷ 2 = 90; 90 ÷ 2 = 45; 45 ÷ 3 = 15; 15 ÷ 3 = 5; 5 ÷ 5 = 1. So 360 = 2 × 2 × 2 × 3 × 3 × 5.",
+        "explanation": "Divide by the smallest prime each time until the quotient is 1. Multiplying the divisors gives the prime factorisation; you can check 2×2×2×3×3×5 = 360.",
+        "self_check_criteria": [
+          "Did I divide by the smallest prime factor at each step?",
+          "Did I continue dividing until the quotient became 1?",
+          "Did I list all the prime divisors I used?",
+          "Did I write 360 = 2 × 2 × 2 × 3 × 3 × 5 (and can I check it multiplies back to 360)?"
+        ]
+      },
+      {
+        "id": "tp5",
+        "category": "hcf_lcm_relationship",
+        "marks": 5,
+        "scenario": "Two numbers have an HCF of 8 and an LCM of 96. One of the numbers is 24.",
+        "question": "Find the other number, and verify your answer using the HCF–LCM relationship.",
+        "model_answer": "Product of two numbers = HCF × LCM = 8 × 96 = 768. So the other number = 768 ÷ 24 = 32. Verify: 24 = 2×2×2×3 and 32 = 2×2×2×2×2, HCF = 2×2×2 = 8 ✓ and LCM = 2⁵×3 = 96 ✓.",
+        "explanation": "Use Product = HCF × LCM to get the product of the two numbers, then divide by the known number. Checking the HCF and LCM of 24 and the answer confirms it.",
+        "self_check_criteria": [
+          "Did I use the rule Product = HCF × LCM?",
+          "Did I compute HCF × LCM = 8 × 96 = 768?",
+          "Did I divide 768 by 24 to get 32?",
+          "Did I verify that HCF(24, 32) = 8 and LCM(24, 32) = 96?"
+        ]
+      }
+    ]
+  },
+  "stage_4_test": {
+    "title": "Chapter 3 Test",
+    "total_marks": 20,
+    "time_limit": 2400,
+    "instructions": "20 marks, 40 minutes. Section A has 8 multiple-choice questions (1 mark each). Section B has 5 short-answer questions. Read each question carefully and show your working for Section B.",
+    "sections": [
+      {
+        "id": "test_section_a",
+        "title": "Section A — Multiple Choice (8 × 1 = 8 marks)",
+        "marks": 8,
+        "questions": [
+          {
+            "id": "ta1",
+            "type": "mcq",
+            "question": "Which is the smallest prime number?",
+            "options": [
+              "0",
+              "1",
+              "2",
+              "3"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta2",
+            "type": "mcq",
+            "question": "How many factors does 18 have?",
+            "options": [
+              "4",
+              "5",
+              "6",
+              "9"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta3",
+            "type": "mcq",
+            "question": "A number is divisible by both 2 and 3. It must also be divisible by:",
+            "options": [
+              "5",
+              "6",
+              "9",
+              "11"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta4",
+            "type": "mcq",
+            "question": "Which number is divisible by 4?",
+            "options": [
+              "1,234",
+              "3,612",
+              "5,170",
+              "7,135"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta5",
+            "type": "mcq",
+            "question": "What is the HCF of 12 and 18?",
+            "options": [
+              "2",
+              "3",
+              "6",
+              "36"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta6",
+            "type": "mcq",
+            "question": "What is the LCM of 6 and 8?",
+            "options": [
+              "2",
+              "14",
+              "24",
+              "48"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta7",
+            "type": "mcq",
+            "question": "Which of these is a prime number?",
+            "options": [
+              "21",
+              "33",
+              "37",
+              "51"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta8",
+            "type": "mcq",
+            "question": "What is the prime factorisation of 24?",
+            "options": [
+              "2 × 12",
+              "2 × 2 × 6",
+              "2 × 2 × 2 × 3",
+              "3 × 8"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          }
+        ]
+      },
+      {
+        "id": "test_section_b",
+        "title": "Section B — Short Answers (12 marks)",
+        "marks": 12,
+        "questions": [
+          {
+            "id": "tb1",
+            "type": "short_answer",
+            "question": "Write all the factors of 36.",
+            "marks": 2,
+            "model_answer": "The factors of 36 are 1, 2, 3, 4, 6, 9, 12, 18 and 36.",
+            "marking_guide": "1 mark for listing most factors with at most one error. 2 marks for all nine factors correct with none missing or extra."
+          },
+          {
+            "id": "tb2",
+            "type": "short_answer",
+            "question": "Using divisibility rules, check whether 3,612 is divisible by 4 and by 8. Show your reasoning.",
+            "marks": 2,
+            "model_answer": "By 4: last two digits are 12, and 12 ÷ 4 = 3 → divisible by 4. By 8: last three digits are 612, and 612 ÷ 8 = 76.5 → NOT divisible by 8. So 3,612 is divisible by 4 but not by 8.",
+            "marking_guide": "1 mark for the correct check by 4 (last two digits 12). 1 mark for the correct check by 8 (last three digits 612, not divisible)."
+          },
+          {
+            "id": "tb3",
+            "type": "short_answer",
+            "question": "Find the prime factorisation of 84.",
+            "marks": 2,
+            "model_answer": "84 ÷ 2 = 42; 42 ÷ 2 = 21; 21 ÷ 3 = 7; 7 ÷ 7 = 1. So 84 = 2 × 2 × 3 × 7.",
+            "marking_guide": "1 mark for correct division steps using primes. 1 mark for the correct final answer 2 × 2 × 3 × 7."
+          },
+          {
+            "id": "tb4",
+            "type": "short_answer",
+            "question": "Find the HCF and the LCM of 24 and 36.",
+            "marks": 3,
+            "model_answer": "24 = 2×2×2×3 and 36 = 2×2×3×3. HCF = common primes = 2×2×3 = 12. LCM = 2×2×2×3×3 = 72. (Check: 24×36 = 864 = 12×72.)",
+            "marking_guide": "1 mark for correct prime factorisation of both numbers. 1 mark for HCF = 12. 1 mark for LCM = 72."
+          },
+          {
+            "id": "tb5",
+            "type": "short_answer",
+            "question": "Three temple bells ring at intervals of 9, 12 and 15 minutes. They all ring together at 6:00 a.m. At what time will they next ring together?",
+            "marks": 3,
+            "model_answer": "Find LCM(9, 12, 15). 9 = 3×3, 12 = 2×2×3, 15 = 3×5. LCM = 2×2×3×3×5 = 180 minutes = 3 hours. So they next ring together at 6:00 a.m. + 3 hours = 9:00 a.m.",
+            "marking_guide": "1 mark for recognising LCM is needed. 1 mark for LCM = 180 minutes. 1 mark for converting to 3 hours and stating 9:00 a.m."
+          }
+        ]
+      }
+    ],
+    "score_tiers": [
+      {
+        "min": 19,
+        "max": 20,
+        "message": "You are a champion! 🏆"
+      },
+      {
+        "min": 16,
+        "max": 18,
+        "message": "Good job! Keep it up! ⭐"
+      },
+      {
+        "min": 12,
+        "max": 15,
+        "message": "Nice effort, aim higher! ✨"
+      },
+      {
+        "min": 8,
+        "max": 11,
+        "message": "Room for improvement, try again! 💪"
+      },
+      {
+        "min": 0,
+        "max": 7,
+        "message": "You can do better, try again! 📚"
+      }
+    ]
+  }
+}
+</script>
+
+<div class="container" id="app">
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <p style="color: var(--ink-soft); font-weight: 600;">Loading your chapter...</p>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const App = {
+  data: null,
+  currentStage: 1,
+  currentBranch: null,
+  currentSection: null,
+  currentPanelIdx: 0,
+  currentVocabGroup: null,
+  state: {
+    panelChecks: {}, cardFlips: {}, spotItAnswers: {}, practiceAnswers: {},
+    thinkSubmissions: {},      // p_id: { value, submitted }
+    testAnswers: {},           // q_id: { value }
+    testStartTime: null,       // null if not started
+    testTimeUp: false,
+    testSubmitted: false,
+    spotItModal: null,
+  },
+
+  async init() {
+    try {
+      // Bind events ONCE at startup, before any rendering
+      this.bindEvents();
+
+      const embedded = document.getElementById('embedded-chapter');
+      if (embedded && embedded.textContent.trim()) {
+        try {
+          this.data = JSON.parse(embedded.textContent.trim());
+          this.loadProgress();
+          this.render();
+          return;
+        } catch (e) { console.warn('Embedded JSON parse failed:', e.message); }
+      }
+      const params = new URLSearchParams(window.location.search);
+      const chapter = params.get('chapter');
+      const url = chapter ? `${chapter}.json` : 'content/class5/english/ch1-that-boy-next-door.json';
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Could not load: ${url} (status ${response.status})`);
+      this.data = await response.json();
+      this.validateSchema();
+      this.loadProgress();
+      this.render();
+    } catch (err) { this.renderError(err.message); }
+  },
+
+  validateSchema() {
+    const required = ['chapter_id', 'chapter_title', 'subject', 'stage_1_learn', 'stage_2_practice'];
+    const missing = required.filter(f => !this.data[f]);
+    if (missing.length > 0) throw new Error(`JSON missing fields: ${missing.join(', ')}`);
+  },
+
+  storageKey() { return `egurukul_${this.data.chapter_id}`; },
+
+  // Bump this when schema or state shape changes — old state will be discarded
+  STATE_VERSION: 6,
+
+  loadProgress() {
+    try {
+      const saved = localStorage.getItem(this.storageKey());
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (p.stateVersion !== this.STATE_VERSION) {
+          console.log('Old state version detected, starting fresh');
+          localStorage.removeItem(this.storageKey());
+          return;
+        }
+        this.state.panelChecks = p.panelChecks || {};
+        this.state.cardFlips = p.cardFlips || {};
+        this.state.spotItAnswers = p.spotItAnswers || {};
+        this.state.practiceAnswers = p.practiceAnswers || {};
+        this.state.thinkSubmissions = p.thinkSubmissions || {};
+        this.state.testAnswers = p.testSubmitted ? (p.testAnswers || {}) : {};
+        this.state.testSubmitted = p.testSubmitted || false;
+        this.state.manualMarksAwarded = p.manualMarksAwarded || {};
+        this.currentStage = p.currentStage || 1;
+        if (this.currentStage < 1) this.currentStage = 1; // Never restore to Stage 0 (Deep Dive)
+      }
+    } catch (e) { console.warn(e); }
+  },
+
+  saveProgress() {
+    try {
+      localStorage.setItem(this.storageKey(), JSON.stringify({
+        stateVersion: this.STATE_VERSION,
+        panelChecks: this.state.panelChecks,
+        cardFlips: this.state.cardFlips,
+        spotItAnswers: this.state.spotItAnswers,
+        practiceAnswers: this.state.practiceAnswers,
+        thinkSubmissions: this.state.thinkSubmissions,
+        testAnswers: this.state.testSubmitted ? this.state.testAnswers : {},
+        testSubmitted: this.state.testSubmitted,
+        manualMarksAwarded: this.state.manualMarksAwarded || {},
+        currentStage: this.currentStage,
+      }));
+    } catch (e) { console.warn(e); }
+  },
+
+  resetProgress() {
+    if (confirm('Reset all your progress in this chapter? You will start fresh from Stage 1.')) {
+      localStorage.removeItem(this.storageKey());
+      this.state.panelChecks = {};
+      this.state.cardFlips = {};
+      this.state.spotItAnswers = {};
+      this.state.practiceAnswers = {};
+      this.state.thinkSubmissions = {};
+      this.state.testAnswers = {};
+      this.state.testStartTime = null;
+      this.state.testTimeUp = false;
+      this.state.testSubmitted = false;
+      this.state.manualMarksAwarded = {};
+      this.currentStage = 1;
+      this.currentBranch = null;
+      this.currentSection = null;
+      this.currentPanelIdx = 0;
+      this.currentVocabGroup = null;
+      this.deepDiveTopicIdx = 0;
+      this.previousStage = 1;
+      this.stopTimer();
+      this.render();
+      window.scrollTo(0, 0);
+    }
+  },
+
+  isBranchComplete(branch) {
+    if (branch.type === 'story_panels') {
+      return branch.panels.every(p => !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined));
+    }
+    if (branch.type === 'vocabulary_cards') {
+      return branch.cards.every(c => this.state.spotItAnswers[c.id] !== undefined);
+    }
+    if (branch.type === 'concept_teaching') {
+      return branch.cards.every(c => !c.check || (this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined));
+    }
+    return false;
+  },
+
+  countAnsweredPanels(branch) {
+    if (!branch.panels) return 0;
+    return branch.panels.filter(p =>
+      !p.comprehension_check ||
+      (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined)
+    ).length;
+  },
+
+  isStage1Complete() { return this.data.stage_1_learn.branches.every(b => this.isBranchComplete(b)); },
+
+  isPracticeSectionComplete(section) {
+    return section.questions.every(q => this.state.practiceAnswers[q.id] && this.state.practiceAnswers[q.id].selected !== undefined);
+  },
+
+  isStage2Complete() { return this.data.stage_2_practice.sections.every(s => this.isPracticeSectionComplete(s)); },
+
+  isStage3Complete() {
+    const problems = this.data.stage_3_think.problems;
+    return problems.every(p => this.state.thinkSubmissions[p.id] && this.state.thinkSubmissions[p.id].submitted);
+  },
+
+  isStage4Complete() { return this.state.testSubmitted; },
+
+  isStageComplete(n) {
+    if (n === 1) return this.isStage1Complete();
+    if (n === 2) return this.isStage2Complete();
+    if (n === 3) return this.isStage3Complete();
+    if (n === 4) return this.isStage4Complete();
+    return false;
+  },
+
+  isStageUnlocked(n) {
+    if (n === 1) return true;
+    return this.isStageComplete(n - 1);
+  },
+
+  render() {
+    const app = document.getElementById('app');
+    const hasDeepDive = this.data.stage_0_deep_dive && this.data.stage_0_deep_dive.topics && this.data.stage_0_deep_dive.topics.length > 0;
+    app.innerHTML = `
+      ${this.renderHeader()}
+      ${this.currentStage === 0 ? '' : (hasDeepDive ? this.renderDeepDiveTrigger() : '')}
+      ${this.currentStage === 0 ? '' : this.renderProgressBar()}
+      <div>
+        ${this.currentStage === 0 ? this.renderStage0() : ''}
+        ${this.currentStage === 1 ? this.renderStage1() : ''}
+        ${this.currentStage === 2 ? this.renderStage2() : ''}
+        ${this.currentStage === 3 ? this.renderStage3() : ''}
+        ${this.currentStage === 4 ? this.renderStage4() : ''}
+      </div>
+      ${this.state.spotItModal ? this.renderSpotItModal() : ''}
+    `;
+    // Execute deferred JS for interactive Deep Dive sections (global scope so inline onclick works)
+    app.querySelectorAll('.dd-deferred-js').forEach(el => {
+      try {
+        const js = el.textContent;
+        if (js && js.trim()) {
+          const s = document.createElement('script');
+          s.textContent = js;
+          document.body.appendChild(s);
+          s.remove();
+        }
+      } catch(e) { console.warn('Interactive JS error:', e); }
+      el.remove();
+    });
+    // bindEvents is now called ONCE in init(), not here
+  },
+
+  renderError(msg) {
+    document.getElementById('app').innerHTML = `
+      <div class="error-screen">
+        <h2 style="font-family: 'Fraunces', serif; margin-bottom: 12px;">Couldn't load the chapter</h2>
+        <p>${this.escapeHtml(msg)}</p>
+        <p style="font-size: 13px; margin-top: 12px;">Make sure the JSON file is in the same folder, or paste it inside the embedded-chapter script tag.</p>
+      </div>
+    `;
+  },
+
+  renderHeader() {
+    const d = this.data;
+    let title = d.chapter_title;
+    if (d.chapter_number) title = `Chapter ${d.chapter_number} — ${title}`;
+    return `
+      <header class="app-header">
+        <div class="header-eyebrow">${this.escapeHtml(d.subject || '')} · Class 5</div>
+        <h1 class="header-title">${this.escapeHtml(title)}</h1>
+        ${d.chapter_author ? `<div class="header-author">by ${this.escapeHtml(d.chapter_author)}</div>` : ''}
+        <button class="reset-btn" data-reset-progress="1" title="Clear all progress and start fresh">↻ Reset</button>
+      </header>
+    `;
+  },
+
+  renderProgressBar() {
+    const stages = [{num:1,label:'Learn'},{num:2,label:'Practice'},{num:3,label:'Think'},{num:4,label:'Test'}];
+    return `<div class="progress-bar">${stages.map(s => {
+      const isActive = this.currentStage === s.num;
+      const isComplete = this.isStageComplete(s.num);
+      const isLocked = !this.isStageUnlocked(s.num) && !isActive;
+      let cls = '';
+      if (isActive) cls = 'active';
+      else if (isComplete) cls = 'complete';
+      else if (isLocked) cls = 'locked';
+      return `<div class="progress-step ${cls}" data-stage="${s.num}"><span class="step-num">${s.num}</span><span>${s.label}</span></div>`;
+    }).join('')}</div>`;
+  },
+
+  renderDeepDiveTrigger() {
+    const dd = this.data.stage_0_deep_dive;
+    return `
+      <button class="deep-dive-trigger" data-open-deep-dive="1">
+        <span class="dd-icon">📚</span>
+        <span class="dd-text">
+          <span class="dd-title">${this.escapeHtml(dd.title || 'Deep Dive — Concept Reference')}</span>
+          <span class="dd-sub">${this.escapeHtml(dd.description || 'Detailed explanations, stories & visuals — always available for reference')}</span>
+        </span>
+      </button>
+    `;
+  },
+
+  renderStage0() {
+    const dd = this.data.stage_0_deep_dive;
+    if (!dd || !dd.topics || dd.topics.length === 0) return '';
+    const currentIdx = this.deepDiveTopicIdx || 0;
+    const topic = dd.topics[currentIdx];
+
+    return `
+      <div class="dd-screen">
+        <div class="dd-header">
+          <button class="btn btn-secondary" data-close-deep-dive="1">← Back to Dashboard</button>
+          <div>
+            <h2 class="stage-title" style="font-size:22px;margin:0;">📚 ${this.escapeHtml(dd.title || 'Deep Dive')}</h2>
+            <p class="stage-description" style="font-size:13px;">${this.escapeHtml(dd.description || '')}</p>
+          </div>
+        </div>
+        <div class="dd-nav">
+          ${dd.topics.map((t, i) => `
+            <button class="dd-nav-btn ${i === currentIdx ? 'active' : ''}" data-dd-topic="${i}">
+              ${t.icon || '📖'} ${this.escapeHtml(t.title)}
+            </button>
+          `).join('')}
+        </div>
+        <div class="dd-topic">
+          <div class="dd-topic-title">${topic.icon || ''} ${this.escapeHtml(topic.title)}</div>
+          ${topic.subtitle ? `<div class="dd-topic-subtitle">${this.escapeHtml(topic.subtitle)}</div>` : ''}
+          ${(topic.sections || []).map(sec => this.renderDeepDiveSection(sec)).join('')}
+        </div>
+        <div class="panel-nav">
+          <button class="btn btn-secondary" data-dd-topic="${currentIdx - 1}" ${currentIdx === 0 ? 'disabled' : ''}>← Previous Topic</button>
+          ${currentIdx < dd.topics.length - 1
+            ? `<button class="btn btn-primary" data-dd-topic="${currentIdx + 1}">Next Topic →</button>`
+            : `<button class="btn btn-success" data-close-deep-dive="1">✓ Back to Dashboard</button>`
+          }
+        </div>
+      </div>
+    `;
+  },
+
+  renderDeepDiveSection(sec) {
+    if (sec.type === 'story') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label story">📖 Story</span>
+          <div class="dd-story">
+            ${sec.title ? `<div class="dd-story-title">${this.escapeHtml(sec.title)}</div>` : ''}
+            <div class="dd-story-text">${this.renderDDText(sec.content)}</div>
+          </div>
+          ${sec.image_svg ? `<div class="dd-visual">${sec.image_svg}${sec.image_caption ? `<div class="dd-visual-caption">${this.escapeHtml(sec.image_caption)}</div>` : ''}</div>` : ''}
+        </div>
+      `;
+    }
+    if (sec.type === 'steps') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label steps">🪜 Step by Step</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-steps">
+            ${(sec.steps || []).map((step, i) => `
+              <div class="dd-step">
+                <div class="dd-step-num">${i + 1}</div>
+                <div class="dd-step-content">
+                  <div class="dd-step-title">${this.escapeHtml(step.title)}</div>
+                  <div class="dd-step-text">${this.renderDDText(step.text)}</div>
+                  ${step.example ? `<div class="dd-step-example">💡 ${this.renderDDText(step.example)}</div>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'visual') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label visual">🎨 Visual</span>
+          <div class="dd-visual">
+            ${sec.svg || ''}
+            ${sec.caption ? `<div class="dd-visual-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'video') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label video">🎬 Video</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-video">
+            <iframe src="${this.escapeAttr(sec.url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            ${sec.caption ? `<div class="dd-video-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'video_embedded') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label video">🎬 Video</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-video">
+            <video controls playsinline preload="metadata" style="width:100%;border-radius:12px;">
+              <source src="${sec.data_url || ''}" type="video/webm">
+              <source src="${sec.data_url || ''}" type="video/mp4">
+              Your browser does not support embedded video.
+            </video>
+            ${sec.caption ? `<div class="dd-video-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'tip') {
+      return `
+        <div class="dd-section">
+          <div class="dd-tip">
+            <div class="dd-tip-title">💡 ${this.escapeHtml(sec.title || 'Remember')}</div>
+            <div class="dd-tip-text">${this.renderDDText(sec.content)}</div>
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'text') {
+      return `
+        <div class="dd-section">
+          ${sec.label ? `<span class="dd-section-label tip">${this.escapeHtml(sec.label)}</span>` : ''}
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:10px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-rich-text">${this.renderDDText(sec.content)}</div>
+        </div>
+      `;
+    }
+    if (sec.type === 'funfact') {
+      return `
+        <div class="dd-section">
+          <div class="dd-funfact">
+            <span class="dd-funfact-icon">${sec.icon || '🤯'}</span>
+            <div class="dd-funfact-content">
+              <div class="dd-funfact-label">Did You Know?</div>
+              <div class="dd-funfact-text">${this.renderDDText(sec.content)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'interactive') {
+      const safeId = 'dd-int-' + Math.random().toString(36).substr(2, 8);
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label visual">🎮 Interactive</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-interactive" id="${safeId}">${sec.html || ''}</div>
+          ${sec.js ? `<div class="dd-deferred-js" style="display:none;" data-target="${safeId}">${this.escapeHtml(sec.js)}</div>` : ''}
+        </div>
+      `;
+    }
+    return '';
+  },
+
+  renderDDText(text) {
+    if (!text) return '';
+    // Simple markdown-like rendering: **bold**, *italic*, `code`, \n for line breaks
+    let html = this.escapeHtml(text);
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    html = html.replace(/`(.+?)`/g, '<code style="background:var(--paper-dark);padding:2px 6px;border-radius:4px;font-size:0.9em;">$1</code>');
+    return html;
+  },
+
+  renderStage1() {
+    const s = this.data.stage_1_learn;
+    if (this.currentBranch) {
+      const branch = s.branches.find(b => b.id === this.currentBranch);
+      if (branch) {
+        if (branch.type === 'story_panels') return this.renderStoryPanelView(branch);
+        if (branch.type === 'vocabulary_cards') return this.renderVocabCardsView(branch);
+        if (branch.type === 'concept_teaching') return this.renderConceptTeachingView(branch);
+      }
+    }
+    const s1Stars = this.computeStage1Stars();
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s1Stars.earned} / ${s1Stars.total}</strong></p>
+      </div>
+      <div class="branches-grid">${s.branches.map(b => {
+        const complete = this.isBranchComplete(b);
+        let progress = '';
+        if (b.type === 'story_panels') {
+          const total = b.panels.length;
+          const done = b.panels.filter(p => !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined)).length;
+          progress = `${done} / ${total} panels`;
+        } else if (b.type === 'vocabulary_cards') {
+          const total = b.cards.length;
+          const done = b.cards.filter(c => this.state.spotItAnswers[c.id] !== undefined).length;
+          progress = `${done} / ${total} words`;
+        } else if (b.type === 'concept_teaching') {
+          const total = b.cards.length;
+          const done = b.cards.filter(c => !c.check || (this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined)).length;
+          progress = `${done} / ${total} concepts`;
+        }
+        let starDisplay = '';
+        if (b.type === 'concept_teaching' && b.cards) {
+          const totalStars = b.cards.filter(c => c.check).length;
+          const earnedStars = b.cards.filter(c => {
+            if (!c.check) return false;
+            const a = this.state.panelChecks[c.id];
+            return a && a.selected === c.check.correct;
+          }).length;
+          starDisplay = `${earnedStars} / ${totalStars} ⭐`;
+        } else {
+          starDisplay = `${b.marks} marks`;
+        }
+        return `<div class="branch-card ${complete ? 'complete' : ''}" data-enter-branch="${this.escapeAttr(b.id)}">
+          <div class="branch-icon">${b.icon || '📖'}</div>
+          <div class="branch-title">${this.escapeHtml(b.title)}</div>
+          <div class="branch-meta">${starDisplay}</div>
+          <div class="branch-progress">${progress}</div>
+        </div>`;
+      }).join('')}</div>
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderStoryPanelView(branch) {
+    const idx = this.currentPanelIdx;
+    const panel = branch.panels[idx];
+    const total = branch.panels.length;
+    const check = this.state.panelChecks[panel.id] || {};
+    const isAnswered = check.selected !== undefined;
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">${this.escapeHtml(branch.story_title || '')}${branch.story_author ? ' · by ' + this.escapeHtml(branch.story_author) : ''}</p>
+        </div>
+      </div>
+      <div class="panel-dots">
+        ${branch.panels.map((p, i) => {
+          const answered = !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined);
+          const isCurrent = i === idx;
+          let cls = 'panel-dot';
+          if (isCurrent) cls += ' current';
+          if (answered) cls += ' answered';
+          return `<button class="${cls}" data-jump-to-panel="${i}" title="Panel ${i+1}: ${this.escapeAttr(p.panel_title)}">${i+1}${answered ? ' ✓' : ''}</button>`;
+        }).join('')}
+      </div>
+      <div class="panel-container">
+        <div class="panel-meta">
+          <span class="panel-counter">Panel ${idx + 1} of ${total}</span>
+          <span style="font-size:11px;color:var(--ink-soft);font-weight:700;">${this.countAnsweredPanels(branch)} of ${total} checks answered</span>
+        </div>
+        <h3 class="panel-title">${this.escapeHtml(panel.panel_title)}</h3>
+        <div class="narration-text">${this.renderNarrationWithHighlights(panel)}</div>
+        ${panel.comprehension_check ? this.renderComprehensionCheck(panel) : ''}
+      </div>
+      <div class="panel-nav">
+        ${idx > 0 ? `<button class="btn btn-secondary" data-panel-nav="prev">← Previous Panel</button>` : `<button class="btn btn-secondary" disabled>← Previous Panel</button>`}
+        ${idx < total - 1
+          ? `<button class="btn btn-primary" data-panel-nav="next" ${panel.comprehension_check && !isAnswered ? 'disabled' : ''}>Next Panel →</button>`
+          : `<button class="btn btn-success" data-panel-nav="finish-branch" ${!this.isBranchComplete(branch) ? 'disabled' : ''}>${this.isBranchComplete(branch) ? '✓ Finish ' + this.escapeHtml(branch.title) : 'Answer all panels to finish'}</button>`}
+      </div>
+    `;
+  },
+
+  renderNarrationWithHighlights(panel) {
+    let text = panel.narration_text;
+    if (panel.highlighted_words && panel.highlighted_words.length > 0) {
+      const sorted = [...panel.highlighted_words].sort((a, b) => b.word.length - a.word.length);
+      sorted.forEach((hw) => {
+        const escaped = hw.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b(${escaped})\\b`, 'gi');
+        const dataIdx = panel.highlighted_words.indexOf(hw);
+        text = text.replace(regex, (match) => `<span class="highlight-word" data-word-idx="${dataIdx}" data-panel-id="${this.escapeAttr(panel.id)}">${match}</span>`);
+      });
+    }
+    return text;
+  },
+
+  renderComprehensionCheck(panel) {
+    const check = panel.comprehension_check;
+    const ans = this.state.panelChecks[panel.id] || {};
+    const isAnswered = ans.selected !== undefined;
+    return `
+      <div class="comprehension-check">
+        <span class="check-label">Quick Check${check.marks ? ' · ' + check.marks + ' marks' : ''}</span>
+        <p class="check-question">${this.escapeHtml(check.question)}</p>
+        <ul class="options-list">${check.options.map((opt, i) => {
+          let cls = 'option-btn';
+          if (isAnswered) {
+            if (i === check.correct) cls += ' correct';
+            else if (i === ans.selected) cls += ' incorrect';
+          }
+          return `<li><button class="${cls}" data-panel-check="${this.escapeAttr(panel.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+          </button></li>`;
+        }).join('')}</ul>
+        ${isAnswered && check.explanation ? `
+          <div class="feedback-box explanation">
+            <span class="feedback-label">${ans.selected === check.correct ? '✓ Correct!' : "Let's understand"}</span>
+            ${this.escapeHtml(check.explanation)}
+          </div>` : ''}
+      </div>
+    `;
+  },
+
+  renderVocabCardsView(branch) {
+    // Group cards by source for cleaner browsing
+    const groups = {};
+    branch.cards.forEach(c => {
+      const src = c.source || 'Words';
+      if (!groups[src]) groups[src] = [];
+      groups[src].push(c);
+    });
+
+    // If we don't have a sub-view selected, default to first group
+    const sources = Object.keys(groups);
+    if (!this.currentVocabGroup || !groups[this.currentVocabGroup]) {
+      this.currentVocabGroup = sources[0];
+    }
+    const activeCards = groups[this.currentVocabGroup] || [];
+
+    // Group completion stats
+    const groupTabs = sources.map(src => {
+      const cards = groups[src];
+      const done = cards.filter(c => this.state.spotItAnswers[c.id] !== undefined).length;
+      const isActive = src === this.currentVocabGroup;
+      return `<button class="vocab-group-tab ${isActive ? 'active' : ''}" data-vocab-group="${this.escapeAttr(src)}">
+        ${this.escapeHtml(src)} <span style="opacity:0.7;font-size:11px;">(${done}/${cards.length})</span>
+      </button>`;
+    }).join('');
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">Tap each card to see meaning, then test yourself with "Spot it!"</p>
+        </div>
+      </div>
+      <div class="vocab-group-tabs">${groupTabs}</div>
+      <div class="cards-grid">${activeCards.map(c => this.renderVocabCard(c)).join('')}</div>
+      <div class="stage-nav">
+        <div></div>
+        <button class="btn ${this.isBranchComplete(branch) ? 'btn-success' : 'btn-secondary'}" data-back-to-branches="1">${this.isBranchComplete(branch) ? '✓ Branch Complete · Back' : 'Save & Back'}</button>
+      </div>
+    `;
+  },
+
+  renderVocabCard(card) {
+    const flipped = this.state.cardFlips[card.id];
+    const spotAnswered = this.state.spotItAnswers[card.id] !== undefined;
+    return `
+      <div class="vocab-card ${flipped ? 'flipped' : ''} ${spotAnswered ? 'complete' : ''}" data-flip-card="${this.escapeAttr(card.id)}">
+        <div class="vocab-card-inner">
+          <div class="vocab-face front">
+            <div class="vocab-source-tag">${this.escapeHtml(card.source || 'Word')}</div>
+            <div class="vocab-word">${this.escapeHtml(card.word)}</div>
+            <div class="vocab-flip-hint">Tap to reveal</div>
+          </div>
+          <div class="vocab-face back">
+            <div class="vocab-meaning">${this.escapeHtml(card.meaning)}</div>
+            ${card.example_from_story ? `<div><span class="vocab-example-label">From the story</span><p class="vocab-example">${this.escapeHtml(card.example_from_story)}</p></div>` : ''}
+            ${card.indian_context_example ? `<div style="margin-top:6px;"><span class="vocab-example-label">Example</span><p class="vocab-example">${this.escapeHtml(card.indian_context_example)}</p></div>` : ''}
+            ${card.spot_it ? `<div class="spot-it-cta" data-open-spot-it="${this.escapeAttr(card.id)}">${spotAnswered ? '✓ Spot it answered' : '🎯 Spot it! Tap to test yourself'}</div>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  renderSpotItModal() {
+    const cardId = this.state.spotItModal;
+    let card = null;
+    for (const branch of this.data.stage_1_learn.branches) {
+      if (branch.cards) { card = branch.cards.find(c => c.id === cardId); if (card) break; }
+    }
+    if (!card || !card.spot_it) return '';
+    const ans = this.state.spotItAnswers[card.id];
+    const spot = card.spot_it;
+    const isAnswered = ans !== undefined;
+    return `
+      <div class="modal-overlay" data-close-modal="1">
+        <div class="modal-content" data-stop-propagation="1">
+          <div class="modal-title">Spot it: <span class="modal-word">${this.escapeHtml(card.word)}</span></div>
+          <p style="margin:12px 0 16px 0;color:var(--ink-soft);font-size:14px;">${this.escapeHtml(spot.question)}</p>
+          <ul class="options-list">${spot.options.map((opt, i) => {
+            let cls = 'option-btn';
+            if (isAnswered) {
+              if (i === spot.correct) cls += ' correct';
+              else if (i === ans.selected) cls += ' incorrect';
+            }
+            return `<li><button class="${cls}" data-spot-answer="${this.escapeAttr(card.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+              <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+            </button></li>`;
+          }).join('')}</ul>
+          ${isAnswered ? `
+            <div class="feedback-box explanation" style="margin-bottom:12px;">
+              <span class="feedback-label">${ans.selected === spot.correct ? '✓ Correct!' : 'Not quite — see the right answer above'}</span>
+            </div>
+            <button class="btn btn-primary" data-close-modal="1" style="width:100%;">Continue</button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  },
+
+  renderConceptTeachingView(branch) {
+    const cards = branch.cards || [];
+    const currentCard = cards[this.currentPanelIdx] || cards[0];
+    if (!currentCard) return '';
+    const idx = this.currentPanelIdx;
+    const total = cards.length;
+    const isAnswered = currentCard.check && this.state.panelChecks[currentCard.id] && this.state.panelChecks[currentCard.id].selected !== undefined;
+    const ans = this.state.panelChecks[currentCard.id] || {};
+    const isCorrect = isAnswered && ans.selected === currentCard.check.correct;
+    const isLast = idx === total - 1;
+    const allDone = this.isBranchComplete(branch);
+    // Count stars earned (1 per correct quick check)
+    const starsEarned = cards.filter(c => {
+      if (!c.check) return false;
+      const a = this.state.panelChecks[c.id];
+      return a && a.selected === c.check.correct;
+    }).length;
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          ${branch.concept_title ? `<p class="stage-description" style="font-size:13px;">${this.escapeHtml(branch.concept_title)}</p>` : ''}
+        </div>
+        <span class="marks-tag">⭐ ${starsEarned} / ${total}</span>
+      </div>
+      ${branch.intro ? `<p style="color:var(--ink-soft);font-size:14px;margin-bottom:16px;">${this.escapeHtml(branch.intro)}</p>` : ''}
+      <div class="panel-dots">
+        ${cards.map((c, i) => {
+          const done = c.check && this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined;
+          const correct = done && this.state.panelChecks[c.id].selected === c.check.correct;
+          const cls = i === idx ? (done ? 'current answered' : 'current') : (done ? 'answered' : '');
+          return `<button class="panel-dot ${cls}" data-jump-to-panel="${i}">${i + 1}${correct ? ' ⭐' : (done ? ' ✗' : '')}</button>`;
+        }).join('')}
+      </div>
+      <div class="concept-card ${isAnswered ? 'answered' : ''}">
+        <div class="panel-meta">
+          <span class="panel-counter">Concept ${idx + 1} of ${total}</span>
+        </div>
+        <div class="concept-name">${this.escapeHtml(currentCard.concept_name)}</div>
+        <div class="concept-definition">${this.escapeHtml(currentCard.definition)}</div>
+        ${currentCard.examples && currentCard.examples.length > 0 ? `
+          <div class="concept-examples">
+            <span class="concept-examples-label">Examples</span>
+            ${currentCard.examples.map(ex => `<div class="concept-example-item">• ${this.escapeHtml(ex)}</div>`).join('')}
+          </div>
+        ` : ''}
+        ${currentCard.check ? `
+          <div class="concept-check">
+            <span class="check-label">Quick Check</span>
+            <p class="check-question">${this.escapeHtml(currentCard.check.question)}</p>
+            <ul class="options-list">${currentCard.check.options.map((opt, i) => {
+              let cls = '';
+              if (isAnswered) {
+                if (i === currentCard.check.correct) cls = 'correct';
+                else if (i === ans.selected && i !== currentCard.check.correct) cls = 'incorrect';
+              }
+              return `<li><button class="option-btn ${cls}" data-panel-check="${this.escapeAttr(currentCard.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+                <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+              </button></li>`;
+            }).join('')}</ul>
+            ${isAnswered ? `
+              <div class="feedback-box ${isCorrect ? 'explanation' : 'hint'}">
+                <span class="feedback-label">${isCorrect ? '✓ Correct! ⭐ Star earned!' : '✗ That\'s not right. Here\'s why:'}</span>
+                ${this.escapeHtml(currentCard.check.explanation || '')}
+                ${!isCorrect ? `<div style="margin-top:12px;padding:14px;background:rgba(74,124,89,0.08);border-radius:10px;border-left:4px solid var(--leaf);">
+                  <strong style="color:var(--leaf);">✅ The correct answer is ${String.fromCharCode(65 + currentCard.check.correct)}: ${this.escapeHtml(currentCard.check.options[currentCard.check.correct])}</strong>
+                  <p style="margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink);">You chose ${String.fromCharCode(65 + ans.selected)}: ${this.escapeHtml(currentCard.check.options[ans.selected])}. Go through the explanation above step by step. If it's still not clear, tap <strong>← Previous</strong> to re-read the concept card, then come back.</p>
+                </div>` : ''}
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+      </div>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" data-panel-nav="prev" ${idx === 0 ? 'disabled' : ''}>← Previous</button>
+        ${isLast
+          ? `<button class="btn ${allDone ? 'btn-success' : 'btn-primary'}" data-panel-nav="finish-branch">${allDone ? '✓ Done' : 'Back to Topics'}</button>`
+          : `<button class="btn btn-primary" data-panel-nav="next">Next →</button>`
+        }
+      </div>
+    `;
+  },
+
+  renderStage2() {
+    if (!this.isStageUnlocked(2)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Stage 1 First</div>
+          <p class="placeholder-detail">Finish all three branches in Learn before moving to Practice.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    const s = this.data.stage_2_practice;
+    if (this.currentSection) {
+      const section = s.sections.find(sec => sec.id === this.currentSection);
+      if (section) return this.renderPracticeSectionView(section);
+    }
+    const s2Stars = this.computeStage2Stars();
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s2Stars.earned} / ${s2Stars.total}</strong></p>
+      </div>
+      <div class="branches-grid">${s.sections.map(sec => {
+        const complete = this.isPracticeSectionComplete(sec);
+        const total = sec.questions.length;
+        const done = sec.questions.filter(q => this.state.practiceAnswers[q.id] && this.state.practiceAnswers[q.id].selected !== undefined).length;
+        const correct = sec.questions.filter(q => {
+          const a = this.state.practiceAnswers[q.id];
+          return a && a.selected === q.correct;
+        }).length;
+        return `<div class="branch-card ${complete ? 'complete' : ''}" data-enter-section="${this.escapeAttr(sec.id)}">
+          <div class="branch-icon">${sec.icon || '📑'}</div>
+          <div class="branch-title">${this.escapeHtml(sec.title)}</div>
+          <div class="branch-meta">${correct} / ${total} ⭐</div>
+          <div class="branch-progress">${done} / ${total} answered</div>
+        </div>`;
+      }).join('')}</div>
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderPracticeSectionView(section) {
+    const correct = section.questions.filter(q => {
+      const a = this.state.practiceAnswers[q.id];
+      return a && a.selected === q.correct;
+    }).length;
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-sections="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(section.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">${section.questions.length} questions · ⭐ ${correct} / ${section.questions.length}</p>
+        </div>
+      </div>
+      ${section.questions.map((q, i) => this.renderPracticeQuestion(q, i + 1)).join('')}
+      <div class="stage-nav">
+        <div></div>
+        <button class="btn ${this.isPracticeSectionComplete(section) ? 'btn-success' : 'btn-secondary'}" data-back-to-sections="1">${this.isPracticeSectionComplete(section) ? '✓ Section Complete · Back' : 'Save & Back'}</button>
+      </div>
+    `;
+  },
+
+  renderPracticeQuestion(q, num) {
+    const ans = this.state.practiceAnswers[q.id] || {};
+    const isAnswered = ans.selected !== undefined;
+    return `
+      <div class="question-card">
+        <div>
+          <span class="question-number">${num}</span>
+          ${q.category ? `<span style="display:inline-block;margin-left:10px;padding:4px 12px;background:var(--paper-dark);border-radius:12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);vertical-align:middle;">${this.escapeHtml(q.category)}</span>` : ''}
+        </div>
+        ${q.passage_excerpt ? `<div class="passage-excerpt">${this.escapeHtml(q.passage_excerpt)}</div>` : ''}
+        <p class="question-text">${this.escapeHtml(q.question)}</p>
+        <ul class="options-list">${q.options.map((opt, i) => {
+          let cls = 'option-btn';
+          if (isAnswered) {
+            if (i === q.correct) cls += ' correct';
+            else if (i === ans.selected) cls += ' incorrect';
+          }
+          return `<li><button class="${cls}" data-practice-answer="${this.escapeAttr(q.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+          </button></li>`;
+        }).join('')}</ul>
+        ${!isAnswered && q.hint ? `<div class="question-actions"><button class="btn btn-secondary" data-show-hint="${this.escapeAttr(q.id)}">💡 Show hint</button></div>` : ''}
+        ${ans.showHint && q.hint ? `<div class="feedback-box hint"><span class="feedback-label">Hint</span>${this.escapeHtml(q.hint)}</div>` : ''}
+        ${isAnswered && q.explanation ? `<div class="feedback-box ${ans.selected === q.correct ? 'explanation' : 'hint'}">
+          <span class="feedback-label">${ans.selected === q.correct ? '✓ Correct! ⭐' : '✗ That\'s not right. Here\'s why:'}</span>
+          ${this.escapeHtml(q.explanation)}
+          ${ans.selected !== q.correct ? `<div style="margin-top:12px;padding:14px;background:rgba(74,124,89,0.08);border-radius:10px;border-left:4px solid var(--leaf);">
+            <strong style="color:var(--leaf);">✅ The correct answer is ${String.fromCharCode(65 + q.correct)}: ${this.escapeHtml(q.options[q.correct])}</strong>
+            <p style="margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink);">You chose ${String.fromCharCode(65 + ans.selected)}: ${this.escapeHtml(q.options[ans.selected])}. Read the explanation above carefully to understand the difference.</p>
+          </div>` : ''}
+        </div>` : ''}
+      </div>
+    `;
+  },
+
+  // ============================================================
+  // STAGE 3: THINK DEEPER
+  // ============================================================
+  renderStage3() {
+    if (!this.isStageUnlocked(3)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Practice First</div>
+          <p class="placeholder-detail">Finish all of Practice before unlocking Think Deeper.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    const s = this.data.stage_3_think;
+    const s3Stars = this.computeStage3Stars();
+
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s3Stars.earned} / ${s3Stars.total}</strong></p>
+      </div>
+      ${s.problems.map((p, i) => this.renderThinkProblem(p, i + 1)).join('')}
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderThinkProblem(p, num) {
+    const sub = this.state.thinkSubmissions[p.id] || {};
+    const isSubmitted = !!sub.submitted;
+    const userAnswer = sub.value || '';
+    const hasCriteria = p.self_check_criteria && p.self_check_criteria.length > 0;
+    const starsEarned = isSubmitted && hasCriteria ? (sub.selfChecks || []).length : 0;
+    const starsMax = hasCriteria ? p.self_check_criteria.length : 0;
+
+    return `
+      <div class="think-card ${isSubmitted ? 'submitted' : ''}" data-think-id="${this.escapeAttr(p.id)}">
+        <div>
+          <span class="question-number">${num}</span>
+          ${p.category ? `<span class="question-category">${this.escapeHtml(p.category)}</span>` : ''}
+          ${hasCriteria ? `<span class="marks-tag">⭐ ${starsEarned} / ${starsMax}</span>` : ''}
+          ${isSubmitted ? `<span class="submitted-tag">✓ Submitted</span>` : ''}
+        </div>
+        ${p.scenario ? `<div class="scenario-box">${this.escapeHtml(p.scenario)}</div>` : ''}
+        <p class="question-text">${this.escapeHtml(p.question)}</p>
+        <textarea
+          class="text-input"
+          rows="5"
+          placeholder="Write your answer here..."
+          data-think-input="${this.escapeAttr(p.id)}"
+          ${isSubmitted ? 'readonly' : ''}>${this.escapeHtml(userAnswer)}</textarea>
+        <div class="question-actions">
+          ${!isSubmitted
+            ? `<button class="btn btn-success" data-think-submit="${this.escapeAttr(p.id)}">✓ Submit Answer</button>`
+            : `<button class="btn btn-secondary" data-think-edit="${this.escapeAttr(p.id)}">✎ Edit Answer</button>`}
+        </div>
+        ${isSubmitted ? `
+          <div class="model-answer-box">
+            <span class="feedback-label">Model answer</span>
+            <p class="answer-text">${this.escapeHtml(p.model_answer)}</p>
+            ${p.explanation ? `
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--paper-dark);">
+                <span class="feedback-label" style="color: var(--leaf);">Why this works</span>
+                <p class="answer-text">${this.escapeHtml(p.explanation)}</p>
+              </div>
+            ` : ''}
+          </div>
+          ${hasCriteria ? `
+            <div class="self-check-box">
+              <div class="self-check-title">⭐ Self-Check — Rate Your Answer</div>
+              ${p.self_check_criteria.map((c, ci) => {
+                const checks = sub.selfChecks || [];
+                const isChecked = checks.includes(ci);
+                return `<div class="self-check-item" data-self-check="${this.escapeAttr(p.id)}" data-check-idx="${ci}">
+                  <span class="self-check-tick ${isChecked ? 'checked' : ''}">${isChecked ? '✓' : ''}</span>
+                  <span class="self-check-label">${this.escapeHtml(c)}</span>
+                </div>`;
+              }).join('')}
+              <div class="self-check-stars">
+                ⭐ ${starsEarned} / ${starsMax} checks passed
+              </div>
+            </div>
+          ` : ''}
+        ` : ''}
+      </div>
+    `;
+  },
+
+  countWords(s) {
+    if (!s || !s.trim()) return 0;
+    return s.trim().split(/\s+/).length;
+  },
+
+  wordCounterClass(count, limit) {
+    if (!limit) return '';
+    const m = limit.match(/(\d+)\s*[-–]\s*(\d+)/);
+    if (!m) return '';
+    const min = parseInt(m[1], 10), max = parseInt(m[2], 10);
+    if (count >= min && count <= max) return 'in-range';
+    if (count > max) return 'over';
+    return '';
+  },
+
+  // ============================================================
+  // STAGE 4: TEST
+  // ============================================================
+  renderStage4() {
+    if (!this.isStageUnlocked(4)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Think Deeper First</div>
+          <p class="placeholder-detail">Finish all five Think Deeper questions before taking the test.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    if (this.state.testSubmitted) return this.renderResults();
+    if (this.state.testStartTime === null) return this.renderTestIntro();
+    return this.renderTestActive();
+  },
+
+  renderTestIntro() {
+    const s = this.data.stage_4_test;
+    const minutes = Math.floor((s.duration_seconds || 2400) / 60);
+    const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+
+    return `
+      <div class="test-intro">
+        <div class="test-intro-icon">🏆</div>
+        <h2>${this.escapeHtml(s.title)}</h2>
+        <p class="test-intro-subtitle">${this.escapeHtml(s.subtitle || '')}</p>
+        <div class="test-stats">
+          <div class="test-stat">
+            <div class="test-stat-num">${totalQuestions}</div>
+            <div class="test-stat-label">Questions</div>
+          </div>
+          <div class="test-stat">
+            <div class="test-stat-num">${s.total_marks}</div>
+            <div class="test-stat-label">Marks</div>
+          </div>
+          <div class="test-stat">
+            <div class="test-stat-num">${minutes}</div>
+            <div class="test-stat-label">Minutes</div>
+          </div>
+        </div>
+        <div class="test-sections-preview">
+          ${s.sections.map(sec => `
+            <div class="test-section-preview">
+              <strong>${this.escapeHtml(sec.title)}</strong> · ${sec.marks} marks · ${sec.questions.length} questions
+            </div>
+          `).join('')}
+        </div>
+        <button class="test-start-btn" data-start-test="1">Start Test →</button>
+      </div>
+    `;
+  },
+
+  renderTestActive() {
+    const s = this.data.stage_4_test;
+    const elapsed = Math.floor((Date.now() - this.state.testStartTime) / 1000);
+    const remaining = Math.max(0, (s.duration_seconds || 2400) - elapsed);
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    let timerClass = '';
+    if (remaining < 60) timerClass = 'urgent';
+    else if (remaining < 300) timerClass = 'warning';
+
+    if (remaining === 0 && !this.state.testTimeUp) {
+      this.state.testTimeUp = true;
+      setTimeout(() => this.submitTest(), 100);
+    }
+
+    const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+    const answeredCount = Object.keys(this.state.testAnswers).filter(k => {
+      const v = this.state.testAnswers[k];
+      return v && v.value !== undefined && String(v.value).trim() !== '';
+    }).length;
+
+    return `
+      <div class="timer-bar">
+        <div class="timer-display ${timerClass}" id="timer-display">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</div>
+        <div class="timer-progress" id="timer-progress">${answeredCount} / ${totalQuestions} answered</div>
+      </div>
+      ${s.sections.map((sec, sidx) => this.renderTestSection(sec, sidx + 1)).join('')}
+      <div class="test-submit-zone">
+        <p style="margin-bottom: 12px; color: var(--ink-soft); font-size: 14px;">When you're done, submit your test.</p>
+        <button class="btn btn-primary test-submit-btn" data-submit-test="1">Submit Test ✓</button>
+      </div>
+    `;
+  },
+
+  renderTestSection(section, sidx) {
+    return `
+      <div class="test-section">
+        <div class="test-section-header">
+          <h3>${this.escapeHtml(section.title)}</h3>
+          <span class="test-section-marks">${section.marks} marks</span>
+        </div>
+        ${section.instructions ? `<p class="test-section-instructions">${this.escapeHtml(section.instructions)}</p>` : ''}
+        ${section.passage ? this.renderTestPassage(section.passage) : ''}
+        ${section.questions.map((q, i) => this.renderTestQuestion(q, sidx, i + 1)).join('')}
+      </div>
+    `;
+  },
+
+  renderTestPassage(passage) {
+    return `
+      <div class="test-passage">
+        <div class="test-passage-title">${this.escapeHtml(passage.title)}</div>
+        ${passage.author ? `<div class="test-passage-author">${this.escapeHtml(passage.author)}</div>` : ''}
+        <div class="test-passage-text">${this.escapeHtml(passage.text)}</div>
+        ${passage.is_ai_generated ? `<div class="test-passage-note">📝 ${this.escapeHtml(passage.review_note || 'AI-generated passage — parent please review.')}</div>` : ''}
+      </div>
+    `;
+  },
+
+  renderTestQuestion(q, sidx, qnum) {
+    const ans = this.state.testAnswers[q.id] || {};
+    const value = ans.value !== undefined ? String(ans.value) : '';
+
+    let inputHtml = '';
+    if (q.type === 'mcq') {
+      inputHtml = `
+        <ul class="options-list">
+          ${q.options.map((opt, i) => {
+            const letter = String.fromCharCode(65 + i);
+            const selected = ans.value === letter;
+            return `<li><button class="option-btn ${selected ? 'test-selected' : ''}" data-test-mcq="${this.escapeAttr(q.id)}" data-value="${this.escapeAttr(letter)}">
+              <span class="option-letter">${letter}</span><span>${this.escapeHtml(opt)}</span>
+            </button></li>`;
+          }).join('')}
+        </ul>
+      `;
+    } else if (q.type === 'fill_blank') {
+      inputHtml = `<input type="text" class="text-input" data-test-input="${this.escapeAttr(q.id)}" value="${this.escapeAttr(value)}" placeholder="Type your answer...">`;
+    } else if (q.type === 'short_answer' || q.type === 'subjective') {
+      const wlimit = q.word_limit || '';
+      const wc = this.countWords(value);
+      const wccls = this.wordCounterClass(wc, wlimit);
+      inputHtml = `
+        ${wlimit ? `<div class="word-limit-tag">📝 Word limit: ${this.escapeHtml(wlimit)}</div>` : ''}
+        <textarea class="text-input" rows="${q.type === 'subjective' ? 6 : 4}" data-test-input="${this.escapeAttr(q.id)}" placeholder="Write your answer here...">${this.escapeHtml(value)}</textarea>
+        <div class="word-counter ${wccls}" data-counter-for="${this.escapeAttr(q.id)}">
+          ${wc} word${wc === 1 ? '' : 's'}${wlimit ? ` · target: ${this.escapeHtml(wlimit)}` : ''}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="test-question">
+        <div class="test-q-header">
+          <span class="test-q-num">Q${qnum}</span>
+          <span class="test-q-type">${q.type.replace('_', ' ').toUpperCase()}</span>
+          <span class="marks-tag">${q.marks} mark${q.marks > 1 ? 's' : ''}</span>
+        </div>
+        <p class="question-text">${this.escapeHtml(q.question)}</p>
+        ${inputHtml}
+      </div>
+    `;
+  },
+
+  startTest() {
+    this.state.testStartTime = Date.now();
+    this.state.testAnswers = {};
+    this.state.testTimeUp = false;
+    this.state.testSubmitted = false;
+    this.startTimer();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  captureTestInputs() {
+    document.querySelectorAll('[data-test-input]').forEach(el => {
+      const qid = el.dataset.testInput;
+      this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value: el.value };
+    });
+  },
+
+  submitTest() {
+    this.captureTestInputs();
+    this.stopTimer();
+    this.state.testSubmitted = true;
+    this.saveProgress();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  retakeTest() {
+    if (!confirm('Retake the test? Your previous test answers will be cleared. (Other progress in Stages 1-3 stays.)')) return;
+    this.state.testStartTime = null;
+    this.state.testAnswers = {};
+    this.state.testTimeUp = false;
+    this.state.testSubmitted = false;
+    this.saveProgress();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  // ============================================================
+  // TIMER
+  // ============================================================
+  timerInterval: null,
+  startTimer() {
+    this.stopTimer();
+    this.timerInterval = setInterval(() => {
+      if (this.state.testSubmitted || this.state.testStartTime === null) {
+        this.stopTimer();
+        return;
+      }
+      const s = this.data.stage_4_test;
+      const elapsed = Math.floor((Date.now() - this.state.testStartTime) / 1000);
+      const remaining = Math.max(0, (s.duration_seconds || 2400) - elapsed);
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      const display = document.getElementById('timer-display');
+      if (display) {
+        display.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        display.className = 'timer-display ' + (remaining < 60 ? 'urgent' : (remaining < 300 ? 'warning' : ''));
+      }
+      const progress = document.getElementById('timer-progress');
+      if (progress) {
+        const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+        // Capture current input values to keep "answered count" live without re-rendering
+        document.querySelectorAll('[data-test-input]').forEach(el => {
+          const qid = el.dataset.testInput;
+          this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value: el.value };
+        });
+        const answered = Object.keys(this.state.testAnswers).filter(k => {
+          const v = this.state.testAnswers[k];
+          return v && v.value !== undefined && String(v.value).trim() !== '';
+        }).length;
+        progress.textContent = `${answered} / ${totalQuestions} answered`;
+      }
+      if (remaining === 0 && !this.state.testTimeUp) {
+        this.state.testTimeUp = true;
+        this.stopTimer();
+        this.submitTest();
+      }
+    }, 1000);
+  },
+
+  stopTimer() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  },
+
+  // ============================================================
+  // RESULTS / SCORING
+  // ============================================================
+  computeStageScores() {
+    // Stage 1: 25 marks total. Use branch.marks weights × completion fraction within each branch.
+    const s1 = this.data.stage_1_learn;
+    let s1Score = 0;
+    s1.branches.forEach(b => {
+      if (b.type === 'story_panels') {
+        const totalChecks = b.panels.filter(p => p.comprehension_check).length;
+        if (totalChecks === 0) {
+          if (this.isBranchComplete(b)) s1Score += b.marks;
+        } else {
+          const correctChecks = b.panels.filter(p => {
+            if (!p.comprehension_check) return false;
+            const a = this.state.panelChecks[p.id];
+            return a && a.selected === p.comprehension_check.correct;
+          }).length;
+          s1Score += Math.round((correctChecks / totalChecks) * b.marks);
+        }
+      } else if (b.type === 'vocabulary_cards') {
+        const total = b.cards.length;
+        const correctSpots = b.cards.filter(c => {
+          const a = this.state.spotItAnswers[c.id];
+          return a && a.correct;
+        }).length;
+        s1Score += total > 0 ? Math.round((correctSpots / total) * b.marks) : 0;
+      } else if (b.type === 'concept_teaching') {
+        const totalChecks = b.cards.filter(c => c.check).length;
+        if (totalChecks === 0) {
+          if (this.isBranchComplete(b)) s1Score += b.marks;
+        } else {
+          const correctChecks = b.cards.filter(c => {
+            if (!c.check) return false;
+            const a = this.state.panelChecks[c.id];
+            return a && a.selected === c.check.correct;
+          }).length;
+          s1Score += Math.round((correctChecks / totalChecks) * b.marks);
+        }
+      }
+    });
+
+    // Stage 2: 25 marks. Sum of (correct/total) × section.marks across sections.
+    const s2 = this.data.stage_2_practice;
+    let s2Score = 0;
+    s2.sections.forEach(sec => {
+      const total = sec.questions.length;
+      if (total === 0) return;
+      const correct = sec.questions.filter(q => {
+        const a = this.state.practiceAnswers[q.id];
+        return a && a.selected === q.correct;
+      }).length;
+      s2Score += Math.round((correct / total) * sec.marks);
+    });
+
+    // Stage 3: 25 marks. Based on self_check_criteria ticks.
+    const s3 = this.data.stage_3_think;
+    let s3Score = 0;
+    const s3Problems = s3.problems;
+    const hasSelfChecks = s3Problems.some(p => p.self_check_criteria && p.self_check_criteria.length > 0);
+    if (hasSelfChecks) {
+      let totalStars = 0;
+      let maxStars = 0;
+      s3Problems.forEach(p => {
+        const sub = this.state.thinkSubmissions[p.id] || {};
+        const criteria = p.self_check_criteria || [];
+        maxStars += criteria.length;
+        if (sub.submitted) {
+          totalStars += (sub.selfChecks || []).length;
+        }
+      });
+      s3Score = maxStars > 0 ? Math.round((totalStars / maxStars) * 25) : 0;
+    } else {
+      const submittedCount = s3Problems.filter(p => this.state.thinkSubmissions[p.id] && this.state.thinkSubmissions[p.id].submitted).length;
+      s3Score = Math.round((submittedCount / s3Problems.length) * 25);
+    }
+
+    // Stage 4: scale to 25.
+    const s4 = this.data.stage_4_test;
+    const breakdown = this.gradeTestQuestions();
+    const autoScore = breakdown.reduce((sum, b) => sum + b.marks_awarded, 0);
+    const manualPotential = breakdown.filter(b => b.needs_manual).reduce((sum, b) => sum + b.q.marks, 0);
+    // Optimistic for display
+    const optimisticTotal = autoScore + manualPotential;
+    const s4Max = s4.total_marks || 25;
+    const s4Score = Math.round((optimisticTotal / s4Max) * 25);
+
+    return {
+      stage1: { score: s1Score, max: 25 },
+      stage2: { score: s2Score, max: 25 },
+      stage3: { score: s3Score, max: 25 },
+      stage4: { score: s4Score, max: 25, manualMarks: manualPotential, breakdown, rawAutoScore: autoScore, rawTotal: s4Max },
+      grandTotal: s1Score + s2Score + s3Score + s4Score,
+    };
+  },
+
+  gradeTestQuestions() {
+    const s = this.data.stage_4_test;
+    const out = [];
+    s.sections.forEach(sec => {
+      sec.questions.forEach(q => {
+        const ans = this.state.testAnswers[q.id] || {};
+        const userAnswer = (ans.value !== undefined ? String(ans.value) : '').trim();
+
+        if (q.type === 'mcq') {
+          const correct = userAnswer.toLowerCase() === String(q.correct_answer || '').toLowerCase();
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: q.correct_answer || '',
+            is_correct: correct,
+            marks_awarded: correct ? q.marks : 0,
+            needs_manual: false,
+          });
+        } else if (q.type === 'fill_blank') {
+          const norm = (s) => s.toLowerCase().trim().replace(/[.,;:!?'"]/g, '').replace(/\s+/g, ' ');
+          const correct = norm(userAnswer) === norm(String(q.correct_answer || ''));
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: q.correct_answer || '',
+            is_correct: correct,
+            marks_awarded: correct ? q.marks : 0,
+            needs_manual: false,
+          });
+        } else {
+          // short_answer or subjective — needs manual grading
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: '(See model answer)',
+            is_correct: null,
+            marks_awarded: 0,
+            needs_manual: true,
+          });
+        }
+      });
+    });
+    return out;
+  },
+
+  renderResults() {
+    const scores = this.computeStageScores();
+    const s4 = this.data.stage_4_test;
+    const s4Max = s4.total_marks || 20;
+    const breakdown = scores.stage4.breakdown;
+    const autoScore = scores.stage4.rawAutoScore;
+    const manualMarks = scores.stage4.manualMarks;
+    // Manual marks state — parent can adjust
+    const manualState = this.state.manualMarksAwarded || {};
+    let manualAwarded = 0;
+    breakdown.filter(b => b.needs_manual).forEach(b => {
+      manualAwarded += (manualState[b.q.id] !== undefined ? manualState[b.q.id] : 0);
+    });
+    const testScore = autoScore + manualAwarded;
+
+    // Badge and message from score_tiers in JSON
+    const tiers = s4.score_tiers || [];
+    let tierMsg = 'Keep practising!';
+    let tierEmoji = '🌱';
+    for (const tier of tiers) {
+      if (testScore >= tier.min && testScore <= tier.max) { tierMsg = tier.message; break; }
+    }
+    if (testScore >= s4Max * 0.95) tierEmoji = '🏆';
+    else if (testScore >= s4Max * 0.8) tierEmoji = '⭐';
+    else if (testScore >= s4Max * 0.6) tierEmoji = '✨';
+    else tierEmoji = '🌱';
+
+    const quotes = this.data.motivational_quotes || ["Every champion was once a beginner."];
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    const confetti = testScore >= s4Max * 0.8 ? this.generateConfetti() : '';
+
+    // Stars for stages 1-3
+    const s1Stars = this.computeStage1Stars();
+    const s2Stars = this.computeStage2Stars();
+    const s3Stars = this.computeStage3Stars();
+
+    return `
+      <div class="results-screen">
+        <div class="results-hero">
+          ${confetti}
+          <div class="badge-circle ${testScore < s4Max * 0.6 ? 'no-badge' : ''}">
+            <span class="badge-emoji">${tierEmoji}</span>
+          </div>
+          <h2 class="badge-name">${this.escapeHtml(tierMsg)}</h2>
+          <div class="results-percentage">
+            <div class="percentage-num">${testScore}/${s4Max}</div>
+            <div class="percentage-label">Test Score</div>
+          </div>
+        </div>
+
+        <div class="motivational-quote">${this.escapeHtml(quote)}</div>
+
+        <div class="section-scores">
+          <h3>How You Did In Each Section</h3>
+          <div class="scores-table">
+            ${this.renderStarCell('📖', 'Learn', s1Stars.earned, s1Stars.total)}
+            ${this.renderStarCell('✏️', 'Practice', s2Stars.earned, s2Stars.total)}
+            ${this.renderStarCell('💭', 'Think', s3Stars.earned, s3Stars.total)}
+            ${this.renderMarksCell('🏆', 'Test', testScore, s4Max)}
+          </div>
+        </div>
+
+        <div class="reattempt-card">
+          <h4>Think you can do better? 🎯</h4>
+          <p>Take the test again — try to beat your score!</p>
+          <button class="reattempt-btn" data-retake-test="1">↻ Retake Test</button>
+        </div>
+
+        <div class="results-detail">
+          <h4>Test — Your Answers Reviewed</h4>
+          ${breakdown.map((b, i) => {
+            const qType = b.q.type || '';
+            const optionLetters = ['A','B','C','D','E','F'];
+            let userDisplay = b.user_answer || '(not answered)';
+            let correctDisplay = b.correct_display || '';
+
+            // For MCQs show option letter + text
+            if (qType === 'mcq' && b.q.options) {
+              const userIdx = optionLetters.indexOf(b.user_answer.toUpperCase());
+              if (userIdx >= 0 && b.q.options[userIdx]) {
+                userDisplay = b.user_answer.toUpperCase() + ': ' + b.q.options[userIdx];
+              }
+              const correctIdx = optionLetters.indexOf((b.q.correct_answer || '').toUpperCase());
+              if (correctIdx >= 0 && b.q.options[correctIdx]) {
+                correctDisplay = b.q.correct_answer.toUpperCase() + ': ' + b.q.options[correctIdx];
+              }
+            }
+
+            return `
+            <div class="review-item">
+              <div class="review-q">
+                <strong>Q${i+1}.</strong> <em>${this.escapeHtml(b.section.title)}</em><br>
+                ${this.escapeHtml(b.q.question)}
+              </div>
+              <div class="review-content">
+                ${b.needs_manual ? `
+                  <div class="review-row"><strong>Your answer:</strong> "${this.escapeHtml(b.user_answer || '(not answered)')}"</div>
+                  ${b.q.model_answer ? `<div class="review-row"><strong>Model:</strong> ${this.escapeHtml(b.q.model_answer)}</div>` : ''}
+                  ${b.q.marking_guide ? `<div class="review-row" style="font-style:italic;color:var(--ink-soft);font-size:13px;"><strong>For parent:</strong> ${this.escapeHtml(b.q.marking_guide)}</div>` : ''}
+                  <div class="review-result manual" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span>Marks (out of ${b.q.marks}):</span>
+                    <button class="btn btn-secondary" style="padding:4px 10px;min-width:32px;" data-manual-marks-dec="${this.escapeAttr(b.q.id)}">−</button>
+                    <strong style="font-size:18px;min-width:24px;text-align:center;">${manualState[b.q.id] !== undefined ? manualState[b.q.id] : 0}</strong>
+                    <button class="btn btn-secondary" style="padding:4px 10px;min-width:32px;" data-manual-marks-inc="${this.escapeAttr(b.q.id)}">+</button>
+                  </div>
+                ` : `
+                  <div class="review-row"><strong>Your answer:</strong> ${this.escapeHtml(userDisplay)}</div>
+                  <div class="review-row"><strong>Correct:</strong> ${this.escapeHtml(correctDisplay)}</div>
+                  <div class="review-result ${b.is_correct ? 'correct' : 'incorrect'}">${b.is_correct ? `✓ +${b.marks_awarded}` : `✗ 0 / ${b.q.marks}`}</div>
+                `}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+
+        <div class="results-actions">
+          <button class="btn btn-secondary" data-back-home="1">← Back to Stages</button>
+        </div>
+      </div>
+    `;
+  },
+
+  computeStage1Stars() {
+    const s1 = this.data.stage_1_learn;
+    let earned = 0, total = 0;
+    s1.branches.forEach(b => {
+      if (b.type === 'concept_teaching' && b.cards) {
+        b.cards.forEach(c => {
+          if (c.check) {
+            total++;
+            const a = this.state.panelChecks[c.id];
+            if (a && a.selected === c.check.correct) earned++;
+          }
+        });
+      } else if (b.type === 'story_panels' && b.panels) {
+        b.panels.forEach(p => {
+          if (p.comprehension_check) {
+            total++;
+            const a = this.state.panelChecks[p.id];
+            if (a && a.selected === p.comprehension_check.correct) earned++;
+          }
+        });
+      } else if (b.type === 'vocabulary_cards' && b.cards) {
+        b.cards.forEach(c => {
+          total++;
+          const a = this.state.spotItAnswers[c.id];
+          if (a && a.correct) earned++;
+        });
+      }
+    });
+    return { earned, total };
+  },
+
+  computeStage2Stars() {
+    const s2 = this.data.stage_2_practice;
+    let earned = 0, total = 0;
+    s2.sections.forEach(sec => {
+      sec.questions.forEach(q => {
+        total++;
+        const a = this.state.practiceAnswers[q.id];
+        if (a && a.selected === q.correct) earned++;
+      });
+    });
+    return { earned, total };
+  },
+
+  computeStage3Stars() {
+    const s3 = this.data.stage_3_think;
+    let earned = 0, total = 0;
+    s3.problems.forEach(p => {
+      if (p.self_check_criteria) {
+        total += p.self_check_criteria.length;
+        const sub = this.state.thinkSubmissions[p.id] || {};
+        earned += (sub.selfChecks || []).length;
+      }
+    });
+    return { earned, total };
+  },
+
+  renderStarCell(icon, label, earned, total) {
+    const pct = total > 0 ? (earned / total) * 100 : 0;
+    let cls = '', tag = '';
+    if (pct >= 80) { cls = 'strong'; tag = '<span class="score-cell-tag strong-tag">Strong</span>'; }
+    else if (pct < 50) { cls = 'improvement'; tag = '<span class="score-cell-tag improve-tag">Practice More</span>'; }
+    else { tag = '<span class="score-cell-tag neutral-tag">Good</span>'; }
+    return `
+      <div class="score-cell ${cls}">
+        <div class="score-cell-icon">${icon}</div>
+        <div class="score-cell-label">${label}</div>
+        <div class="score-cell-num">${earned} ⭐</div>
+        <div class="score-cell-out-of">out of ${total}</div>
+        ${tag}
+      </div>
+    `;
+  },
+
+  renderMarksCell(icon, label, score, max) {
+    const pct = max > 0 ? (score / max) * 100 : 0;
+    let cls = '', tag = '';
+    if (pct >= 80) { cls = 'strong'; tag = '<span class="score-cell-tag strong-tag">Strong</span>'; }
+    else if (pct < 50) { cls = 'improvement'; tag = '<span class="score-cell-tag improve-tag">Practice More</span>'; }
+    else { tag = '<span class="score-cell-tag neutral-tag">Good</span>'; }
+    return `
+      <div class="score-cell ${cls}">
+        <div class="score-cell-icon">${icon}</div>
+        <div class="score-cell-label">${label}</div>
+        <div class="score-cell-num">${score}</div>
+        <div class="score-cell-out-of">out of ${max}</div>
+        ${tag}
+      </div>
+    `;
+  },
+
+  generateConfetti() {
+    const colors = ['#E87722', '#F4A82C', '#D4A53A', '#4A7C59', '#5B8DB8', '#B8385E', '#FFFFFF'];
+    let html = '';
+    for (let i = 0; i < 30; i++) {
+      const left = Math.random() * 100;
+      const delay = Math.random() * 3;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const rotate = Math.random() * 360;
+      html += `<div class="confetti-piece" style="left:${left}%;background:${color};animation-delay:${delay}s;transform:rotate(${rotate}deg);"></div>`;
+    }
+    return html;
+  },
+
+  renderStageNav() {
+    const canPrev = this.currentStage > 1;
+    const canNext = this.currentStage < 4 && this.isStageUnlocked(this.currentStage + 1);
+    const stageLabels = ['', 'Learn', 'Practice', 'Think', 'Test'];
+    return `
+      <div class="stage-nav">
+        ${canPrev ? `<button class="btn btn-secondary" data-stage-nav="prev">← Back to ${stageLabels[this.currentStage - 1]}</button>` : '<div></div>'}
+        ${canNext ? `<button class="btn btn-primary" data-stage-nav="next">Next: ${stageLabels[this.currentStage + 1]} →</button>` : (this.currentStage < 4 ? `<button class="btn btn-primary" disabled title="Complete current stage first">Next: ${stageLabels[this.currentStage + 1]} →</button>` : '<div></div>')}
+      </div>
+    `;
+  },
+
+  bindEvents() {
+    // Use document.body so the listener survives across renders.
+    // Called ONCE in init().
+    document.body.addEventListener('click', (e) => {
+      const t = e.target;
+
+      if (t.dataset && t.dataset.closeModal) { this.state.spotItModal = null; this.render(); return; }
+      if (t.classList && t.classList.contains('highlight-word')) { this.showWordTooltip(t); return; }
+
+      const target = t.closest('[data-stage], [data-enter-branch], [data-back-to-branches], [data-panel-nav], [data-panel-check], [data-flip-card], [data-open-spot-it], [data-spot-answer], [data-enter-section], [data-back-to-sections], [data-practice-answer], [data-show-hint], [data-stage-nav], [data-vocab-group], [data-reset-progress], [data-jump-to-panel], [data-think-submit], [data-think-edit], [data-start-test], [data-submit-test], [data-retake-test], [data-back-home], [data-test-mcq], [data-self-check], [data-manual-marks-inc], [data-manual-marks-dec], [data-open-deep-dive], [data-close-deep-dive], [data-dd-topic]');
+      if (!target) return;
+
+      if (target.dataset.resetProgress) {
+        this.resetProgress();
+        return;
+      }
+      if (target.dataset.jumpToPanel !== undefined) {
+        const idx = parseInt(target.dataset.jumpToPanel, 10);
+        if (!isNaN(idx)) {
+          this.currentPanelIdx = idx;
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      // Deep Dive navigation
+      if (target.dataset.openDeepDive !== undefined) {
+        this.previousStage = this.currentStage;
+        this.currentStage = 0;
+        this.deepDiveTopicIdx = 0;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.closeDeepDive !== undefined) {
+        this.currentStage = this.previousStage || 1;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.ddTopic !== undefined) {
+        const idx = parseInt(target.dataset.ddTopic, 10);
+        const dd = this.data.stage_0_deep_dive;
+        if (dd && idx >= 0 && idx < dd.topics.length) {
+          this.deepDiveTopicIdx = idx;
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      if (target.dataset.stage) {
+        const num = parseInt(target.dataset.stage, 10);
+        if (this.isStageUnlocked(num) || num === this.currentStage) {
+          this.currentStage = num;
+          this.currentBranch = null;
+          this.currentSection = null;
+          this.saveProgress();
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      if (target.dataset.enterBranch) {
+        this.currentBranch = target.dataset.enterBranch;
+        this.currentPanelIdx = 0;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.backToBranches) {
+        this.currentBranch = null;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.panelNav) {
+        const branch = this.data.stage_1_learn.branches.find(b => b.id === this.currentBranch);
+        const items = branch.panels || branch.cards || [];
+        if (target.dataset.panelNav === 'prev' && this.currentPanelIdx > 0) this.currentPanelIdx--;
+        else if (target.dataset.panelNav === 'next' && this.currentPanelIdx < items.length - 1) this.currentPanelIdx++;
+        else if (target.dataset.panelNav === 'finish-branch') { this.currentBranch = null; this.saveProgress(); }
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.panelCheck) {
+        const panelId = target.dataset.panelCheck;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.panelChecks[panelId] && this.state.panelChecks[panelId].selected !== undefined) return;
+        this.state.panelChecks[panelId] = { ...(this.state.panelChecks[panelId] || {}), selected: opt };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.flipCard) {
+        if (e.target.closest('[data-open-spot-it]')) return;
+        const id = target.dataset.flipCard;
+        this.state.cardFlips[id] = !this.state.cardFlips[id];
+        // Toggle the class directly on the live element so CSS transition animates.
+        // No full re-render — that would destroy the element and skip the animation.
+        target.classList.toggle('flipped');
+        this.saveProgress();
+        return;
+      }
+      if (target.dataset.vocabGroup) {
+        this.currentVocabGroup = target.dataset.vocabGroup;
+        this.render();
+        return;
+      }
+      if (target.dataset.openSpotIt) {
+        e.stopPropagation();
+        this.state.spotItModal = target.dataset.openSpotIt;
+        this.render();
+        return;
+      }
+      if (target.dataset.spotAnswer) {
+        const id = target.dataset.spotAnswer;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.spotItAnswers[id] !== undefined) return;
+        let card = null;
+        for (const branch of this.data.stage_1_learn.branches) {
+          if (branch.cards) { card = branch.cards.find(c => c.id === id); if (card) break; }
+        }
+        if (!card) return;
+        this.state.spotItAnswers[id] = { selected: opt, correct: opt === card.spot_it.correct };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.enterSection) {
+        this.currentSection = target.dataset.enterSection;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.backToSections) {
+        this.currentSection = null;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.practiceAnswer) {
+        const qid = target.dataset.practiceAnswer;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.practiceAnswers[qid] && this.state.practiceAnswers[qid].selected !== undefined) return;
+        this.state.practiceAnswers[qid] = { ...(this.state.practiceAnswers[qid] || {}), selected: opt };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.showHint) {
+        const qid = target.dataset.showHint;
+        this.state.practiceAnswers[qid] = { ...(this.state.practiceAnswers[qid] || {}), showHint: true };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — submit a Think problem
+      if (target.dataset.thinkSubmit) {
+        const pid = target.dataset.thinkSubmit;
+        const ta = document.querySelector(`[data-think-input="${CSS.escape(pid)}"]`);
+        const value = ta ? ta.value.trim() : '';
+        if (!value) {
+          alert('Please write your answer first before submitting.');
+          return;
+        }
+        this.state.thinkSubmissions[pid] = { value, submitted: true };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — edit (un-submit)
+      if (target.dataset.thinkEdit) {
+        const pid = target.dataset.thinkEdit;
+        const existing = this.state.thinkSubmissions[pid] || {};
+        this.state.thinkSubmissions[pid] = { ...existing, submitted: false };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — self-check criteria toggle
+      if (target.dataset.selfCheck) {
+        const pid = target.dataset.selfCheck;
+        const ci = parseInt(target.dataset.checkIdx, 10);
+        const existing = this.state.thinkSubmissions[pid] || {};
+        const checks = [...(existing.selfChecks || [])];
+        const idx = checks.indexOf(ci);
+        if (idx >= 0) checks.splice(idx, 1); else checks.push(ci);
+        this.state.thinkSubmissions[pid] = { ...existing, selfChecks: checks };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Results — manual marks adjustment
+      if (target.dataset.manualMarksInc) {
+        const qid = target.dataset.manualMarksInc;
+        if (!this.state.manualMarksAwarded) this.state.manualMarksAwarded = {};
+        const q = this.findTestQuestion(qid);
+        const max = q ? q.marks : 5;
+        const current = this.state.manualMarksAwarded[qid] || 0;
+        if (current < max) { this.state.manualMarksAwarded[qid] = current + 1; this.saveProgress(); this.render(); }
+        return;
+      }
+      if (target.dataset.manualMarksDec) {
+        const qid = target.dataset.manualMarksDec;
+        if (!this.state.manualMarksAwarded) this.state.manualMarksAwarded = {};
+        const current = this.state.manualMarksAwarded[qid] || 0;
+        if (current > 0) { this.state.manualMarksAwarded[qid] = current - 1; this.saveProgress(); this.render(); }
+        return;
+      }
+      // Stage 4 — start the test
+      if (target.dataset.startTest) {
+        this.startTest();
+        return;
+      }
+      // Stage 4 — MCQ click
+      if (target.dataset.testMcq) {
+        // Capture text inputs first so we don't lose typed values on re-render
+        this.captureTestInputs();
+        const qid = target.dataset.testMcq;
+        const value = target.dataset.value;
+        this.state.testAnswers[qid] = { value };
+        this.render();
+        return;
+      }
+      // Stage 4 — submit
+      if (target.dataset.submitTest) {
+        if (!confirm('Submit your test? You will not be able to change your answers after this.')) return;
+        this.submitTest();
+        return;
+      }
+      // Results — retake test
+      if (target.dataset.retakeTest) {
+        this.retakeTest();
+        return;
+      }
+      // Results — back home
+      if (target.dataset.backHome) {
+        this.currentStage = 1;
+        this.saveProgress();
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.stageNav === 'prev') {
+        this.currentStage = Math.max(1, this.currentStage - 1);
+        this.currentBranch = null; this.currentSection = null;
+        this.stopTimer();
+        this.saveProgress();
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.stageNav === 'next') {
+        if (this.isStageUnlocked(this.currentStage + 1)) {
+          this.currentStage = Math.min(4, this.currentStage + 1);
+          this.currentBranch = null; this.currentSection = null;
+          this.stopTimer();
+          this.saveProgress();
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+    });
+
+    // Input listener for Think textareas + Test text inputs — live word count, save state
+    document.body.addEventListener('input', (e) => {
+      const t = e.target;
+      // Stage 3 — Think problems
+      if (t.dataset && t.dataset.thinkInput) {
+        const pid = t.dataset.thinkInput;
+        const value = t.value;
+        const existing = this.state.thinkSubmissions[pid] || {};
+        this.state.thinkSubmissions[pid] = { ...existing, value, submitted: false };
+        // Update word counter directly without re-render (preserves cursor)
+        const counter = document.querySelector(`[data-counter-for="${CSS.escape(pid)}"]`);
+        if (counter) {
+          const wc = this.countWords(value);
+          // Find the original problem to read word_limit
+          const problem = this.data.stage_3_think.problems.find(p => p.id === pid);
+          const limit = problem ? problem.word_limit : '';
+          counter.textContent = `${wc} word${wc === 1 ? '' : 's'}${limit ? ` · target: ${limit}` : ''}`;
+          counter.className = 'word-counter ' + this.wordCounterClass(wc, limit);
+        }
+        return;
+      }
+      // Stage 4 — Test text inputs
+      if (t.dataset && t.dataset.testInput) {
+        const qid = t.dataset.testInput;
+        const value = t.value;
+        this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value };
+        // Update word counter for short_answer / subjective
+        const counter = document.querySelector(`[data-counter-for="${CSS.escape(qid)}"]`);
+        if (counter) {
+          const wc = this.countWords(value);
+          let limit = '';
+          // Find the question for word_limit
+          for (const sec of this.data.stage_4_test.sections) {
+            const q = sec.questions.find(q => q.id === qid);
+            if (q) { limit = q.word_limit || ''; break; }
+          }
+          counter.textContent = `${wc} word${wc === 1 ? '' : 's'}${limit ? ` · target: ${limit}` : ''}`;
+          counter.className = 'word-counter ' + this.wordCounterClass(wc, limit);
+        }
+        return;
+      }
+    });
+  },
+
+  showWordTooltip(el) {
+    document.querySelectorAll('.word-tooltip').forEach(t => t.remove());
+    const panelId = el.dataset.panelId;
+    const idx = parseInt(el.dataset.wordIdx, 10);
+    const branch = this.data.stage_1_learn.branches.find(b => b.id === this.currentBranch);
+    if (!branch) return;
+    const panel = branch.panels.find(p => p.id === panelId);
+    if (!panel || !panel.highlighted_words || !panel.highlighted_words[idx]) return;
+    const tip = document.createElement('span');
+    tip.className = 'word-tooltip';
+    tip.textContent = panel.highlighted_words[idx].meaning;
+    el.appendChild(tip);
+    setTimeout(() => tip.remove(), 3000);
+  },
+
+  escapeHtml(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  },
+
+  findTestQuestion(qid) {
+    if (!this.data.stage_4_test) return null;
+    for (const sec of this.data.stage_4_test.sections) {
+      const q = sec.questions.find(q => q.id === qid);
+      if (q) return q;
+    }
+    return null;
+  },
+  escapeAttr(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+
+</body>
+</html>
