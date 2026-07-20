@@ -1,0 +1,3159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>e-Gurukul · Learn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --saffron: #E87722; --marigold: #F4A82C; --cream: #FFF8EE; --paper: #FDF6E8;
+  --paper-dark: #F5EBD3; --ink: #2B1810; --ink-soft: #5C4332; --leaf: #4A7C59;
+  --leaf-light: #E8F4EA; --berry: #B8385E; --berry-light: #FBE9EE; --gold: #D4A53A;
+  --sky: #5B8DB8; --sky-light: #E5F0F8; --shadow: rgba(43,24,16,0.12); --shadow-strong: rgba(43,24,16,0.25);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--paper); color: var(--ink); font-family: 'Nunito', sans-serif; font-size: 16px; line-height: 1.6; min-height: 100vh; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; background-image: radial-gradient(circle at 20% 30%, rgba(232,119,34,0.04) 0%, transparent 40%), radial-gradient(circle at 80% 70%, rgba(244,168,44,0.06) 0%, transparent 50%); pointer-events: none; z-index: 0; }
+.container { max-width: 920px; margin: 0 auto; padding: 24px 20px 80px; position: relative; z-index: 1; }
+header.app-header { margin-bottom: 28px; padding: 24px 28px; background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 100%); border-radius: 24px; color: white; box-shadow: 0 8px 24px var(--shadow); position: relative; overflow: hidden; }
+header.app-header::before { content: ''; position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, transparent 70%); border-radius: 50%; }
+.header-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.9; margin-bottom: 6px; }
+.header-title { font-family: 'Fraunces', serif; font-weight: 900; font-size: clamp(26px, 5vw, 38px); line-height: 1.15; letter-spacing: -0.5px; }
+.header-meta { margin-top: 10px; font-size: 14px; opacity: 0.95; font-weight: 600; }
+.header-author { margin-top: 6px; font-size: 14px; opacity: 0.85; font-weight: 500; font-style: italic; }
+.header-theme-pill { display: inline-block; margin-top: 12px; background: rgba(0,0,0,0.25); color: white; padding: 5px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; backdrop-filter: blur(4px); }
+.reset-btn { position: absolute; top: 16px; right: 16px; background: var(--ink); color: white; border: 2px solid rgba(255,255,255,0.3); padding: 7px 14px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 12px; cursor: pointer; transition: all 0.2s ease; z-index: 2; }
+.reset-btn:hover { background: #1a0e07; border-color: white; transform: translateY(-1px); }
+.progress-bar { display: flex; gap: 8px; margin-bottom: 32px; }
+.progress-step { flex: 1; padding: 12px 8px; background: var(--paper-dark); border-radius: 12px; text-align: center; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; color: var(--ink-soft); cursor: pointer; transition: all 0.25s ease; border: 2px solid transparent; user-select: none; position: relative; }
+.progress-step:hover { background: var(--cream); border-color: var(--marigold); }
+.progress-step.active { background: var(--ink); color: var(--cream); }
+.progress-step.complete { background: var(--leaf); color: white; }
+.progress-step.locked { opacity: 0.5; cursor: not-allowed; }
+.progress-step.locked:hover { background: var(--paper-dark); border-color: transparent; }
+.progress-step.complete::after { content: '✓'; position: absolute; top: 4px; right: 6px; font-size: 11px; font-weight: 900; }
+.progress-step.locked::after { content: '🔒'; position: absolute; top: 4px; right: 6px; font-size: 10px; }
+.step-num { display: block; font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; }
+.stage-header { margin-bottom: 24px; }
+.stage-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: clamp(24px, 4vw, 32px); color: var(--ink); letter-spacing: -0.3px; margin-bottom: 6px; }
+.stage-description { color: var(--ink-soft); font-size: 15px; }
+.branches-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.branch-card { background: var(--cream); border: 2px solid var(--paper-dark); border-radius: 18px; padding: 24px 20px; cursor: pointer; transition: all 0.25s ease; text-align: center; position: relative; }
+.branch-card:hover { border-color: var(--marigold); transform: translateY(-3px); box-shadow: 0 6px 16px var(--shadow); }
+.branch-card.complete { border-color: var(--leaf); background: var(--leaf-light); }
+.branch-card.complete::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; background: var(--leaf); color: white; border-radius: 50%; line-height: 24px; font-weight: 900; font-size: 14px; }
+.branch-icon { font-size: 40px; margin-bottom: 12px; }
+.branch-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.branch-meta { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
+.branch-progress { margin-top: 12px; font-size: 13px; color: var(--ink-soft); }
+.panel-container { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 20px; }
+.panel-dots { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
+.panel-dot { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 8px 14px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; min-width: 44px; }
+.panel-dot:hover { border-color: var(--marigold); }
+.panel-dot.current { background: var(--ink); color: var(--cream); }
+.panel-dot.answered { background: var(--leaf); color: white; }
+.panel-dot.current.answered { background: var(--ink); border-color: var(--leaf); border-width: 3px; }
+.panel-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--paper-dark); }
+.panel-counter { font-size: 12px; font-weight: 800; color: var(--saffron); letter-spacing: 1.5px; text-transform: uppercase; }
+.panel-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+.narration-text { font-size: 16px; line-height: 1.75; color: var(--ink); margin-bottom: 16px; }
+.narration-text .highlight-word { background: linear-gradient(180deg, transparent 60%, rgba(244,168,44,0.4) 60%); cursor: pointer; font-weight: 700; color: var(--ink); border-radius: 2px; transition: background 0.2s ease; position: relative; }
+.narration-text .highlight-word:hover { background: linear-gradient(180deg, transparent 30%, rgba(244,168,44,0.7) 30%); }
+.word-tooltip { position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); background: var(--ink); color: var(--cream); padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 600; line-height: 1.4; width: max-content; max-width: 240px; text-align: center; z-index: 100; box-shadow: 0 6px 20px rgba(0,0,0,0.25); pointer-events: none; }
+.word-tooltip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: var(--ink); }
+.tts-controls { display: flex; gap: 10px; align-items: center; background: var(--sky-light); border-radius: 12px; padding: 10px 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.tts-btn { background: var(--sky); color: white; border: none; padding: 8px 16px; border-radius: 10px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.tts-btn:hover { background: #4a7a9c; }
+.tts-btn.playing { background: var(--berry); animation: pulse 1.5s ease-in-out infinite; }
+.tts-status { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+.comprehension-check { background: var(--cream); border: 2px solid var(--marigold); border-radius: 16px; padding: 20px; margin-top: 16px; }
+.check-label { display: inline-block; background: var(--saffron); color: white; padding: 4px 12px; border-radius: 8px; font-size: 11px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.check-question { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 500; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+.options-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 14px; }
+.option-btn { background: white; border: 2px solid var(--paper-dark); padding: 12px 16px; border-radius: 12px; text-align: left; cursor: pointer; font-family: inherit; font-size: 14px; color: var(--ink); transition: all 0.2s ease; width: 100%; display: flex; align-items: center; gap: 10px; }
+.option-btn:hover:not(:disabled) { border-color: var(--marigold); background: var(--paper); transform: translateX(2px); }
+.option-letter { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; background: var(--paper-dark); border-radius: 8px; font-weight: 700; font-size: 12px; flex-shrink: 0; color: var(--ink-soft); }
+.option-btn.correct { background: var(--leaf-light); border-color: var(--leaf); color: var(--leaf); font-weight: 700; }
+.option-btn.correct .option-letter { background: var(--leaf); color: white; }
+.option-btn.incorrect { background: var(--berry-light); border-color: var(--berry); color: var(--berry); }
+.option-btn.incorrect .option-letter { background: var(--berry); color: white; }
+.option-btn:disabled { cursor: default; }
+.feedback-box { margin-top: 12px; padding: 14px 16px; border-radius: 12px; font-size: 14px; line-height: 1.5; animation: slideDown 0.3s ease; }
+.feedback-box.hint { background: #FFF4D6; border-left: 4px solid var(--gold); color: var(--ink); }
+.feedback-box.explanation { background: var(--leaf-light); border-left: 4px solid var(--leaf); color: var(--ink); }
+.feedback-label { font-weight: 800; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; margin-bottom: 4px; display: block; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
+.panel-nav { display: flex; justify-content: space-between; gap: 10px; margin-top: 20px; }
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.vocab-group-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.vocab-group-tab { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 10px 18px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+.vocab-group-tab:hover { border-color: var(--marigold); }
+.vocab-group-tab.active { background: var(--saffron); color: white; }
+.vocab-card { height: 280px; cursor: pointer; perspective: 1000px; }
+.vocab-card-inner { position: relative; width: 100%; height: 100%; transition: transform 0.7s cubic-bezier(0.4, 0.0, 0.2, 1); transform-style: preserve-3d; }
+.vocab-card.flipped .vocab-card-inner { transform: rotateY(180deg); }
+.vocab-face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 18px; padding: 22px; display: flex; flex-direction: column; box-shadow: 0 4px 16px var(--shadow); overflow: hidden; }
+.vocab-face.front { background: var(--cream); border: 2px solid var(--paper-dark); align-items: center; justify-content: center; text-align: center; }
+.vocab-face.back { background: linear-gradient(135deg, var(--saffron), var(--marigold)); color: white; transform: rotateY(180deg); overflow-y: auto; text-align: left; }
+.vocab-card.complete .vocab-face.front { border-color: var(--leaf); background: var(--leaf-light); }
+.vocab-card.complete .vocab-face.front::after { content: '✓'; position: absolute; top: 12px; right: 16px; width: 24px; height: 24px; background: var(--leaf); color: white; border-radius: 50%; line-height: 24px; font-weight: 900; font-size: 14px; }
+.vocab-word { font-family: 'Fraunces', serif; font-weight: 700; font-size: 30px; color: var(--ink); margin-bottom: 6px; letter-spacing: -0.5px; }
+.vocab-source-tag { display: inline-block; background: var(--paper-dark); color: var(--ink-soft); padding: 2px 10px; border-radius: 8px; font-size: 10px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+.vocab-flip-hint { margin-top: 12px; font-size: 11px; color: var(--ink-soft); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; opacity: 0.6; }
+.vocab-meaning { font-family: 'Fraunces', serif; font-size: 15px; font-weight: 500; line-height: 1.4; margin-bottom: 10px; }
+.vocab-example { font-size: 12px; line-height: 1.45; margin-bottom: 6px; opacity: 0.95; }
+.vocab-example-label { font-size: 9px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.85; margin-bottom: 2px; display: block; }
+.spot-it-cta { margin-top: 10px; padding: 10px; background: rgba(255,255,255,0.2); border-radius: 10px; text-align: center; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid rgba(255,255,255,0.4); }
+.spot-it-cta:hover { background: rgba(255,255,255,0.3); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(43,24,16,0.7); display: flex; align-items: center; justify-content: center; z-index: 200; padding: 20px; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.modal-content { background: var(--cream); border-radius: 20px; padding: 28px; max-width: 480px; width: 100%; box-shadow: 0 12px 40px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
+.modal-title { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.modal-word { color: var(--saffron); font-style: italic; }
+.question-card { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); }
+.question-number { display: inline-block; background: var(--ink); color: var(--cream); font-family: 'Fraunces', serif; font-weight: 700; width: 36px; height: 36px; line-height: 36px; text-align: center; border-radius: 50%; font-size: 16px; margin-bottom: 12px; }
+.passage-excerpt { background: var(--paper); padding: 12px 16px; border-radius: 12px; border-left: 4px solid var(--sky); margin-bottom: 12px; font-style: italic; color: var(--ink-soft); font-size: 13px; line-height: 1.5; }
+.question-text { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 500; line-height: 1.4; margin-bottom: 14px; color: var(--ink); }
+.question-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.btn { padding: 10px 18px; border-radius: 12px; border: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 14px; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 6px; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary { background: var(--paper-dark); color: var(--ink); }
+.btn-secondary:hover:not(:disabled) { background: var(--marigold); color: white; }
+.btn-primary { background: var(--saffron); color: white; box-shadow: 0 4px 12px rgba(232,119,34,0.3); }
+.btn-primary:hover:not(:disabled) { background: var(--ink); transform: translateY(-2px); }
+.btn-success { background: var(--leaf); color: white; box-shadow: 0 4px 12px rgba(74,124,89,0.3); }
+.btn-success:hover:not(:disabled) { background: #3a6248; transform: translateY(-2px); }
+.stage-nav { margin-top: 32px; display: flex; justify-content: space-between; gap: 12px; }
+.placeholder-card { background: var(--cream); border: 2px dashed var(--paper-dark); border-radius: 20px; padding: 48px 32px; text-align: center; color: var(--ink-soft); }
+.placeholder-icon { font-size: 60px; margin-bottom: 16px; opacity: 0.5; }
+.placeholder-title { font-family: 'Fraunces', serif; font-size: 22px; color: var(--ink); margin-bottom: 8px; }
+.placeholder-detail { font-size: 14px; line-height: 1.6; max-width: 480px; margin: 0 auto; }
+.loading-screen, .error-screen { text-align: center; padding: 48px 20px; }
+.spinner { width: 48px; height: 48px; border: 4px solid var(--paper-dark); border-top-color: var(--saffron); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.error-screen { background: var(--berry-light); border: 2px solid var(--berry); color: var(--berry); border-radius: 16px; }
+/* === STAGE 0: DEEP DIVE REFERENCE === */
+.deep-dive-trigger { display: flex; align-items: center; gap: 14px; background: linear-gradient(135deg, var(--sky) 0%, #3d6d8f 100%); color: white; border: none; padding: 20px 28px; border-radius: 18px; font-family: inherit; font-weight: 700; font-size: 15px; cursor: pointer; transition: all 0.25s ease; margin-bottom: 28px; width: 100%; box-shadow: 0 4px 16px rgba(91,141,184,0.3); }
+.deep-dive-trigger:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(91,141,184,0.4); }
+.deep-dive-trigger .dd-icon { font-size: 36px; }
+.deep-dive-trigger .dd-text { text-align: left; }
+.deep-dive-trigger .dd-title { font-family: 'Fraunces', serif; font-size: 22px; display: block; }
+.deep-dive-trigger .dd-sub { font-size: 14px; opacity: 0.9; font-weight: 500; display: block; margin-top: 2px; }
+
+.dd-screen { padding: 0; }
+.dd-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+.dd-nav { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.dd-nav-btn { background: var(--paper-dark); color: var(--ink-soft); border: 2px solid transparent; padding: 10px 16px; border-radius: 12px; font-family: inherit; font-weight: 700; font-size: 13px; cursor: pointer; transition: all 0.2s ease; }
+.dd-nav-btn:hover { border-color: var(--sky); }
+.dd-nav-btn.active { background: var(--sky); color: white; }
+
+.dd-topic { background: white; border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 24px; }
+.dd-topic-title { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--ink); margin-bottom: 6px; }
+.dd-topic-subtitle { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; }
+
+.dd-section { margin-bottom: 28px; }
+.dd-section-label { display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; padding: 4px 12px; border-radius: 8px; margin-bottom: 12px; }
+.dd-section-label.story { background: var(--berry-light); color: var(--berry); }
+.dd-section-label.steps { background: var(--leaf-light); color: var(--leaf); }
+.dd-section-label.visual { background: var(--sky-light); color: var(--sky); }
+.dd-section-label.video { background: #FFF4D6; color: var(--gold); }
+.dd-section-label.tip { background: var(--cream); color: var(--saffron); }
+
+.dd-story { background: var(--cream); border-radius: 16px; padding: 24px; border-left: 5px solid var(--berry); margin-bottom: 16px; }
+.dd-story-title { font-family: 'Fraunces', serif; font-size: 18px; font-weight: 700; color: var(--berry); margin-bottom: 10px; }
+.dd-story-text { font-size: 15px; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+
+.dd-steps { counter-reset: ddstep; }
+.dd-step { display: flex; gap: 16px; margin-bottom: 18px; align-items: flex-start; }
+.dd-step-num { counter-increment: ddstep; flex-shrink: 0; width: 36px; height: 36px; background: var(--leaf); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; }
+.dd-step-content { flex: 1; }
+.dd-step-title { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+.dd-step-text { font-size: 14px; line-height: 1.7; color: var(--ink); }
+.dd-step-example { background: var(--paper); border-radius: 10px; padding: 12px 14px; margin-top: 8px; font-size: 14px; font-family: 'Nunito', sans-serif; border-left: 3px solid var(--marigold); color: var(--ink); }
+
+.dd-visual { text-align: center; margin: 20px 0; }
+.dd-visual svg { max-width: 100%; height: auto; border-radius: 12px; }
+.dd-visual-caption { font-size: 12px; color: var(--ink-soft); margin-top: 8px; font-style: italic; }
+
+.dd-video { margin: 20px 0; border-radius: 16px; overflow: hidden; background: var(--ink); }
+.dd-video iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+.dd-video-caption { padding: 10px 16px; font-size: 12px; color: var(--ink-soft); background: var(--paper); }
+
+.dd-tip { background: #FFF4D6; border-radius: 14px; padding: 18px 20px; border-left: 4px solid var(--gold); margin: 16px 0; }
+.dd-tip-title { font-weight: 800; font-size: 13px; color: var(--gold); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.dd-tip-text { font-size: 14px; line-height: 1.6; color: var(--ink); }
+
+.dd-funfact { background: linear-gradient(135deg, #FFF4D6 0%, #FFEEBB 100%); border-radius: 16px; padding: 20px 22px; border: 2px solid var(--gold); margin: 20px 0; display: flex; gap: 14px; align-items: flex-start; }
+.dd-funfact-icon { font-size: 32px; flex-shrink: 0; }
+.dd-funfact-content { flex: 1; }
+.dd-funfact-label { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.dd-funfact-text { font-size: 15px; line-height: 1.6; color: var(--ink); font-weight: 600; }
+
+.dd-rich-text { font-size: 15px; line-height: 1.8; color: var(--ink); white-space: pre-wrap; }
+.dd-rich-text strong, .dd-rich-text b { font-weight: 700; color: var(--ink); }
+
+/* === CONCEPT TEACHING CARDS (Math) === */
+.concept-card { background: white; border-radius: 20px; padding: 28px; box-shadow: 0 4px 16px var(--shadow); margin-bottom: 20px; border: 2px solid var(--paper-dark); }
+.concept-card.answered { border-color: var(--leaf); }
+.concept-name { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: var(--saffron); margin-bottom: 8px; }
+.concept-definition { font-size: 15px; line-height: 1.7; color: var(--ink); margin-bottom: 14px; white-space: pre-wrap; }
+.concept-examples { background: var(--paper); border-radius: 12px; padding: 14px 16px; margin-bottom: 16px; }
+.concept-examples-label { font-size: 10px; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 6px; display: block; }
+.concept-example-item { font-size: 14px; line-height: 1.6; color: var(--ink); padding: 4px 0; font-family: 'Nunito', sans-serif; }
+.concept-check { background: var(--cream); border: 2px solid var(--marigold); border-radius: 16px; padding: 20px; margin-top: 16px; }
+
+/* === SELF-CHECK CRITERIA (Stage 3) === */
+.self-check-box { background: var(--paper); border-radius: 14px; padding: 16px 18px; margin-top: 14px; border: 2px solid var(--paper-dark); }
+.self-check-title { font-size: 12px; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; color: var(--saffron); margin-bottom: 10px; }
+.self-check-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; cursor: pointer; user-select: none; }
+.self-check-item + .self-check-item { border-top: 1px solid var(--paper-dark); }
+.self-check-tick { width: 24px; height: 24px; border: 2px solid var(--paper-dark); border-radius: 6px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; transition: all 0.2s ease; background: white; }
+.self-check-tick.checked { background: var(--leaf); border-color: var(--leaf); color: white; }
+.self-check-label { font-size: 14px; color: var(--ink); line-height: 1.4; }
+.self-check-stars { margin-top: 10px; font-size: 13px; font-weight: 700; color: var(--gold); }
+
+/* === STAGE 3: THINK DEEPER === */
+.think-card { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); transition: border-color 0.3s ease; }
+.think-card.submitted { border-color: var(--leaf); background: linear-gradient(135deg, var(--cream), var(--leaf-light)); }
+.scenario-box { background: var(--cream); padding: 16px 18px; border-radius: 12px; border-left: 5px solid var(--saffron); margin: 12px 0 14px 0; color: var(--ink); font-size: 16px; line-height: 1.7; font-weight: 600; }
+.word-limit-tag { display: inline-block; background: var(--sky); color: white; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 8px; }
+.text-input { width: 100%; padding: 14px 16px; border: 2px solid var(--paper-dark); border-radius: 12px; font-family: inherit; font-size: 15px; background: white; color: var(--ink); transition: border-color 0.2s ease; line-height: 1.5; }
+.text-input:focus { outline: none; border-color: var(--saffron); }
+textarea.text-input { resize: vertical; min-height: 100px; }
+textarea.text-input[readonly] { background: var(--paper); cursor: default; }
+.word-counter { margin-top: 6px; font-size: 12px; font-weight: 700; color: var(--ink-soft); text-align: right; transition: color 0.2s ease; }
+.word-counter.in-range { color: var(--leaf); }
+.word-counter.over { color: var(--berry); }
+.model-answer-box { margin-top: 14px; padding: 16px 18px; background: linear-gradient(135deg, var(--cream), var(--paper-dark)); border-radius: 12px; border: 2px dashed var(--marigold); animation: slideDown 0.4s ease; }
+.model-answer-box .feedback-label { color: var(--saffron); }
+.answer-text { margin-top: 6px; line-height: 1.6; color: var(--ink); font-size: 14px; }
+.submitted-tag { display: inline-block; margin-left: 8px; background: var(--leaf); color: white; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.marks-tag { display: inline-block; margin-left: 8px; background: var(--ink); color: var(--cream); padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; vertical-align: middle; }
+.question-category { display: inline-block; margin-left: 10px; padding: 4px 12px; background: var(--paper-dark); border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--ink-soft); vertical-align: middle; }
+
+/* === STAGE 4: TEST === */
+.test-intro { background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 100%); color: white; padding: 40px 32px; border-radius: 24px; text-align: center; margin-bottom: 28px; box-shadow: 0 8px 24px var(--shadow-strong); position: relative; overflow: hidden; }
+.test-intro::before { content: ''; position: absolute; top: -50px; left: -50px; width: 250px; height: 250px; background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%); border-radius: 50%; }
+.test-intro-icon { font-size: 60px; margin-bottom: 12px; position: relative; z-index: 2; }
+.test-intro h2 { font-family: 'Fraunces', serif; font-weight: 900; font-size: 32px; margin-bottom: 8px; position: relative; z-index: 2; }
+.test-intro-subtitle { font-size: 15px; opacity: 0.95; margin-bottom: 8px; position: relative; z-index: 2; }
+.test-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0; position: relative; z-index: 2; }
+.test-stat { background: rgba(255,255,255,0.2); padding: 14px; border-radius: 14px; backdrop-filter: blur(10px); }
+.test-stat-num { font-family: 'Fraunces', serif; font-weight: 700; font-size: 28px; line-height: 1; }
+.test-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; margin-top: 4px; }
+.test-sections-preview { background: rgba(0,0,0,0.15); border-radius: 14px; padding: 16px; margin: 20px 0; text-align: left; position: relative; z-index: 2; }
+.test-section-preview { padding: 6px 0; font-size: 13px; }
+.test-section-preview + .test-section-preview { border-top: 1px solid rgba(255,255,255,0.2); }
+.test-start-btn { background: white; color: var(--saffron); padding: 16px 36px; font-size: 16px; font-weight: 800; border-radius: 14px; border: none; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: relative; z-index: 2; }
+.test-start-btn:hover { transform: scale(1.04); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+
+.timer-bar { position: sticky; top: 12px; z-index: 10; background: var(--ink); color: var(--cream); padding: 14px 22px; border-radius: 14px; margin-bottom: 22px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px var(--shadow-strong); }
+.timer-display { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.timer-display.warning { color: var(--marigold); }
+.timer-display.urgent { color: #FF8B6E; animation: pulse 1s ease-in-out infinite; }
+.timer-progress { font-size: 13px; font-weight: 700; opacity: 0.85; }
+
+.test-section { background: var(--cream); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 4px 16px var(--shadow); border: 2px solid var(--paper-dark); }
+.test-section-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 2px solid var(--paper-dark); margin-bottom: 14px; }
+.test-section-header h3 { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--ink); }
+.test-section-marks { background: var(--saffron); color: white; padding: 4px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
+.test-section-instructions { font-size: 13px; color: var(--ink-soft); margin-bottom: 14px; font-style: italic; }
+.test-passage { background: var(--paper); border-radius: 14px; padding: 20px; margin-bottom: 20px; border-left: 4px solid var(--sky); }
+.test-passage-title { font-family: 'Fraunces', serif; font-weight: 700; font-size: 18px; color: var(--ink); margin-bottom: 4px; }
+.test-passage-author { font-size: 12px; color: var(--ink-soft); font-style: italic; margin-bottom: 12px; }
+.test-passage-text { font-size: 14px; line-height: 1.7; color: var(--ink); white-space: pre-wrap; }
+.test-passage-note { margin-top: 12px; font-size: 12px; color: var(--ink-soft); padding: 8px 12px; background: rgba(244, 168, 44, 0.15); border-radius: 8px; }
+
+.test-question { padding: 18px 0; border-bottom: 1px solid var(--paper-dark); }
+.test-question:last-child { border-bottom: none; }
+.test-q-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+.test-q-num { font-family: 'Fraunces', serif; font-weight: 700; font-size: 16px; color: var(--saffron); }
+.test-q-type { font-size: 10px; font-weight: 800; letter-spacing: 1px; color: var(--ink-soft); background: var(--paper-dark); padding: 3px 8px; border-radius: 6px; }
+.option-btn.test-selected { background: var(--cream); border-color: var(--saffron); color: var(--ink); font-weight: 700; }
+.option-btn.test-selected .option-letter { background: var(--saffron); color: white; }
+
+.test-submit-zone { text-align: center; margin: 32px 0; padding: 28px; background: var(--cream); border-radius: 18px; border: 2px solid var(--paper-dark); }
+.test-submit-btn { padding: 14px 32px; font-size: 16px; }
+
+/* === RESULTS === */
+.results-screen { padding: 24px 0; position: relative; }
+.results-hero { background: linear-gradient(135deg, var(--saffron) 0%, var(--marigold) 50%, var(--gold) 100%); color: white; padding: 48px 32px; border-radius: 28px; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: 0 12px 36px var(--shadow-strong); text-align: center; }
+.results-hero::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.25) 0%, transparent 25%), radial-gradient(circle at 85% 80%, rgba(255,255,255,0.18) 0%, transparent 30%); pointer-events: none; }
+
+.confetti-piece { position: absolute; width: 8px; height: 14px; border-radius: 2px; animation: confettiFall 3s ease-in-out infinite; opacity: 0.85; pointer-events: none; }
+@keyframes confettiFall { 0% { transform: translateY(-50px) rotate(0deg); opacity: 0; } 10% { opacity: 1; } 100% { transform: translateY(700px) rotate(720deg); opacity: 0; } }
+
+.badge-circle { width: 160px; height: 160px; margin: 0 auto 20px; background: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 36px rgba(0,0,0,0.2), inset 0 0 20px rgba(244, 168, 44, 0.2); position: relative; z-index: 2; animation: badgePop 0.8s cubic-bezier(0.5, 1.5, 0.7, 1); }
+.badge-circle.no-badge { background: rgba(255,255,255,0.85); }
+@keyframes badgePop { 0% { transform: scale(0) rotate(-180deg); opacity: 0; } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+.badge-circle::before { content: ''; position: absolute; inset: -10px; border-radius: 50%; border: 4px dashed white; opacity: 0.6; animation: spin 20s linear infinite; }
+.badge-emoji { font-size: 80px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+.badge-name { font-family: 'Fraunces', serif; font-weight: 900; font-size: 36px; margin-bottom: 6px; color: white; letter-spacing: -0.5px; text-shadow: 0 2px 4px rgba(0,0,0,0.15); position: relative; z-index: 2; }
+.badge-tagline { font-size: 17px; opacity: 0.95; margin-bottom: 24px; position: relative; z-index: 2; font-weight: 600; }
+.results-percentage { background: white; color: var(--saffron); display: inline-block; padding: 18px 40px; border-radius: 18px; box-shadow: 0 6px 18px rgba(0,0,0,0.15); margin-top: 8px; position: relative; z-index: 2; }
+.percentage-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 56px; line-height: 1; }
+.percentage-label { font-size: 12px; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 6px; }
+
+.motivational-quote { background: var(--cream); border: 2px solid var(--marigold); border-radius: 18px; padding: 22px 24px; margin: 24px auto; max-width: 600px; font-family: 'Fraunces', serif; font-style: italic; font-size: 17px; color: var(--ink); line-height: 1.5; position: relative; text-align: center; }
+.motivational-quote::before { content: '"'; font-family: 'Fraunces', serif; font-size: 80px; color: var(--marigold); position: absolute; top: -20px; left: 12px; line-height: 1; opacity: 0.4; }
+
+.section-scores { background: white; border-radius: 20px; padding: 24px; margin: 24px auto; max-width: 700px; box-shadow: 0 6px 20px var(--shadow); border: 2px solid var(--paper-dark); }
+.section-scores h3 { font-family: 'Fraunces', serif; font-weight: 700; font-size: 22px; color: var(--ink); margin-bottom: 20px; text-align: center; }
+.scores-table { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.score-cell { background: var(--paper); border-radius: 14px; padding: 16px 10px; text-align: center; border: 2px solid var(--paper-dark); transition: transform 0.2s ease; }
+.score-cell:hover { transform: translateY(-2px); }
+.score-cell.strong { background: var(--leaf-light); border-color: var(--leaf); }
+.score-cell.improvement { background: var(--berry-light); border-color: var(--berry); }
+.score-cell-icon { font-size: 26px; margin-bottom: 4px; }
+.score-cell-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; color: var(--ink-soft); margin-bottom: 6px; }
+.score-cell-num { font-family: 'Fraunces', serif; font-weight: 900; font-size: 26px; color: var(--ink); line-height: 1; }
+.score-cell-out-of { font-size: 12px; color: var(--ink-soft); margin-top: 4px; font-weight: 600; }
+.score-cell-tag { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 8px; font-size: 9px; font-weight: 800; letter-spacing: 0.5px; text-transform: uppercase; }
+.score-cell-tag.strong-tag { background: var(--leaf); color: white; }
+.score-cell-tag.improve-tag { background: var(--berry); color: white; }
+.score-cell-tag.neutral-tag { background: var(--paper-dark); color: var(--ink-soft); }
+
+.reattempt-card { background: linear-gradient(135deg, var(--sky) 0%, #4a7a9c 100%); color: white; padding: 24px 28px; border-radius: 20px; margin: 24px auto; max-width: 600px; text-align: center; box-shadow: 0 6px 20px rgba(91, 141, 184, 0.3); }
+.reattempt-card h4 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+.reattempt-card p { font-size: 15px; opacity: 0.95; margin-bottom: 16px; }
+.reattempt-btn { background: white; color: var(--sky); padding: 12px 28px; border: none; border-radius: 12px; font-family: inherit; font-weight: 800; font-size: 15px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.reattempt-btn:hover { transform: translateY(-2px) scale(1.03); box-shadow: 0 6px 16px rgba(0,0,0,0.2); }
+
+.manual-grading-note { margin-top: 20px; padding: 14px 18px; background: #FFF4D6; border-radius: 12px; font-size: 13px; color: var(--ink-soft); border-left: 4px solid var(--gold); max-width: 700px; margin-left: auto; margin-right: auto; }
+
+.results-detail { background: var(--cream); border-radius: 18px; padding: 22px 24px; margin: 16px auto; max-width: 700px; text-align: left; border: 2px solid var(--paper-dark); }
+.results-detail h4 { font-family: 'Fraunces', serif; font-size: 18px; margin-bottom: 12px; color: var(--ink); }
+.review-item { padding: 14px 0; border-bottom: 1px solid var(--paper-dark); }
+.review-item:last-child { border-bottom: none; }
+.review-q { font-weight: 700; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+.review-content { font-size: 13px; color: var(--ink-soft); }
+.review-row { padding: 4px 0; line-height: 1.5; }
+.review-result { display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 8px; font-size: 12px; font-weight: 800; }
+.review-result.correct { background: var(--leaf-light); color: var(--leaf); }
+.review-result.incorrect { background: var(--berry-light); color: var(--berry); }
+.review-result.manual { background: #FFF4D6; color: #B8830A; }
+
+.results-actions { margin-top: 28px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+@media (max-width: 600px) { .container { padding: 16px 14px 60px; } header.app-header { padding: 20px; border-radius: 18px; } .progress-bar { gap: 5px; } .progress-step { padding: 8px 4px; font-size: 9px; } .step-num { font-size: 16px; } .branches-grid { grid-template-columns: 1fr; } .panel-container { padding: 22px; } .panel-title { font-size: 22px; } .narration-text { font-size: 15px; } .cards-grid { grid-template-columns: 1fr; } .vocab-card { height: 260px; } .panel-nav { flex-direction: column; } .test-stats { grid-template-columns: 1fr 1fr 1fr; gap: 8px; } .test-stat { padding: 10px 6px; } .test-stat-num { font-size: 22px; } .badge-circle { width: 130px; height: 130px; } .badge-emoji { font-size: 60px; } .badge-name { font-size: 28px; } .percentage-num { font-size: 44px; } .results-hero { padding: 32px 20px; } .scores-table { grid-template-columns: 1fr 1fr; } .score-cell { padding: 14px 8px; } .score-cell-num { font-size: 22px; } .think-card, .test-section { padding: 18px; } }
+</style>
+</head>
+<body>
+
+<script type="application/json" id="embedded-chapter">
+{
+  "schema_version": "2.0",
+  "chapter_id": "math-ch12-scales-directions",
+  "chapter_number": 12,
+  "chapter_title": "Scales and Directions",
+  "subject": "Mathematics",
+  "books": [
+    "Learning Paths Mathematics Class 5"
+  ],
+  "theme": "Scales, Reduction, Enlargement, Compass Directions, Turns, Angles",
+  "theme_short": "Scales & Directions",
+  "summary": "Learn how scale drawings work — reducing and enlarging images — and master the eight compass directions, turns (quarter, half, three-quarter), and angles between directions.",
+  "school_exam_format": {
+    "test_name": "Periodic Test 1",
+    "session": "2026-27",
+    "total_marks": 20,
+    "duration_minutes": 40
+  },
+  "badges": {
+    "champion": {
+      "threshold": 90,
+      "name": "Navigator Champion",
+      "emoji": "🏆",
+      "tagline": "You've mastered scales and directions!"
+    },
+    "star": {
+      "threshold": 75,
+      "name": "Compass Star",
+      "emoji": "⭐",
+      "tagline": "Great sense of direction!"
+    },
+    "spark": {
+      "threshold": 60,
+      "name": "Explorer Spark",
+      "emoji": "✨",
+      "tagline": "Keep exploring — you're finding your way!"
+    }
+  },
+  "motivational_quotes": [
+    "Not all who wander are lost — especially if they know their compass directions!",
+    "A good map and a clear mind can take you anywhere.",
+    "Mathematics gives us the tools to understand the world around us.",
+    "Every expert navigator started by learning North from South."
+  ],
+  "stage_1_learn": {
+    "title": "Learn",
+    "description": "Explore scales and directions through concept cards. Read carefully, study the examples, then test yourself.",
+    "branches": [
+      {
+        "id": "branch_scale_reduction",
+        "title": "Reducing with Scales",
+        "icon": "🔍",
+        "type": "concept_teaching",
+        "marks": 4,
+        "concept_title": "How Scale Drawings Make Big Things Small",
+        "intro": "Ever wondered how a huge building fits on a small piece of paper? That's the magic of scale!",
+        "cards": [
+          {
+            "id": "sc_what_is_scale",
+            "concept_name": "What Is a Scale?",
+            "definition": "A scale tells you the relationship between a drawing and the real object.\n\nWhen we draw something large (like a building, a map, or a cupboard) on paper, we make it smaller — but we keep the SHAPE exactly the same. Only the SIZE changes.\n\nThe scale tells you: \"1 cm on my drawing = ___ cm in real life.\"\n\nExample: A cupboard is 180 cm long. Its drawing is 18 cm long.\n• The drawing is 1/10 of the real size\n• 1 cm on the drawing = 10 cm in real life\n• We write: Scale is 1 cm = 10 cm\n\n💡 Think of it like a photocopy machine that shrinks things — the shape stays the same, but everything gets smaller by the same amount.",
+            "examples": [
+              "Cupboard: actual 180 cm, drawing 18 cm → 18 is 1/10 of 180 → scale: 1 cm = 10 cm",
+              "Chair: actual height 1 m (100 cm), drawing height 20 cm → 20 is 1/5 of 100 → scale: 1 cm = 5 cm"
+            ],
+            "check": {
+              "question": "A table is 200 cm long. Its drawing is 20 cm long. What is the scale?",
+              "options": [
+                "1 cm = 2 cm",
+                "1 cm = 10 cm",
+                "1 cm = 20 cm",
+                "1 cm = 100 cm"
+              ],
+              "correct": 1,
+              "explanation": "The drawing (20 cm) is 1/10 of the real length (200 cm). So 1 cm on the drawing represents 10 cm in reality. Scale = 1 cm = 10 cm."
+            }
+          },
+          {
+            "id": "sc_finding_actual",
+            "concept_name": "Finding Actual Distance from a Map",
+            "definition": "If you know the scale and the distance on a map/drawing, you can find the ACTUAL distance.\n\nFormula:\nActual distance = Map distance × Scale factor\n\nExample: A map has scale 1 cm = 800 m.\nThe distance between two towns on the map is 4.2 cm.\nActual distance = 4.2 × 800 = 3,360 m = 3 km 360 m.\n\nAnother example: Scale is 1 cm = 200 cm (or 2 m).\nSchool is 18 cm from Akif's house on the map.\nActual distance = 18 × 200 = 3,600 cm = 36 m.\n\n💡 Maps are 2D representations of real places. A suitable scale is always used to draw them. The scale is usually written at the bottom of the map.",
+            "examples": [
+              "Scale 1 cm = 800 m, map distance 4.2 cm → actual = 4.2 × 800 = 3,360 m = 3 km 360 m",
+              "Scale 1 cm = 200 cm, map distance 18 cm → actual = 18 × 200 = 3,600 cm = 36 m",
+              "Scale 1 cm = 200 cm, map distance 20 cm → actual = 20 × 200 = 4,000 cm = 40 m"
+            ],
+            "check": {
+              "question": "A map has scale 1 cm = 500 m. Two villages are 6 cm apart on the map. What is the actual distance?",
+              "options": [
+                "500 m",
+                "3,000 m",
+                "30,000 m",
+                "3 cm"
+              ],
+              "correct": 1,
+              "explanation": "Actual distance = map distance × scale factor = 6 × 500 = 3,000 m = 3 km."
+            }
+          },
+          {
+            "id": "sc_finding_scale",
+            "concept_name": "Finding the Scale",
+            "definition": "If you know the actual size and the drawing size, you can find the scale.\n\nSteps:\n1. Divide the actual size by the drawing size\n2. That gives you how many real units each drawing unit represents\n\nExample:\nActual height of a building = 24 cm on paper, real height = 24 m = 2,400 cm... wait, let's use the textbook example:\n\nImage 1 (actual): 6 cm tall. Image 2 (real): 24 cm tall.\nScale = 24 ÷ 6 = 4. So 1 cm on Image 1 = 4 cm on Image 2.\nScale: 1 cm = 4 cm.\n\nAnother example:\nSmall bottle: 3 cm on paper. Real bottle: 90 cm.\nScale = 90 ÷ 3 = 30. Scale: 1 cm = 30 cm.",
+            "examples": [
+              "Drawing: 6 cm, Real: 24 cm → 24 ÷ 6 = 4 → Scale: 1 cm = 4 cm",
+              "Drawing: 3 cm, Real: 90 cm → 90 ÷ 3 = 30 → Scale: 1 cm = 30 cm"
+            ],
+            "check": {
+              "question": "A model car is 8 cm long. The real car is 4 m (400 cm) long. What is the scale?",
+              "options": [
+                "1 cm = 8 cm",
+                "1 cm = 40 cm",
+                "1 cm = 50 cm",
+                "1 cm = 400 cm"
+              ],
+              "correct": 2,
+              "explanation": "Scale factor = 400 ÷ 8 = 50. So 1 cm on the model = 50 cm on the real car."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_scale_enlargement",
+        "title": "Enlarging with Scales",
+        "icon": "🔎",
+        "type": "concept_teaching",
+        "marks": 2,
+        "concept_title": "Making Small Things Bigger — Magnification",
+        "intro": "Sometimes we need to make small things BIGGER to see them clearly. That's enlargement!",
+        "cards": [
+          {
+            "id": "sc_enlarge",
+            "concept_name": "Enlargement (Magnification)",
+            "definition": "Enlargement is the opposite of reduction — we make the image BIGGER.\n\nIf an image is drawn on a ½ cm grid and redrawn on a 1 cm grid:\n• Each square is now 2× bigger\n• The entire image is magnified 2 times\n• The shape stays the same, only the size changes\n\nIf redrawn on a 2 cm grid:\n• Each square is 4× bigger than the ½ cm original\n• The image is magnified 4 times\n\n💡 Think of a magnifying glass — it makes things look bigger without changing their shape. Scale drawings work the same way!\n\n🔬 Real-life use: Scientists enlarge images of tiny bacteria and cells so we can study them. Architects enlarge small blueprint details to see them clearly.",
+            "examples": [
+              "½ cm grid → 1 cm grid: magnified 2× (1 ÷ 0.5 = 2)",
+              "½ cm grid → 2 cm grid: magnified 4× (2 ÷ 0.5 = 4)",
+              "1 cm grid → 3 cm grid: magnified 3× (3 ÷ 1 = 3)"
+            ],
+            "check": {
+              "question": "An insect drawn on a 1 cm grid is redrawn on a 4 cm grid. How many times is the image magnified?",
+              "options": [
+                "2 times",
+                "3 times",
+                "4 times",
+                "5 times"
+              ],
+              "correct": 2,
+              "explanation": "Magnification = new grid size ÷ old grid size = 4 ÷ 1 = 4 times."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_compass",
+        "title": "Compass Directions",
+        "icon": "🧭",
+        "type": "concept_teaching",
+        "marks": 4,
+        "concept_title": "The Eight Compass Directions",
+        "intro": "Directions help us navigate the world. Let's learn the compass rose!",
+        "cards": [
+          {
+            "id": "dir_cardinal",
+            "concept_name": "The Four Cardinal Directions",
+            "definition": "The four main directions are called CARDINAL directions:\n\n⬆️ North (N) — up on a map\n⬇️ South (S) — down on a map\n➡️ East (E) — right on a map (where the sun rises)\n⬅️ West (W) — left on a map (where the sun sets)\n\nOpposite pairs:\n• North ↔ South\n• East ↔ West\n\n💡 Memory trick: Starting from North and going clockwise, remember \"Never Eat Soggy Waffles\" — N, E, S, W!\n\nThe angle between any two adjacent cardinal directions is 90° (a right angle).\nNorth to South = 180° (a straight line).",
+            "examples": [
+              "The sun rises in the East and sets in the West",
+              "If you face North, South is directly behind you",
+              "North to East = 90°, North to South = 180°, North to West = 270° (going clockwise)"
+            ],
+            "check": {
+              "question": "What is the angle between North and South?",
+              "options": [
+                "45°",
+                "90°",
+                "180°",
+                "360°"
+              ],
+              "correct": 2,
+              "explanation": "North and South are exactly opposite directions. The angle between opposite directions is always 180° (half a full turn)."
+            }
+          },
+          {
+            "id": "dir_intermediate",
+            "concept_name": "The Four Intermediate Directions",
+            "definition": "Between each pair of cardinal directions, there is an INTERMEDIATE direction:\n\n↗️ North-East (NE) — between North and East\n↘️ South-East (SE) — between South and East\n↙️ South-West (SW) — between South and West\n↖️ North-West (NW) — between North and West\n\nOpposite pairs:\n• North-East ↔ South-West\n• North-West ↔ South-East\n\nAll 8 directions together form the COMPASS ROSE.\n\nThe angle between adjacent directions on the compass (e.g., N to NE, or NE to E) is 45°.",
+            "examples": [
+              "North-East is opposite to South-West",
+              "North-West is opposite to South-East",
+              "The direction between South and West is South-West"
+            ],
+            "check": {
+              "question": "Which direction is opposite to South-East?",
+              "options": [
+                "South-West",
+                "North-East",
+                "North-West",
+                "East"
+              ],
+              "correct": 2,
+              "explanation": "South-East and North-West are directly opposite on the compass."
+            }
+          },
+          {
+            "id": "dir_angles_between",
+            "concept_name": "Angles Between Directions",
+            "definition": "The compass is like a clock with 360°. Here are the key angles:\n\n• Adjacent cardinal directions (N→E, E→S, etc.) = 90°\n• Adjacent on the 8-point compass (N→NE, NE→E, etc.) = 45°\n• Opposite directions = 180°\n• Full turn = 360° (you face the same direction again)\n\nQuick reference starting from North (clockwise):\nN = 0° | NE = 45° | E = 90° | SE = 135° | S = 180° | SW = 225° | W = 270° | NW = 315° | back to N = 360°\n\n💡 Think of it as a pizza cut into 8 equal slices. Each slice = 45°.",
+            "examples": [
+              "Angle from North to East (clockwise) = 90°",
+              "Angle from South to East (clockwise) = 270° (S→SW→W→NW→N→NE→E) OR 90° anti-clockwise",
+              "Angle between South and East = 90° (they are adjacent cardinal directions)"
+            ],
+            "check": {
+              "question": "What is the angle between North and South-West (going clockwise)?",
+              "options": [
+                "135°",
+                "180°",
+                "225°",
+                "270°"
+              ],
+              "correct": 2,
+              "explanation": "Clockwise from N: N→NE (45°) → E (90°) → SE (135°) → S (180°) → SW (225°). The answer is 225°."
+            }
+          }
+        ]
+      },
+      {
+        "id": "branch_turns",
+        "title": "Turns and Angles",
+        "icon": "🔄",
+        "type": "concept_teaching",
+        "marks": 4,
+        "concept_title": "Quarter, Half, Three-Quarter Turns and Degrees",
+        "intro": "When you spin around, you're making turns. Let's connect turns to directions and angles!",
+        "cards": [
+          {
+            "id": "turn_types",
+            "concept_name": "Types of Turns",
+            "definition": "A full turn = 360° (you end up facing the SAME direction)\nA half turn = 180° = ½ turn (you face the OPPOSITE direction)\nA quarter turn = 90° = ¼ turn (you move one cardinal direction)\nA three-quarter turn = 270° = ¾ turn\n\n🔄 Clockwise = the direction clock hands move\nLooking at a compass: N → E → S → W → N\n\n🔃 Anti-clockwise = the opposite direction\nN → W → S → E → N\n\n💡 Key insight: A ¼ turn clockwise gives the SAME result as a ¾ turn anti-clockwise (because ¼ + ¾ = 1 full turn)!",
+            "examples": [
+              "Facing North, ¼ turn clockwise → East",
+              "Facing North, ½ turn clockwise → South (opposite)",
+              "Facing North, ¾ turn clockwise → West",
+              "Facing North, full turn → North again"
+            ],
+            "check": {
+              "question": "Ishan is facing South. He makes a ½ turn clockwise. Which direction does he face now?",
+              "options": [
+                "East",
+                "West",
+                "North",
+                "South"
+              ],
+              "correct": 2,
+              "explanation": "A ½ turn (180°) from any direction takes you to the OPPOSITE direction. Opposite of South = North."
+            }
+          },
+          {
+            "id": "turn_practice",
+            "concept_name": "Working Out Turns Step by Step",
+            "definition": "To find the final direction after a turn:\n1. Start at the initial direction\n2. Count 90° steps in the given rotation direction\n3. Each 90° step moves you to the next cardinal direction\n\n¼ turn = 1 step (90°)\n½ turn = 2 steps (180°)\n¾ turn = 3 steps (270°)\n\nClockwise order: N → E → S → W → N\nAnti-clockwise order: N → W → S → E → N\n\nExample: Akif faces West. He makes a ¾ turn clockwise.\nW → N (1 step) → E (2 steps) → S (3 steps)\nHe faces South.\n\nExample: Kate faces NE. She turns 90° clockwise.\nNE → SE (one 90° step clockwise)\nShe faces South-East.",
+            "examples": [
+              "Facing West, ¾ clockwise: W → N → E → S. Faces South.",
+              "Facing NE, 90° clockwise: NE → SE. Faces South-East.",
+              "Facing NE, 180° clockwise: NE → SE → SW. Faces South-West."
+            ],
+            "check": {
+              "question": "Jasleen is facing North. She makes a ¼ turn anti-clockwise. Which direction does she face?",
+              "options": [
+                "East",
+                "South",
+                "West",
+                "North-East"
+              ],
+              "correct": 2,
+              "explanation": "Anti-clockwise from North: N → W (one ¼ step). She faces West."
+            }
+          },
+          {
+            "id": "turn_degrees",
+            "concept_name": "Turns in Degrees",
+            "definition": "Instead of fractions, we can describe turns using degrees:\n\n90° = ¼ turn\n180° = ½ turn\n270° = ¾ turn\n360° = full turn\n\nYou can also have turns that land on intermediate directions:\n45° clockwise from North → North-East\n135° clockwise from North → South-East\n\nExample: Kate is facing North-East. She turns 90° clockwise.\nNE + 90° clockwise = SE.\nShe faces South-East.\n\nIf she turns 180° clockwise from NE:\nNE + 180° = SW (opposite direction).\n\n💡 Quick test: If a turn is 180°, you ALWAYS face the opposite direction, no matter which way you were facing or which way you turned!",
+            "examples": [
+              "From North, 90° clockwise → East",
+              "From North, 135° clockwise → South-East",
+              "From East, 180° clockwise → West (opposite)",
+              "From SW, 360° any direction → SW (full turn = same place)"
+            ],
+            "check": {
+              "question": "You are facing East. You turn 270° clockwise. Which direction do you face?",
+              "options": [
+                "North",
+                "South",
+                "West",
+                "East"
+              ],
+              "correct": 0,
+              "explanation": "From East, clockwise: E → S (90°) → W (180°) → N (270°). You face North. (Alternatively: 270° CW = 90° anti-CW. From East, 90° anti-CW = North.)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "stage_2_practice": {
+    "title": "Practice",
+    "description": "Test your understanding of scales and directions with these MCQs.",
+    "sections": [
+      {
+        "id": "practice_scales",
+        "title": "Scales — Reduction & Enlargement",
+        "icon": "📏",
+        "marks": 8,
+        "questions": [
+          {
+            "id": "pq1",
+            "question": "A room is 500 cm long. Its drawing is 10 cm long. What is the scale?",
+            "options": [
+              "1 cm = 5 cm",
+              "1 cm = 50 cm",
+              "1 cm = 500 cm",
+              "1 cm = 10 cm"
+            ],
+            "correct": 1,
+            "hint": "Divide the real length by the drawing length: 500 ÷ 10 = ?",
+            "explanation": "Scale factor = 500 ÷ 10 = 50. So 1 cm on the drawing = 50 cm in reality."
+          },
+          {
+            "id": "pq2",
+            "question": "A map has scale 1 cm = 2 km. Two cities are 7.5 cm apart on the map. The actual distance is:",
+            "options": [
+              "7.5 km",
+              "15 km",
+              "2 km",
+              "75 km"
+            ],
+            "correct": 1,
+            "hint": "Actual distance = map distance × scale factor.",
+            "explanation": "7.5 × 2 = 15 km."
+          },
+          {
+            "id": "pq3",
+            "question": "A drawing on a ½ cm grid is redrawn on a 2 cm grid. The image is magnified by:",
+            "options": [
+              "2 times",
+              "3 times",
+              "4 times",
+              "8 times"
+            ],
+            "correct": 2,
+            "hint": "Divide the new grid size by the old grid size: 2 ÷ ½ = ?",
+            "explanation": "2 ÷ 0.5 = 4. The image is magnified 4 times."
+          },
+          {
+            "id": "pq4",
+            "question": "Scale is 1 cm = 200 cm. A playground is 18 cm long on the map. Its actual length in metres is:",
+            "options": [
+              "36 m",
+              "360 m",
+              "3,600 m",
+              "18 m"
+            ],
+            "correct": 0,
+            "hint": "First find actual in cm (18 × 200), then convert to metres (÷ 100).",
+            "explanation": "18 × 200 = 3,600 cm = 36 m."
+          },
+          {
+            "id": "pq5",
+            "question": "Which of these is an example of ENLARGEMENT?",
+            "options": [
+              "Drawing a building on paper",
+              "A map of India",
+              "Looking through a magnifying glass",
+              "A photograph of a mountain"
+            ],
+            "correct": 2,
+            "hint": "Enlargement makes things BIGGER than their actual size.",
+            "explanation": "A magnifying glass makes small things appear bigger — that's enlargement. Maps and building drawings are reductions (making big things small)."
+          }
+        ]
+      },
+      {
+        "id": "practice_directions",
+        "title": "Compass Directions & Turns",
+        "icon": "🧭",
+        "marks": 10,
+        "questions": [
+          {
+            "id": "pq6",
+            "question": "Which direction is opposite to North-East?",
+            "options": [
+              "North-West",
+              "South-East",
+              "South-West",
+              "East"
+            ],
+            "correct": 2,
+            "hint": "Opposite means 180° away. North↔South and East↔West both flip.",
+            "explanation": "North-East opposite = South-West. Both components flip: N→S and E→W."
+          },
+          {
+            "id": "pq7",
+            "question": "The angle between South and East (adjacent cardinal directions) is:",
+            "options": [
+              "45°",
+              "90°",
+              "135°",
+              "180°"
+            ],
+            "correct": 1,
+            "hint": "Adjacent cardinal directions are always separated by the same angle.",
+            "explanation": "Any two adjacent cardinal directions (N-E, E-S, S-W, W-N) are 90° apart."
+          },
+          {
+            "id": "pq8",
+            "question": "Riya is facing West. She makes a ¼ turn clockwise. She now faces:",
+            "options": [
+              "East",
+              "South",
+              "North",
+              "North-West"
+            ],
+            "correct": 2,
+            "hint": "Clockwise order: N → E → S → W → N. Go one step from West.",
+            "explanation": "Clockwise from West: W → N. She faces North."
+          },
+          {
+            "id": "pq9",
+            "question": "A ¾ turn anti-clockwise from East leads to which direction?",
+            "options": [
+              "North",
+              "South",
+              "West",
+              "North-East"
+            ],
+            "correct": 1,
+            "hint": "Anti-clockwise from East: E → N → W → S (3 steps = ¾ turn).",
+            "explanation": "Anti-clockwise: E → N (¼) → W (½) → S (¾). You face South."
+          },
+          {
+            "id": "pq10",
+            "question": "You turn 180° from South-West. You now face:",
+            "options": [
+              "North-East",
+              "North-West",
+              "South-East",
+              "West"
+            ],
+            "correct": 0,
+            "hint": "180° always takes you to the opposite direction.",
+            "explanation": "180° from any direction = opposite. Opposite of South-West = North-East."
+          },
+          {
+            "id": "pq11",
+            "question": "Facing North, a 360° turn means you now face:",
+            "options": [
+              "South",
+              "East",
+              "West",
+              "North"
+            ],
+            "correct": 3,
+            "hint": "360° = one full circle.",
+            "explanation": "A full turn (360°) brings you right back to where you started. You still face North."
+          },
+          {
+            "id": "pq12",
+            "question": "The direction between North and West is:",
+            "options": [
+              "North-East",
+              "South-West",
+              "North-West",
+              "West-North"
+            ],
+            "correct": 2,
+            "hint": "The intermediate direction between two cardinals combines both names.",
+            "explanation": "Between North and West = North-West (NW). We always say the N/S part first, then the E/W part."
+          }
+        ]
+      }
+    ]
+  },
+  "stage_3_think": {
+    "title": "Think Deeper",
+    "description": "Solve these problems using what you've learned about scales and directions.",
+    "problems": [
+      {
+        "id": "tp1",
+        "category": "scale_calculation",
+        "marks": 5,
+        "scenario": "On a map of Karnal city, the scale is 1 cm = 500 m. Your school is 3.4 cm from your home on the map, and the market is 2.8 cm from your home in the opposite direction.",
+        "question": "What is the actual distance from your home to school? What is the actual distance from school to market (going through your home)? Show your working.",
+        "model_answer": "Home to school: 3.4 × 500 = 1,700 m = 1 km 700 m.\nHome to market: 2.8 × 500 = 1,400 m = 1 km 400 m.\nSchool to market (through home): 1,700 + 1,400 = 3,100 m = 3 km 100 m.",
+        "explanation": "Multiply each map distance by the scale factor, then add because school and market are on opposite sides of home.",
+        "self_check_criteria": [
+          "Did I multiply each map distance by the scale factor (500)?",
+          "Did I convert the answers from metres to km and m?",
+          "Did I add both distances for the school-to-market total?",
+          "Did I show my working for each step?"
+        ]
+      },
+      {
+        "id": "tp2",
+        "category": "finding_scale",
+        "marks": 5,
+        "scenario": "A model of the Qutub Minar is 14.6 cm tall. The actual Qutub Minar is 73 m tall.",
+        "question": "What is the scale of the model? If the base diameter of the model is 2.94 cm, what is the actual base diameter of the Qutub Minar? Show your working.",
+        "model_answer": "Scale factor = 73 m ÷ 14.6 cm. First convert: 73 m = 7,300 cm.\nScale factor = 7,300 ÷ 14.6 = 500.\nScale: 1 cm = 500 cm = 5 m.\nActual base diameter = 2.94 × 500 = 1,470 cm = 14.7 m.",
+        "explanation": "Convert to the same units first, then divide to find the scale factor. Use the scale to find the real base diameter.",
+        "self_check_criteria": [
+          "Did I convert metres to centimetres before dividing?",
+          "Did I correctly calculate the scale factor?",
+          "Did I use the scale to find the actual base diameter?",
+          "Did I convert my final answer back to metres?"
+        ]
+      },
+      {
+        "id": "tp3",
+        "category": "directions_turns",
+        "marks": 5,
+        "scenario": "Priya is standing in her school playground facing North. She follows these instructions:\nStep 1: Turn 90° clockwise and walk straight.\nStep 2: Turn 90° clockwise and walk straight.\nStep 3: Turn 90° clockwise and walk straight.\nStep 4: Turn 90° clockwise and walk straight.",
+        "question": "After each step, which direction is Priya facing? After all 4 steps, where does she end up relative to where she started? What total angle has she turned?",
+        "model_answer": "Step 1: North + 90° CW = East.\nStep 2: East + 90° CW = South.\nStep 3: South + 90° CW = West.\nStep 4: West + 90° CW = North.\nShe ends up facing North again — back at the starting direction.\nTotal angle turned = 4 × 90° = 360° (one full turn).\nIf she walked the same distance each time, she would trace a square and end up back at the starting point!",
+        "explanation": "Four quarter turns clockwise = one full turn (360°). She traces a square path.",
+        "self_check_criteria": [
+          "Did I correctly state the direction after each step?",
+          "Did I identify that she ends up facing North (same as start)?",
+          "Did I calculate the total angle as 360°?",
+          "Did I explain that the path forms a square?"
+        ]
+      },
+      {
+        "id": "tp4",
+        "category": "directions_problem",
+        "marks": 5,
+        "scenario": "In a park, Rohan is at the centre. The fountain is to his North. The playground is to his South-East. The ice cream stall is to his West.",
+        "question": "Rohan is facing the fountain (North). He wants to face the playground (South-East). Should he turn clockwise or anti-clockwise, and by how many degrees? Then from the playground direction, how many degrees must he turn clockwise to face the ice cream stall?",
+        "model_answer": "Fountain to playground: North to South-East.\nClockwise: N → NE (45°) → E (90°) → SE (135°). Turn 135° clockwise.\n(Anti-clockwise would be 225° — clockwise is shorter.)\n\nPlayground to ice cream stall: South-East to West.\nClockwise: SE → S (45°) → SW (90°) → W (135°). Turn 135° clockwise.\n(Or anti-clockwise: SE → E (45°) → NE (90°) → N (135°) → NW (180°) → W (225°) — clockwise is shorter again.)",
+        "explanation": "Count 45° steps along the compass. Choose the shorter rotation direction.",
+        "self_check_criteria": [
+          "Did I correctly find the angle from North to South-East?",
+          "Did I state the rotation direction (clockwise is shorter)?",
+          "Did I correctly find the angle from South-East to West?",
+          "Did I show my step-by-step counting along the compass?"
+        ]
+      },
+      {
+        "id": "tp5",
+        "category": "combined_scale_direction",
+        "marks": 5,
+        "scenario": "On a school campus map (scale: 1 cm = 50 m), the library is 4 cm North of the main gate, and the sports field is 6 cm East of the main gate.",
+        "question": "What is the actual distance from the main gate to the library? What is the actual distance from the main gate to the sports field? If you walk from the library to the main gate to the sports field, what total distance do you cover and what directions do you walk?",
+        "model_answer": "Library: 4 × 50 = 200 m (North of gate).\nSports field: 6 × 50 = 300 m (East of gate).\nLibrary to gate: walk 200 m South.\nGate to sports field: walk 300 m East.\nTotal distance: 200 + 300 = 500 m.\nDirections: first South, then East.",
+        "explanation": "Convert each map distance using the scale. Going FROM the library TO the gate means walking South (opposite of North). Then gate to field is East.",
+        "self_check_criteria": [
+          "Did I convert both map distances using the scale correctly?",
+          "Did I identify the correct walking directions (South then East)?",
+          "Did I add both distances for the total?",
+          "Did I clearly explain the route with distances and directions?"
+        ]
+      }
+    ]
+  },
+  "stage_4_test": {
+    "title": "Chapter 12 Test",
+    "total_marks": 20,
+    "time_limit": 2400,
+    "instructions": "Answer all questions carefully. Section A: 8 MCQs × 1 mark = 8 marks. Section B: Short answers = 12 marks. Total: 20 marks, 40 minutes.",
+    "sections": [
+      {
+        "id": "test_section_a",
+        "title": "Section A — MCQs",
+        "marks": 8,
+        "instructions": "Choose the correct option. Each question carries 1 mark.",
+        "questions": [
+          {
+            "id": "ta1",
+            "type": "mcq",
+            "question": "A drawing has scale 1 cm = 8 cm. If the drawing is 5 cm long, the actual length is:",
+            "options": [
+              "13 cm",
+              "40 cm",
+              "3 cm",
+              "80 cm"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta2",
+            "type": "mcq",
+            "question": "An image on a ½ cm grid is redrawn on a 1 cm grid. The magnification is:",
+            "options": [
+              "½ times",
+              "1 time",
+              "2 times",
+              "4 times"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta3",
+            "type": "mcq",
+            "question": "The direction opposite to West is:",
+            "options": [
+              "North",
+              "South",
+              "East",
+              "North-West"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta4",
+            "type": "mcq",
+            "question": "The angle between North and East (going clockwise) is:",
+            "options": [
+              "45°",
+              "90°",
+              "180°",
+              "270°"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta5",
+            "type": "mcq",
+            "question": "A ½ turn clockwise from South leads to:",
+            "options": [
+              "East",
+              "West",
+              "North",
+              "South-East"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta6",
+            "type": "mcq",
+            "question": "The direction between South and East is:",
+            "options": [
+              "North-East",
+              "South-East",
+              "South-West",
+              "East-South"
+            ],
+            "correct_answer": "B",
+            "marks": 1
+          },
+          {
+            "id": "ta7",
+            "type": "mcq",
+            "question": "You face NE and turn 180°. You now face:",
+            "options": [
+              "NW",
+              "SE",
+              "SW",
+              "E"
+            ],
+            "correct_answer": "C",
+            "marks": 1
+          },
+          {
+            "id": "ta8",
+            "type": "mcq",
+            "question": "A map scale is 1 cm = 1 km. Two towns are 9.5 cm apart on the map. Actual distance:",
+            "options": [
+              "9.5 km",
+              "95 km",
+              "0.95 km",
+              "950 m"
+            ],
+            "correct_answer": "A",
+            "marks": 1
+          }
+        ]
+      },
+      {
+        "id": "test_section_b",
+        "title": "Section B — Short Answers",
+        "marks": 12,
+        "instructions": "Answer the following. Show your working.",
+        "questions": [
+          {
+            "id": "tb1",
+            "type": "short_answer",
+            "question": "A model boat is 12 cm long. The real boat is 6 m long. Find the scale of the model.",
+            "marks": 2,
+            "model_answer": "Real boat = 6 m = 600 cm. Scale factor = 600 ÷ 12 = 50. Scale: 1 cm = 50 cm.",
+            "marking_guide": "1 mark for converting to same units. 1 mark for correct scale."
+          },
+          {
+            "id": "tb2",
+            "type": "short_answer",
+            "question": "On a map (scale 1 cm = 400 m), a park is 3.5 cm from a hospital. Find the actual distance in km and m.",
+            "marks": 2,
+            "model_answer": "Actual = 3.5 × 400 = 1,400 m = 1 km 400 m.",
+            "marking_guide": "1 mark for correct multiplication. 1 mark for correct conversion to km and m."
+          },
+          {
+            "id": "tb3",
+            "type": "short_answer",
+            "question": "Name the direction opposite to each: (a) North-West (b) South-East (c) East (d) South-West.",
+            "marks": 2,
+            "model_answer": "(a) South-East (b) North-West (c) West (d) North-East.",
+            "marking_guide": "½ mark each. Full marks if all 4 correct, 1 mark if 2-3 correct."
+          },
+          {
+            "id": "tb4",
+            "type": "short_answer",
+            "question": "Simran is facing South. She makes a ¾ turn anti-clockwise. Which direction does she face now? Show each step.",
+            "marks": 3,
+            "model_answer": "Anti-clockwise from South:\nStep 1 (¼ turn): S → E\nStep 2 (½ turn): E → N\nStep 3 (¾ turn): N → W\nShe faces West.",
+            "marking_guide": "1 mark for correct direction of rotation. 1 mark for showing steps. 1 mark for correct final answer (West)."
+          },
+          {
+            "id": "tb5",
+            "type": "short_answer",
+            "question": "A school map has scale 1 cm = 200 m. The playground is 4.5 cm North of the gate. The library is 3 cm East of the gate. Find the actual distances. If you walk from the playground to the gate and then to the library, what total distance do you walk and in which directions?",
+            "marks": 3,
+            "model_answer": "Playground: 4.5 × 200 = 900 m North of gate.\nLibrary: 3 × 200 = 600 m East of gate.\nPlayground to gate: 900 m walking South.\nGate to library: 600 m walking East.\nTotal: 900 + 600 = 1,500 m = 1 km 500 m.\nDirections: South, then East.",
+            "marking_guide": "1 mark for correct distance calculations. 1 mark for correct directions (South then East). 1 mark for correct total distance with unit conversion."
+          }
+        ]
+      }
+    ],
+    "score_tiers": [
+      {
+        "min": 19,
+        "max": 20,
+        "message": "You are a champion! 🏆"
+      },
+      {
+        "min": 16,
+        "max": 18,
+        "message": "Good job! Keep it up! ⭐"
+      },
+      {
+        "min": 12,
+        "max": 15,
+        "message": "Nice effort, aim higher! ✨"
+      },
+      {
+        "min": 8,
+        "max": 11,
+        "message": "Room for improvement, try again! 💪"
+      },
+      {
+        "min": 0,
+        "max": 7,
+        "message": "You can do better, try again! 📚"
+      }
+    ]
+  },
+  "stage_0_deep_dive": {
+    "title": "Deep Dive — Scales & Directions",
+    "description": "Detailed explanations with stories, visuals & step-by-step examples. Read anytime for reference.",
+    "topics": [
+      {
+        "id": "dd_scales",
+        "title": "Scales",
+        "icon": "📏",
+        "subtitle": "How do mapmakers fit a whole city onto one small page?",
+        "sections": [
+          {
+            "type": "story",
+            "title": "The Giant and the Map",
+            "content": "Imagine a giant who wants to draw a picture of his enormous house. The house is **180 centimetres** tall — taller than your father! But his paper is tiny. How can the whole house fit?\n\nThe giant has a clever trick. He decides: \"For every **10 centimetres** of my real house, I will draw just **1 centimetre** on paper.\" So his 180 cm house becomes an 18 cm drawing — small enough to fit, but with the exact same shape!\n\nThis clever trick is called a **scale**. A scale tells us how much smaller (or bigger) a drawing is compared to the real thing."
+          },
+          {
+            "type": "steps",
+            "title": "Understanding Scale",
+            "steps": [
+              {
+                "title": "A scale is a comparison",
+                "text": "A scale like **1 cm = 10 cm** means: every 1 centimetre on the drawing stands for 10 centimetres in real life.",
+                "example": "A 18 cm drawing with scale 1 cm = 10 cm means the real object is 18 × 10 = 180 cm."
+              },
+              {
+                "title": "To find the ACTUAL size from a drawing",
+                "text": "Multiply the drawing measurement by the scale number.\n**Actual = Drawing × Scale**",
+                "example": "Drawing is 20 cm, scale is 1 cm = 5 cm. Actual = 20 × 5 = 100 cm = 1 metre."
+              },
+              {
+                "title": "To find the SCALE",
+                "text": "Divide the actual size by the drawing size (use the same units!).",
+                "example": "Real chair is 100 cm, drawing is 20 cm. Scale = 100 ÷ 20 = 5. So 1 cm = 5 cm."
+              },
+              {
+                "title": "Maps use bigger scales",
+                "text": "A map scale like **1 cm = 800 m** lets a whole city fit on one page. Multiply map distance by the scale to get the real distance.",
+                "example": "Two towns are 4.2 cm apart on a map (1 cm = 800 m). Real distance = 4.2 × 800 = 3,360 m = 3 km 360 m."
+              }
+            ]
+          },
+          {
+            "type": "visual",
+            "svg": "<svg viewBox=\"0 0 700 240\" xmlns=\"http://www.w3.org/2000/svg\" style=\"font-family:Nunito,sans-serif;\"><rect width=\"700\" height=\"240\" rx=\"16\" fill=\"#FFF8EE\"/><text x=\"350\" y=\"28\" text-anchor=\"middle\" font-size=\"15\" font-weight=\"700\" fill=\"#2B1810\">How Scale Works: 1 cm = 10 cm</text><g transform=\"translate(60,55)\"><rect x=\"0\" y=\"0\" width=\"180\" height=\"140\" rx=\"8\" fill=\"#8B5A2B\" fill-opacity=\"0.25\" stroke=\"#8B5A2B\" stroke-width=\"3\"/><text x=\"90\" y=\"75\" text-anchor=\"middle\" font-size=\"13\" fill=\"#5C4332\" font-weight=\"700\">REAL CUPBOARD</text><text x=\"90\" y=\"95\" text-anchor=\"middle\" font-size=\"20\" fill=\"#5C4332\" font-weight=\"900\">180 cm</text></g><g transform=\"translate(400,105)\"><rect x=\"0\" y=\"0\" width=\"90\" height=\"70\" rx=\"6\" fill=\"#5B8DB8\" fill-opacity=\"0.25\" stroke=\"#5B8DB8\" stroke-width=\"3\"/><text x=\"45\" y=\"32\" text-anchor=\"middle\" font-size=\"10\" fill=\"#3d6d8f\" font-weight=\"700\">DRAWING</text><text x=\"45\" y=\"50\" text-anchor=\"middle\" font-size=\"16\" fill=\"#3d6d8f\" font-weight=\"900\">18 cm</text></g><text x=\"320\" y=\"130\" text-anchor=\"middle\" font-size=\"30\" fill=\"#E87722\">&#8594;</text><text x=\"555\" y=\"130\" text-anchor=\"middle\" font-size=\"13\" fill=\"#E87722\" font-weight=\"700\">divide by 10</text><text x=\"350\" y=\"222\" text-anchor=\"middle\" font-size=\"13\" fill=\"#4A7C59\" font-weight=\"700\">Same shape, 10 times smaller. Scale = 1 cm represents 10 cm.</text></svg>",
+            "caption": "A real 180 cm cupboard drawn at 18 cm using a scale of 1 cm = 10 cm"
+          },
+          {
+            "type": "interactive",
+            "title": "Scale Calculator",
+            "html": "<div style=\"font-family:Nunito,sans-serif;background:#FFF8EE;border-radius:16px;padding:24px;text-align:center;\"><div style=\"font-size:14px;color:#5C4332;margin-bottom:14px;font-weight:700;\">Enter a map distance and scale to find the real distance!</div><div style=\"display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:8px;\"><input id=\"sc-dist\" type=\"number\" value=\"4.2\" style=\"font-size:20px;font-family:Fraunces,serif;text-align:center;width:90px;padding:8px;border:3px solid #8B5A2B;border-radius:10px;color:#8B5A2B;font-weight:700;outline:none;\"><span style=\"font-size:15px;color:#5C4332;font-weight:700;\">cm on map</span></div><div style=\"font-size:14px;color:#5C4332;margin-bottom:6px;\">1 cm represents:</div><div style=\"display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin-bottom:14px;\"><input id=\"sc-scale\" type=\"number\" value=\"800\" style=\"font-size:20px;font-family:Fraunces,serif;text-align:center;width:90px;padding:8px;border:3px solid #4A7C59;border-radius:10px;color:#4A7C59;font-weight:700;outline:none;\"><span style=\"font-size:15px;color:#5C4332;font-weight:700;\">metres</span></div><button id=\"sc-go\" style=\"padding:10px 24px;border-radius:10px;border:none;background:#E87722;color:white;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;\">Calculate</button><div id=\"sc-result\" style=\"margin-top:16px;min-height:50px;\"></div></div>",
+            "js": "(function(){var d=document.getElementById('sc-dist'),s=document.getElementById('sc-scale'),btn=document.getElementById('sc-go'),res=document.getElementById('sc-result');function calc(){var dist=parseFloat(d.value),scale=parseFloat(s.value);if(isNaN(dist)||isNaN(scale)){res.innerHTML='<div style=\"color:#A09080;\">Enter valid numbers</div>';return;}var m=dist*scale;var km=Math.floor(m/1000),rem=Math.round(m%1000);var disp=m>=1000?(km+' km '+rem+' m'):(m+' m');res.innerHTML='<div style=\"background:white;border-radius:12px;padding:16px;border:2px solid #E8DCC8;\"><div style=\"font-size:14px;color:#5C4332;\">'+dist+' cm * '+scale+' = </div><div style=\"font-size:26px;font-weight:900;color:#E87722;margin-top:4px;\">'+m.toLocaleString('en-IN')+' metres</div><div style=\"font-size:15px;color:#4A7C59;font-weight:700;margin-top:4px;\">= '+disp+'</div></div>';}btn.onclick=calc;calc();})();"
+          },
+          {
+            "type": "tip",
+            "title": "Reduction vs Enlargement",
+            "content": "**Reduction** makes things SMALLER (a map of a city, a drawing of a building).\n**Enlargement** makes things BIGGER (a magnifying glass, a microscope image of a cell).\n\nIf an image on a half-cm grid is redrawn on a 2 cm grid, it is enlarged **4 times** (because 2 divided by half = 4)."
+          },
+          {
+            "type": "funfact",
+            "icon": "🗺️",
+            "content": "Mapmakers always use scales — without them, a real map of India would have to be as big as India itself! The scale is what lets an entire country fit neatly onto a single page in your atlas."
+          }
+        ]
+      },
+      {
+        "id": "dd_directions",
+        "title": "Directions",
+        "icon": "🧭",
+        "subtitle": "North, South, East, West — and how to turn between them",
+        "sections": [
+          {
+            "type": "story",
+            "title": "Lost in the Forest",
+            "content": "A young explorer named Aarav was hiking in a forest when he realised he was lost. He had no phone, no map. But he remembered something his teacher taught him: **the sun rises in the East and sets in the West.**\n\nIt was morning, and the sun was rising. Aarav faced the sun — now he was facing **East**. He knew his village was towards the **North**. So he turned a quarter-turn to his left, and started walking. Within an hour, he was home!\n\nKnowing your directions can save your life. Let us learn the compass — the explorer's best friend."
+          },
+          {
+            "type": "steps",
+            "title": "The Compass and Turns",
+            "steps": [
+              {
+                "title": "The four main directions",
+                "text": "North (up), South (down), East (right, where the sun rises), West (left, where the sun sets). Remember them clockwise as **N-E-S-W**: \"Never Eat Soggy Waffles!\"",
+                "example": "North is opposite South. East is opposite West."
+              },
+              {
+                "title": "The four in-between directions",
+                "text": "Between the main directions are: North-East (NE), South-East (SE), South-West (SW), North-West (NW).",
+                "example": "NE is between North and East. The direction between South and West is South-West."
+              },
+              {
+                "title": "Turns and angles",
+                "text": "A **quarter turn** = 90 degrees, a **half turn** = 180 degrees, a **three-quarter turn** = 270 degrees, and a **full turn** = 360 degrees.",
+                "example": "Facing North, a quarter turn clockwise makes you face East."
+              },
+              {
+                "title": "Clockwise vs anti-clockwise",
+                "text": "**Clockwise** follows the clock hands: N to E to S to W. **Anti-clockwise** goes the opposite way: N to W to S to E.",
+                "example": "Facing West, a three-quarter turn clockwise: W to N to E to S. You end up facing South."
+              }
+            ]
+          },
+          {
+            "type": "visual",
+            "svg": "<svg viewBox=\"0 0 400 400\" xmlns=\"http://www.w3.org/2000/svg\" style=\"font-family:Nunito,sans-serif;max-width:340px;\"><rect width=\"400\" height=\"400\" rx=\"16\" fill=\"#FFF8EE\"/><circle cx=\"200\" cy=\"200\" r=\"150\" fill=\"white\" stroke=\"#E8DCC8\" stroke-width=\"3\"/><circle cx=\"200\" cy=\"200\" r=\"6\" fill=\"#E87722\"/><line x1=\"200\" y1=\"200\" x2=\"200\" y2=\"60\" stroke=\"#B8385E\" stroke-width=\"3\"/><polygon points=\"200,45 192,68 208,68\" fill=\"#B8385E\"/><line x1=\"200\" y1=\"200\" x2=\"200\" y2=\"340\" stroke=\"#5B8DB8\" stroke-width=\"2\"/><line x1=\"200\" y1=\"200\" x2=\"340\" y2=\"200\" stroke=\"#5B8DB8\" stroke-width=\"2\"/><line x1=\"200\" y1=\"200\" x2=\"60\" y2=\"200\" stroke=\"#5B8DB8\" stroke-width=\"2\"/><line x1=\"200\" y1=\"200\" x2=\"290\" y2=\"110\" stroke=\"#4A7C59\" stroke-width=\"1.5\" stroke-dasharray=\"4\"/><line x1=\"200\" y1=\"200\" x2=\"290\" y2=\"290\" stroke=\"#4A7C59\" stroke-width=\"1.5\" stroke-dasharray=\"4\"/><line x1=\"200\" y1=\"200\" x2=\"110\" y2=\"290\" stroke=\"#4A7C59\" stroke-width=\"1.5\" stroke-dasharray=\"4\"/><line x1=\"200\" y1=\"200\" x2=\"110\" y2=\"110\" stroke=\"#4A7C59\" stroke-width=\"1.5\" stroke-dasharray=\"4\"/><text x=\"200\" y=\"38\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"900\" fill=\"#B8385E\">N</text><text x=\"200\" y=\"370\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"900\" fill=\"#5B8DB8\">S</text><text x=\"368\" y=\"208\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"900\" fill=\"#5B8DB8\">E</text><text x=\"32\" y=\"208\" text-anchor=\"middle\" font-size=\"22\" font-weight=\"900\" fill=\"#5B8DB8\">W</text><text x=\"300\" y=\"100\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#4A7C59\">NE</text><text x=\"300\" y=\"305\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#4A7C59\">SE</text><text x=\"100\" y=\"305\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#4A7C59\">SW</text><text x=\"100\" y=\"100\" text-anchor=\"middle\" font-size=\"14\" font-weight=\"700\" fill=\"#4A7C59\">NW</text></svg>",
+            "caption": "The compass rose: 4 main directions (N,S,E,W) and 4 in-between directions (NE,SE,SW,NW)"
+          },
+          {
+            "type": "interactive",
+            "title": "Turn Explorer",
+            "html": "<div style=\"font-family:Nunito,sans-serif;background:#FFF8EE;border-radius:16px;padding:24px;text-align:center;\"><div style=\"font-size:14px;color:#5C4332;margin-bottom:14px;font-weight:700;\">Pick a starting direction and a turn to see where you end up!</div><div style=\"margin-bottom:10px;\"><span style=\"font-size:14px;color:#5C4332;font-weight:700;\">Facing: </span><select id=\"tn-dir\" style=\"font-size:16px;padding:6px 10px;border-radius:8px;border:2px solid #5B8DB8;font-family:inherit;color:#3d6d8f;font-weight:700;\"><option>North</option><option>East</option><option>South</option><option>West</option></select></div><div style=\"margin-bottom:14px;\"><span style=\"font-size:14px;color:#5C4332;font-weight:700;\">Turn: </span><select id=\"tn-turn\" style=\"font-size:16px;padding:6px 10px;border-radius:8px;border:2px solid #4A7C59;font-family:inherit;color:#4A7C59;font-weight:700;\"><option value=\"90\">Quarter (90 deg)</option><option value=\"180\">Half (180 deg)</option><option value=\"270\">Three-quarter (270 deg)</option></select> <select id=\"tn-rot\" style=\"font-size:16px;padding:6px 10px;border-radius:8px;border:2px solid #E87722;font-family:inherit;color:#E87722;font-weight:700;\"><option value=\"cw\">Clockwise</option><option value=\"acw\">Anti-clockwise</option></select></div><button id=\"tn-go\" style=\"padding:10px 24px;border-radius:10px;border:none;background:#E87722;color:white;font-weight:700;font-size:15px;cursor:pointer;font-family:inherit;\">Show Result</button><div id=\"tn-result\" style=\"margin-top:16px;min-height:50px;\"></div></div>",
+            "js": "(function(){var order=['North','East','South','West'];var d=document.getElementById('tn-dir'),t=document.getElementById('tn-turn'),r=document.getElementById('tn-rot'),btn=document.getElementById('tn-go'),res=document.getElementById('tn-result');function calc(){var start=order.indexOf(d.value);var steps=parseInt(t.value)/90;if(r.value==='acw')steps=-steps;var end=((start+steps)%4+4)%4;res.innerHTML='<div style=\"background:white;border-radius:12px;padding:16px;border:2px solid #E8DCC8;\"><div style=\"font-size:14px;color:#5C4332;\">Starting at '+d.value+', turning '+t.options[t.selectedIndex].text+' '+r.options[r.selectedIndex].text.toLowerCase()+':</div><div style=\"font-size:30px;font-weight:900;color:#E87722;margin-top:8px;\">'+d.value+' -> '+order[end]+'</div></div>';}btn.onclick=calc;calc();})();"
+          },
+          {
+            "type": "tip",
+            "title": "Angles Between Directions",
+            "content": "Each main direction is **90 degrees** apart. North to East = 90 degrees. North to South (opposite) = 180 degrees. A full circle around the compass = 360 degrees.\n\nThe in-between directions split these further: North to North-East = 45 degrees."
+          },
+          {
+            "type": "funfact",
+            "icon": "🐦",
+            "content": "Birds that migrate thousands of kilometres use a built-in compass! Scientists discovered that some birds can actually **sense the Earth's magnetic field** to know which way is North — even at night with no stars to guide them."
+          }
+        ]
+      }
+    ]
+  }
+}
+</script>
+
+<div class="container" id="app">
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <p style="color: var(--ink-soft); font-weight: 600;">Loading your chapter...</p>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+const App = {
+  data: null,
+  currentStage: 1,
+  currentBranch: null,
+  currentSection: null,
+  currentPanelIdx: 0,
+  currentVocabGroup: null,
+  state: {
+    panelChecks: {}, cardFlips: {}, spotItAnswers: {}, practiceAnswers: {},
+    thinkSubmissions: {},      // p_id: { value, submitted }
+    testAnswers: {},           // q_id: { value }
+    testStartTime: null,       // null if not started
+    testTimeUp: false,
+    testSubmitted: false,
+    spotItModal: null,
+  },
+
+  async init() {
+    try {
+      // Bind events ONCE at startup, before any rendering
+      this.bindEvents();
+
+      const embedded = document.getElementById('embedded-chapter');
+      if (embedded && embedded.textContent.trim()) {
+        try {
+          this.data = JSON.parse(embedded.textContent.trim());
+          this.loadProgress();
+          this.render();
+          return;
+        } catch (e) { console.warn('Embedded JSON parse failed:', e.message); }
+      }
+      const params = new URLSearchParams(window.location.search);
+      const chapter = params.get('chapter');
+      const url = chapter ? `${chapter}.json` : 'content/class5/english/ch1-that-boy-next-door.json';
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`Could not load: ${url} (status ${response.status})`);
+      this.data = await response.json();
+      this.validateSchema();
+      this.loadProgress();
+      this.render();
+    } catch (err) { this.renderError(err.message); }
+  },
+
+  validateSchema() {
+    const required = ['chapter_id', 'chapter_title', 'subject', 'stage_1_learn', 'stage_2_practice'];
+    const missing = required.filter(f => !this.data[f]);
+    if (missing.length > 0) throw new Error(`JSON missing fields: ${missing.join(', ')}`);
+  },
+
+  storageKey() { return `egurukul_${this.data.chapter_id}`; },
+
+  // Bump this when schema or state shape changes — old state will be discarded
+  STATE_VERSION: 6,
+
+  loadProgress() {
+    try {
+      const saved = localStorage.getItem(this.storageKey());
+      if (saved) {
+        const p = JSON.parse(saved);
+        if (p.stateVersion !== this.STATE_VERSION) {
+          console.log('Old state version detected, starting fresh');
+          localStorage.removeItem(this.storageKey());
+          return;
+        }
+        this.state.panelChecks = p.panelChecks || {};
+        this.state.cardFlips = p.cardFlips || {};
+        this.state.spotItAnswers = p.spotItAnswers || {};
+        this.state.practiceAnswers = p.practiceAnswers || {};
+        this.state.thinkSubmissions = p.thinkSubmissions || {};
+        this.state.testAnswers = p.testSubmitted ? (p.testAnswers || {}) : {};
+        this.state.testSubmitted = p.testSubmitted || false;
+        this.state.manualMarksAwarded = p.manualMarksAwarded || {};
+        this.currentStage = p.currentStage || 1;
+        if (this.currentStage < 1) this.currentStage = 1; // Never restore to Stage 0 (Deep Dive)
+      }
+    } catch (e) { console.warn(e); }
+  },
+
+  saveProgress() {
+    try {
+      localStorage.setItem(this.storageKey(), JSON.stringify({
+        stateVersion: this.STATE_VERSION,
+        panelChecks: this.state.panelChecks,
+        cardFlips: this.state.cardFlips,
+        spotItAnswers: this.state.spotItAnswers,
+        practiceAnswers: this.state.practiceAnswers,
+        thinkSubmissions: this.state.thinkSubmissions,
+        testAnswers: this.state.testSubmitted ? this.state.testAnswers : {},
+        testSubmitted: this.state.testSubmitted,
+        manualMarksAwarded: this.state.manualMarksAwarded || {},
+        currentStage: this.currentStage,
+      }));
+    } catch (e) { console.warn(e); }
+  },
+
+  resetProgress() {
+    if (confirm('Reset all your progress in this chapter? You will start fresh from Stage 1.')) {
+      localStorage.removeItem(this.storageKey());
+      this.state.panelChecks = {};
+      this.state.cardFlips = {};
+      this.state.spotItAnswers = {};
+      this.state.practiceAnswers = {};
+      this.state.thinkSubmissions = {};
+      this.state.testAnswers = {};
+      this.state.testStartTime = null;
+      this.state.testTimeUp = false;
+      this.state.testSubmitted = false;
+      this.state.manualMarksAwarded = {};
+      this.currentStage = 1;
+      this.currentBranch = null;
+      this.currentSection = null;
+      this.currentPanelIdx = 0;
+      this.currentVocabGroup = null;
+      this.deepDiveTopicIdx = 0;
+      this.previousStage = 1;
+      this.stopTimer();
+      this.render();
+      window.scrollTo(0, 0);
+    }
+  },
+
+  isBranchComplete(branch) {
+    if (branch.type === 'story_panels') {
+      return branch.panels.every(p => !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined));
+    }
+    if (branch.type === 'vocabulary_cards') {
+      return branch.cards.every(c => this.state.spotItAnswers[c.id] !== undefined);
+    }
+    if (branch.type === 'concept_teaching') {
+      return branch.cards.every(c => !c.check || (this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined));
+    }
+    return false;
+  },
+
+  countAnsweredPanels(branch) {
+    if (!branch.panels) return 0;
+    return branch.panels.filter(p =>
+      !p.comprehension_check ||
+      (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined)
+    ).length;
+  },
+
+  isStage1Complete() { return this.data.stage_1_learn.branches.every(b => this.isBranchComplete(b)); },
+
+  isPracticeSectionComplete(section) {
+    return section.questions.every(q => this.state.practiceAnswers[q.id] && this.state.practiceAnswers[q.id].selected !== undefined);
+  },
+
+  isStage2Complete() { return this.data.stage_2_practice.sections.every(s => this.isPracticeSectionComplete(s)); },
+
+  isStage3Complete() {
+    const problems = this.data.stage_3_think.problems;
+    return problems.every(p => this.state.thinkSubmissions[p.id] && this.state.thinkSubmissions[p.id].submitted);
+  },
+
+  isStage4Complete() { return this.state.testSubmitted; },
+
+  isStageComplete(n) {
+    if (n === 1) return this.isStage1Complete();
+    if (n === 2) return this.isStage2Complete();
+    if (n === 3) return this.isStage3Complete();
+    if (n === 4) return this.isStage4Complete();
+    return false;
+  },
+
+  isStageUnlocked(n) {
+    if (n === 1) return true;
+    return this.isStageComplete(n - 1);
+  },
+
+  render() {
+    const app = document.getElementById('app');
+    const hasDeepDive = this.data.stage_0_deep_dive && this.data.stage_0_deep_dive.topics && this.data.stage_0_deep_dive.topics.length > 0;
+    app.innerHTML = `
+      ${this.renderHeader()}
+      ${this.currentStage === 0 ? '' : (hasDeepDive ? this.renderDeepDiveTrigger() : '')}
+      ${this.currentStage === 0 ? '' : this.renderProgressBar()}
+      <div>
+        ${this.currentStage === 0 ? this.renderStage0() : ''}
+        ${this.currentStage === 1 ? this.renderStage1() : ''}
+        ${this.currentStage === 2 ? this.renderStage2() : ''}
+        ${this.currentStage === 3 ? this.renderStage3() : ''}
+        ${this.currentStage === 4 ? this.renderStage4() : ''}
+      </div>
+      ${this.state.spotItModal ? this.renderSpotItModal() : ''}
+    `;
+    // Execute deferred JS for interactive Deep Dive sections (global scope so inline onclick works)
+    app.querySelectorAll('.dd-deferred-js').forEach(el => {
+      try {
+        const js = el.textContent;
+        if (js && js.trim()) {
+          const s = document.createElement('script');
+          s.textContent = js;
+          document.body.appendChild(s);
+          s.remove();
+        }
+      } catch(e) { console.warn('Interactive JS error:', e); }
+      el.remove();
+    });
+    // bindEvents is now called ONCE in init(), not here
+  },
+
+  renderError(msg) {
+    document.getElementById('app').innerHTML = `
+      <div class="error-screen">
+        <h2 style="font-family: 'Fraunces', serif; margin-bottom: 12px;">Couldn't load the chapter</h2>
+        <p>${this.escapeHtml(msg)}</p>
+        <p style="font-size: 13px; margin-top: 12px;">Make sure the JSON file is in the same folder, or paste it inside the embedded-chapter script tag.</p>
+      </div>
+    `;
+  },
+
+  renderHeader() {
+    const d = this.data;
+    let title = d.chapter_title;
+    if (d.chapter_number) title = `Chapter ${d.chapter_number} — ${title}`;
+    return `
+      <header class="app-header">
+        <div class="header-eyebrow">${this.escapeHtml(d.subject || '')} · Class 5</div>
+        <h1 class="header-title">${this.escapeHtml(title)}</h1>
+        ${d.chapter_author ? `<div class="header-author">by ${this.escapeHtml(d.chapter_author)}</div>` : ''}
+        <button class="reset-btn" data-reset-progress="1" title="Clear all progress and start fresh">↻ Reset</button>
+      </header>
+    `;
+  },
+
+  renderProgressBar() {
+    const stages = [{num:1,label:'Learn'},{num:2,label:'Practice'},{num:3,label:'Think'},{num:4,label:'Test'}];
+    return `<div class="progress-bar">${stages.map(s => {
+      const isActive = this.currentStage === s.num;
+      const isComplete = this.isStageComplete(s.num);
+      const isLocked = !this.isStageUnlocked(s.num) && !isActive;
+      let cls = '';
+      if (isActive) cls = 'active';
+      else if (isComplete) cls = 'complete';
+      else if (isLocked) cls = 'locked';
+      return `<div class="progress-step ${cls}" data-stage="${s.num}"><span class="step-num">${s.num}</span><span>${s.label}</span></div>`;
+    }).join('')}</div>`;
+  },
+
+  renderDeepDiveTrigger() {
+    const dd = this.data.stage_0_deep_dive;
+    return `
+      <button class="deep-dive-trigger" data-open-deep-dive="1">
+        <span class="dd-icon">📚</span>
+        <span class="dd-text">
+          <span class="dd-title">${this.escapeHtml(dd.title || 'Deep Dive — Concept Reference')}</span>
+          <span class="dd-sub">${this.escapeHtml(dd.description || 'Detailed explanations, stories & visuals — always available for reference')}</span>
+        </span>
+      </button>
+    `;
+  },
+
+  renderStage0() {
+    const dd = this.data.stage_0_deep_dive;
+    if (!dd || !dd.topics || dd.topics.length === 0) return '';
+    const currentIdx = this.deepDiveTopicIdx || 0;
+    const topic = dd.topics[currentIdx];
+
+    return `
+      <div class="dd-screen">
+        <div class="dd-header">
+          <button class="btn btn-secondary" data-close-deep-dive="1">← Back to Dashboard</button>
+          <div>
+            <h2 class="stage-title" style="font-size:22px;margin:0;">📚 ${this.escapeHtml(dd.title || 'Deep Dive')}</h2>
+            <p class="stage-description" style="font-size:13px;">${this.escapeHtml(dd.description || '')}</p>
+          </div>
+        </div>
+        <div class="dd-nav">
+          ${dd.topics.map((t, i) => `
+            <button class="dd-nav-btn ${i === currentIdx ? 'active' : ''}" data-dd-topic="${i}">
+              ${t.icon || '📖'} ${this.escapeHtml(t.title)}
+            </button>
+          `).join('')}
+        </div>
+        <div class="dd-topic">
+          <div class="dd-topic-title">${topic.icon || ''} ${this.escapeHtml(topic.title)}</div>
+          ${topic.subtitle ? `<div class="dd-topic-subtitle">${this.escapeHtml(topic.subtitle)}</div>` : ''}
+          ${(topic.sections || []).map(sec => this.renderDeepDiveSection(sec)).join('')}
+        </div>
+        <div class="panel-nav">
+          <button class="btn btn-secondary" data-dd-topic="${currentIdx - 1}" ${currentIdx === 0 ? 'disabled' : ''}>← Previous Topic</button>
+          ${currentIdx < dd.topics.length - 1
+            ? `<button class="btn btn-primary" data-dd-topic="${currentIdx + 1}">Next Topic →</button>`
+            : `<button class="btn btn-success" data-close-deep-dive="1">✓ Back to Dashboard</button>`
+          }
+        </div>
+      </div>
+    `;
+  },
+
+  renderDeepDiveSection(sec) {
+    if (sec.type === 'story') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label story">📖 Story</span>
+          <div class="dd-story">
+            ${sec.title ? `<div class="dd-story-title">${this.escapeHtml(sec.title)}</div>` : ''}
+            <div class="dd-story-text">${this.renderDDText(sec.content)}</div>
+          </div>
+          ${sec.image_svg ? `<div class="dd-visual">${sec.image_svg}${sec.image_caption ? `<div class="dd-visual-caption">${this.escapeHtml(sec.image_caption)}</div>` : ''}</div>` : ''}
+        </div>
+      `;
+    }
+    if (sec.type === 'steps') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label steps">🪜 Step by Step</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-steps">
+            ${(sec.steps || []).map((step, i) => `
+              <div class="dd-step">
+                <div class="dd-step-num">${i + 1}</div>
+                <div class="dd-step-content">
+                  <div class="dd-step-title">${this.escapeHtml(step.title)}</div>
+                  <div class="dd-step-text">${this.renderDDText(step.text)}</div>
+                  ${step.example ? `<div class="dd-step-example">💡 ${this.renderDDText(step.example)}</div>` : ''}
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'visual') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label visual">🎨 Visual</span>
+          <div class="dd-visual">
+            ${sec.svg || ''}
+            ${sec.caption ? `<div class="dd-visual-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'video') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label video">🎬 Video</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-video">
+            <iframe src="${this.escapeAttr(sec.url)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+            ${sec.caption ? `<div class="dd-video-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'video_embedded') {
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label video">🎬 Video</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-video">
+            <video controls playsinline preload="metadata" style="width:100%;border-radius:12px;">
+              <source src="${sec.data_url || ''}" type="video/webm">
+              <source src="${sec.data_url || ''}" type="video/mp4">
+              Your browser does not support embedded video.
+            </video>
+            ${sec.caption ? `<div class="dd-video-caption">${this.escapeHtml(sec.caption)}</div>` : ''}
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'tip') {
+      return `
+        <div class="dd-section">
+          <div class="dd-tip">
+            <div class="dd-tip-title">💡 ${this.escapeHtml(sec.title || 'Remember')}</div>
+            <div class="dd-tip-text">${this.renderDDText(sec.content)}</div>
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'text') {
+      return `
+        <div class="dd-section">
+          ${sec.label ? `<span class="dd-section-label tip">${this.escapeHtml(sec.label)}</span>` : ''}
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:10px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-rich-text">${this.renderDDText(sec.content)}</div>
+        </div>
+      `;
+    }
+    if (sec.type === 'funfact') {
+      return `
+        <div class="dd-section">
+          <div class="dd-funfact">
+            <span class="dd-funfact-icon">${sec.icon || '🤯'}</span>
+            <div class="dd-funfact-content">
+              <div class="dd-funfact-label">Did You Know?</div>
+              <div class="dd-funfact-text">${this.renderDDText(sec.content)}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    if (sec.type === 'interactive') {
+      const safeId = 'dd-int-' + Math.random().toString(36).substr(2, 8);
+      return `
+        <div class="dd-section">
+          <span class="dd-section-label visual">🎮 Interactive</span>
+          ${sec.title ? `<h4 style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:14px;color:var(--ink);">${this.escapeHtml(sec.title)}</h4>` : ''}
+          <div class="dd-interactive" id="${safeId}">${sec.html || ''}</div>
+          ${sec.js ? `<div class="dd-deferred-js" style="display:none;" data-target="${safeId}">${this.escapeHtml(sec.js)}</div>` : ''}
+        </div>
+      `;
+    }
+    return '';
+  },
+
+  renderDDText(text) {
+    if (!text) return '';
+    // Simple markdown-like rendering: **bold**, *italic*, `code`, \n for line breaks
+    let html = this.escapeHtml(text);
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    html = html.replace(/`(.+?)`/g, '<code style="background:var(--paper-dark);padding:2px 6px;border-radius:4px;font-size:0.9em;">$1</code>');
+    return html;
+  },
+
+  renderStage1() {
+    const s = this.data.stage_1_learn;
+    if (this.currentBranch) {
+      const branch = s.branches.find(b => b.id === this.currentBranch);
+      if (branch) {
+        if (branch.type === 'story_panels') return this.renderStoryPanelView(branch);
+        if (branch.type === 'vocabulary_cards') return this.renderVocabCardsView(branch);
+        if (branch.type === 'concept_teaching') return this.renderConceptTeachingView(branch);
+      }
+    }
+    const s1Stars = this.computeStage1Stars();
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s1Stars.earned} / ${s1Stars.total}</strong></p>
+      </div>
+      <div class="branches-grid">${s.branches.map(b => {
+        const complete = this.isBranchComplete(b);
+        let progress = '';
+        if (b.type === 'story_panels') {
+          const total = b.panels.length;
+          const done = b.panels.filter(p => !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined)).length;
+          progress = `${done} / ${total} panels`;
+        } else if (b.type === 'vocabulary_cards') {
+          const total = b.cards.length;
+          const done = b.cards.filter(c => this.state.spotItAnswers[c.id] !== undefined).length;
+          progress = `${done} / ${total} words`;
+        } else if (b.type === 'concept_teaching') {
+          const total = b.cards.length;
+          const done = b.cards.filter(c => !c.check || (this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined)).length;
+          progress = `${done} / ${total} concepts`;
+        }
+        let starDisplay = '';
+        if (b.type === 'concept_teaching' && b.cards) {
+          const totalStars = b.cards.filter(c => c.check).length;
+          const earnedStars = b.cards.filter(c => {
+            if (!c.check) return false;
+            const a = this.state.panelChecks[c.id];
+            return a && a.selected === c.check.correct;
+          }).length;
+          starDisplay = `${earnedStars} / ${totalStars} ⭐`;
+        } else {
+          starDisplay = `${b.marks} marks`;
+        }
+        return `<div class="branch-card ${complete ? 'complete' : ''}" data-enter-branch="${this.escapeAttr(b.id)}">
+          <div class="branch-icon">${b.icon || '📖'}</div>
+          <div class="branch-title">${this.escapeHtml(b.title)}</div>
+          <div class="branch-meta">${starDisplay}</div>
+          <div class="branch-progress">${progress}</div>
+        </div>`;
+      }).join('')}</div>
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderStoryPanelView(branch) {
+    const idx = this.currentPanelIdx;
+    const panel = branch.panels[idx];
+    const total = branch.panels.length;
+    const check = this.state.panelChecks[panel.id] || {};
+    const isAnswered = check.selected !== undefined;
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">${this.escapeHtml(branch.story_title || '')}${branch.story_author ? ' · by ' + this.escapeHtml(branch.story_author) : ''}</p>
+        </div>
+      </div>
+      <div class="panel-dots">
+        ${branch.panels.map((p, i) => {
+          const answered = !p.comprehension_check || (this.state.panelChecks[p.id] && this.state.panelChecks[p.id].selected !== undefined);
+          const isCurrent = i === idx;
+          let cls = 'panel-dot';
+          if (isCurrent) cls += ' current';
+          if (answered) cls += ' answered';
+          return `<button class="${cls}" data-jump-to-panel="${i}" title="Panel ${i+1}: ${this.escapeAttr(p.panel_title)}">${i+1}${answered ? ' ✓' : ''}</button>`;
+        }).join('')}
+      </div>
+      <div class="panel-container">
+        <div class="panel-meta">
+          <span class="panel-counter">Panel ${idx + 1} of ${total}</span>
+          <span style="font-size:11px;color:var(--ink-soft);font-weight:700;">${this.countAnsweredPanels(branch)} of ${total} checks answered</span>
+        </div>
+        <h3 class="panel-title">${this.escapeHtml(panel.panel_title)}</h3>
+        <div class="narration-text">${this.renderNarrationWithHighlights(panel)}</div>
+        ${panel.comprehension_check ? this.renderComprehensionCheck(panel) : ''}
+      </div>
+      <div class="panel-nav">
+        ${idx > 0 ? `<button class="btn btn-secondary" data-panel-nav="prev">← Previous Panel</button>` : `<button class="btn btn-secondary" disabled>← Previous Panel</button>`}
+        ${idx < total - 1
+          ? `<button class="btn btn-primary" data-panel-nav="next" ${panel.comprehension_check && !isAnswered ? 'disabled' : ''}>Next Panel →</button>`
+          : `<button class="btn btn-success" data-panel-nav="finish-branch" ${!this.isBranchComplete(branch) ? 'disabled' : ''}>${this.isBranchComplete(branch) ? '✓ Finish ' + this.escapeHtml(branch.title) : 'Answer all panels to finish'}</button>`}
+      </div>
+    `;
+  },
+
+  renderNarrationWithHighlights(panel) {
+    let text = panel.narration_text;
+    if (panel.highlighted_words && panel.highlighted_words.length > 0) {
+      const sorted = [...panel.highlighted_words].sort((a, b) => b.word.length - a.word.length);
+      sorted.forEach((hw) => {
+        const escaped = hw.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`\\b(${escaped})\\b`, 'gi');
+        const dataIdx = panel.highlighted_words.indexOf(hw);
+        text = text.replace(regex, (match) => `<span class="highlight-word" data-word-idx="${dataIdx}" data-panel-id="${this.escapeAttr(panel.id)}">${match}</span>`);
+      });
+    }
+    return text;
+  },
+
+  renderComprehensionCheck(panel) {
+    const check = panel.comprehension_check;
+    const ans = this.state.panelChecks[panel.id] || {};
+    const isAnswered = ans.selected !== undefined;
+    return `
+      <div class="comprehension-check">
+        <span class="check-label">Quick Check${check.marks ? ' · ' + check.marks + ' marks' : ''}</span>
+        <p class="check-question">${this.escapeHtml(check.question)}</p>
+        <ul class="options-list">${check.options.map((opt, i) => {
+          let cls = 'option-btn';
+          if (isAnswered) {
+            if (i === check.correct) cls += ' correct';
+            else if (i === ans.selected) cls += ' incorrect';
+          }
+          return `<li><button class="${cls}" data-panel-check="${this.escapeAttr(panel.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+          </button></li>`;
+        }).join('')}</ul>
+        ${isAnswered && check.explanation ? `
+          <div class="feedback-box explanation">
+            <span class="feedback-label">${ans.selected === check.correct ? '✓ Correct!' : "Let's understand"}</span>
+            ${this.escapeHtml(check.explanation)}
+          </div>` : ''}
+      </div>
+    `;
+  },
+
+  renderVocabCardsView(branch) {
+    // Group cards by source for cleaner browsing
+    const groups = {};
+    branch.cards.forEach(c => {
+      const src = c.source || 'Words';
+      if (!groups[src]) groups[src] = [];
+      groups[src].push(c);
+    });
+
+    // If we don't have a sub-view selected, default to first group
+    const sources = Object.keys(groups);
+    if (!this.currentVocabGroup || !groups[this.currentVocabGroup]) {
+      this.currentVocabGroup = sources[0];
+    }
+    const activeCards = groups[this.currentVocabGroup] || [];
+
+    // Group completion stats
+    const groupTabs = sources.map(src => {
+      const cards = groups[src];
+      const done = cards.filter(c => this.state.spotItAnswers[c.id] !== undefined).length;
+      const isActive = src === this.currentVocabGroup;
+      return `<button class="vocab-group-tab ${isActive ? 'active' : ''}" data-vocab-group="${this.escapeAttr(src)}">
+        ${this.escapeHtml(src)} <span style="opacity:0.7;font-size:11px;">(${done}/${cards.length})</span>
+      </button>`;
+    }).join('');
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">Tap each card to see meaning, then test yourself with "Spot it!"</p>
+        </div>
+      </div>
+      <div class="vocab-group-tabs">${groupTabs}</div>
+      <div class="cards-grid">${activeCards.map(c => this.renderVocabCard(c)).join('')}</div>
+      <div class="stage-nav">
+        <div></div>
+        <button class="btn ${this.isBranchComplete(branch) ? 'btn-success' : 'btn-secondary'}" data-back-to-branches="1">${this.isBranchComplete(branch) ? '✓ Branch Complete · Back' : 'Save & Back'}</button>
+      </div>
+    `;
+  },
+
+  renderVocabCard(card) {
+    const flipped = this.state.cardFlips[card.id];
+    const spotAnswered = this.state.spotItAnswers[card.id] !== undefined;
+    return `
+      <div class="vocab-card ${flipped ? 'flipped' : ''} ${spotAnswered ? 'complete' : ''}" data-flip-card="${this.escapeAttr(card.id)}">
+        <div class="vocab-card-inner">
+          <div class="vocab-face front">
+            <div class="vocab-source-tag">${this.escapeHtml(card.source || 'Word')}</div>
+            <div class="vocab-word">${this.escapeHtml(card.word)}</div>
+            <div class="vocab-flip-hint">Tap to reveal</div>
+          </div>
+          <div class="vocab-face back">
+            <div class="vocab-meaning">${this.escapeHtml(card.meaning)}</div>
+            ${card.example_from_story ? `<div><span class="vocab-example-label">From the story</span><p class="vocab-example">${this.escapeHtml(card.example_from_story)}</p></div>` : ''}
+            ${card.indian_context_example ? `<div style="margin-top:6px;"><span class="vocab-example-label">Example</span><p class="vocab-example">${this.escapeHtml(card.indian_context_example)}</p></div>` : ''}
+            ${card.spot_it ? `<div class="spot-it-cta" data-open-spot-it="${this.escapeAttr(card.id)}">${spotAnswered ? '✓ Spot it answered' : '🎯 Spot it! Tap to test yourself'}</div>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  },
+
+  renderSpotItModal() {
+    const cardId = this.state.spotItModal;
+    let card = null;
+    for (const branch of this.data.stage_1_learn.branches) {
+      if (branch.cards) { card = branch.cards.find(c => c.id === cardId); if (card) break; }
+    }
+    if (!card || !card.spot_it) return '';
+    const ans = this.state.spotItAnswers[card.id];
+    const spot = card.spot_it;
+    const isAnswered = ans !== undefined;
+    return `
+      <div class="modal-overlay" data-close-modal="1">
+        <div class="modal-content" data-stop-propagation="1">
+          <div class="modal-title">Spot it: <span class="modal-word">${this.escapeHtml(card.word)}</span></div>
+          <p style="margin:12px 0 16px 0;color:var(--ink-soft);font-size:14px;">${this.escapeHtml(spot.question)}</p>
+          <ul class="options-list">${spot.options.map((opt, i) => {
+            let cls = 'option-btn';
+            if (isAnswered) {
+              if (i === spot.correct) cls += ' correct';
+              else if (i === ans.selected) cls += ' incorrect';
+            }
+            return `<li><button class="${cls}" data-spot-answer="${this.escapeAttr(card.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+              <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+            </button></li>`;
+          }).join('')}</ul>
+          ${isAnswered ? `
+            <div class="feedback-box explanation" style="margin-bottom:12px;">
+              <span class="feedback-label">${ans.selected === spot.correct ? '✓ Correct!' : 'Not quite — see the right answer above'}</span>
+            </div>
+            <button class="btn btn-primary" data-close-modal="1" style="width:100%;">Continue</button>
+          ` : ''}
+        </div>
+      </div>
+    `;
+  },
+
+  renderConceptTeachingView(branch) {
+    const cards = branch.cards || [];
+    const currentCard = cards[this.currentPanelIdx] || cards[0];
+    if (!currentCard) return '';
+    const idx = this.currentPanelIdx;
+    const total = cards.length;
+    const isAnswered = currentCard.check && this.state.panelChecks[currentCard.id] && this.state.panelChecks[currentCard.id].selected !== undefined;
+    const ans = this.state.panelChecks[currentCard.id] || {};
+    const isCorrect = isAnswered && ans.selected === currentCard.check.correct;
+    const isLast = idx === total - 1;
+    const allDone = this.isBranchComplete(branch);
+    // Count stars earned (1 per correct quick check)
+    const starsEarned = cards.filter(c => {
+      if (!c.check) return false;
+      const a = this.state.panelChecks[c.id];
+      return a && a.selected === c.check.correct;
+    }).length;
+
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-branches="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(branch.title)}</h2>
+          ${branch.concept_title ? `<p class="stage-description" style="font-size:13px;">${this.escapeHtml(branch.concept_title)}</p>` : ''}
+        </div>
+        <span class="marks-tag">⭐ ${starsEarned} / ${total}</span>
+      </div>
+      ${branch.intro ? `<p style="color:var(--ink-soft);font-size:14px;margin-bottom:16px;">${this.escapeHtml(branch.intro)}</p>` : ''}
+      <div class="panel-dots">
+        ${cards.map((c, i) => {
+          const done = c.check && this.state.panelChecks[c.id] && this.state.panelChecks[c.id].selected !== undefined;
+          const correct = done && this.state.panelChecks[c.id].selected === c.check.correct;
+          const cls = i === idx ? (done ? 'current answered' : 'current') : (done ? 'answered' : '');
+          return `<button class="panel-dot ${cls}" data-jump-to-panel="${i}">${i + 1}${correct ? ' ⭐' : (done ? ' ✗' : '')}</button>`;
+        }).join('')}
+      </div>
+      <div class="concept-card ${isAnswered ? 'answered' : ''}">
+        <div class="panel-meta">
+          <span class="panel-counter">Concept ${idx + 1} of ${total}</span>
+        </div>
+        <div class="concept-name">${this.escapeHtml(currentCard.concept_name)}</div>
+        <div class="concept-definition">${this.escapeHtml(currentCard.definition)}</div>
+        ${currentCard.examples && currentCard.examples.length > 0 ? `
+          <div class="concept-examples">
+            <span class="concept-examples-label">Examples</span>
+            ${currentCard.examples.map(ex => `<div class="concept-example-item">• ${this.escapeHtml(ex)}</div>`).join('')}
+          </div>
+        ` : ''}
+        ${currentCard.check ? `
+          <div class="concept-check">
+            <span class="check-label">Quick Check</span>
+            <p class="check-question">${this.escapeHtml(currentCard.check.question)}</p>
+            <ul class="options-list">${currentCard.check.options.map((opt, i) => {
+              let cls = '';
+              if (isAnswered) {
+                if (i === currentCard.check.correct) cls = 'correct';
+                else if (i === ans.selected && i !== currentCard.check.correct) cls = 'incorrect';
+              }
+              return `<li><button class="option-btn ${cls}" data-panel-check="${this.escapeAttr(currentCard.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+                <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+              </button></li>`;
+            }).join('')}</ul>
+            ${isAnswered ? `
+              <div class="feedback-box ${isCorrect ? 'explanation' : 'hint'}">
+                <span class="feedback-label">${isCorrect ? '✓ Correct! ⭐ Star earned!' : '✗ That\'s not right. Here\'s why:'}</span>
+                ${this.escapeHtml(currentCard.check.explanation || '')}
+                ${!isCorrect ? `<div style="margin-top:12px;padding:14px;background:rgba(74,124,89,0.08);border-radius:10px;border-left:4px solid var(--leaf);">
+                  <strong style="color:var(--leaf);">✅ The correct answer is ${String.fromCharCode(65 + currentCard.check.correct)}: ${this.escapeHtml(currentCard.check.options[currentCard.check.correct])}</strong>
+                  <p style="margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink);">You chose ${String.fromCharCode(65 + ans.selected)}: ${this.escapeHtml(currentCard.check.options[ans.selected])}. Go through the explanation above step by step. If it's still not clear, tap <strong>← Previous</strong> to re-read the concept card, then come back.</p>
+                </div>` : ''}
+              </div>
+            ` : ''}
+          </div>
+        ` : ''}
+      </div>
+      <div class="panel-nav">
+        <button class="btn btn-secondary" data-panel-nav="prev" ${idx === 0 ? 'disabled' : ''}>← Previous</button>
+        ${isLast
+          ? `<button class="btn ${allDone ? 'btn-success' : 'btn-primary'}" data-panel-nav="finish-branch">${allDone ? '✓ Done' : 'Back to Topics'}</button>`
+          : `<button class="btn btn-primary" data-panel-nav="next">Next →</button>`
+        }
+      </div>
+    `;
+  },
+
+  renderStage2() {
+    if (!this.isStageUnlocked(2)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Stage 1 First</div>
+          <p class="placeholder-detail">Finish all three branches in Learn before moving to Practice.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    const s = this.data.stage_2_practice;
+    if (this.currentSection) {
+      const section = s.sections.find(sec => sec.id === this.currentSection);
+      if (section) return this.renderPracticeSectionView(section);
+    }
+    const s2Stars = this.computeStage2Stars();
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s2Stars.earned} / ${s2Stars.total}</strong></p>
+      </div>
+      <div class="branches-grid">${s.sections.map(sec => {
+        const complete = this.isPracticeSectionComplete(sec);
+        const total = sec.questions.length;
+        const done = sec.questions.filter(q => this.state.practiceAnswers[q.id] && this.state.practiceAnswers[q.id].selected !== undefined).length;
+        const correct = sec.questions.filter(q => {
+          const a = this.state.practiceAnswers[q.id];
+          return a && a.selected === q.correct;
+        }).length;
+        return `<div class="branch-card ${complete ? 'complete' : ''}" data-enter-section="${this.escapeAttr(sec.id)}">
+          <div class="branch-icon">${sec.icon || '📑'}</div>
+          <div class="branch-title">${this.escapeHtml(sec.title)}</div>
+          <div class="branch-meta">${correct} / ${total} ⭐</div>
+          <div class="branch-progress">${done} / ${total} answered</div>
+        </div>`;
+      }).join('')}</div>
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderPracticeSectionView(section) {
+    const correct = section.questions.filter(q => {
+      const a = this.state.practiceAnswers[q.id];
+      return a && a.selected === q.correct;
+    }).length;
+    return `
+      <div class="stage-header" style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <button class="btn btn-secondary" data-back-to-sections="1">← Back</button>
+        <div>
+          <h2 class="stage-title" style="font-size:22px;margin:0;">${this.escapeHtml(section.title)}</h2>
+          <p class="stage-description" style="font-size:13px;">${section.questions.length} questions · ⭐ ${correct} / ${section.questions.length}</p>
+        </div>
+      </div>
+      ${section.questions.map((q, i) => this.renderPracticeQuestion(q, i + 1)).join('')}
+      <div class="stage-nav">
+        <div></div>
+        <button class="btn ${this.isPracticeSectionComplete(section) ? 'btn-success' : 'btn-secondary'}" data-back-to-sections="1">${this.isPracticeSectionComplete(section) ? '✓ Section Complete · Back' : 'Save & Back'}</button>
+      </div>
+    `;
+  },
+
+  renderPracticeQuestion(q, num) {
+    const ans = this.state.practiceAnswers[q.id] || {};
+    const isAnswered = ans.selected !== undefined;
+    return `
+      <div class="question-card">
+        <div>
+          <span class="question-number">${num}</span>
+          ${q.category ? `<span style="display:inline-block;margin-left:10px;padding:4px 12px;background:var(--paper-dark);border-radius:12px;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);vertical-align:middle;">${this.escapeHtml(q.category)}</span>` : ''}
+        </div>
+        ${q.passage_excerpt ? `<div class="passage-excerpt">${this.escapeHtml(q.passage_excerpt)}</div>` : ''}
+        <p class="question-text">${this.escapeHtml(q.question)}</p>
+        <ul class="options-list">${q.options.map((opt, i) => {
+          let cls = 'option-btn';
+          if (isAnswered) {
+            if (i === q.correct) cls += ' correct';
+            else if (i === ans.selected) cls += ' incorrect';
+          }
+          return `<li><button class="${cls}" data-practice-answer="${this.escapeAttr(q.id)}" data-opt="${i}" ${isAnswered ? 'disabled' : ''}>
+            <span class="option-letter">${String.fromCharCode(65 + i)}</span><span>${this.escapeHtml(opt)}</span>
+          </button></li>`;
+        }).join('')}</ul>
+        ${!isAnswered && q.hint ? `<div class="question-actions"><button class="btn btn-secondary" data-show-hint="${this.escapeAttr(q.id)}">💡 Show hint</button></div>` : ''}
+        ${ans.showHint && q.hint ? `<div class="feedback-box hint"><span class="feedback-label">Hint</span>${this.escapeHtml(q.hint)}</div>` : ''}
+        ${isAnswered && q.explanation ? `<div class="feedback-box ${ans.selected === q.correct ? 'explanation' : 'hint'}">
+          <span class="feedback-label">${ans.selected === q.correct ? '✓ Correct! ⭐' : '✗ That\'s not right. Here\'s why:'}</span>
+          ${this.escapeHtml(q.explanation)}
+          ${ans.selected !== q.correct ? `<div style="margin-top:12px;padding:14px;background:rgba(74,124,89,0.08);border-radius:10px;border-left:4px solid var(--leaf);">
+            <strong style="color:var(--leaf);">✅ The correct answer is ${String.fromCharCode(65 + q.correct)}: ${this.escapeHtml(q.options[q.correct])}</strong>
+            <p style="margin-top:8px;font-size:14px;line-height:1.6;color:var(--ink);">You chose ${String.fromCharCode(65 + ans.selected)}: ${this.escapeHtml(q.options[ans.selected])}. Read the explanation above carefully to understand the difference.</p>
+          </div>` : ''}
+        </div>` : ''}
+      </div>
+    `;
+  },
+
+  // ============================================================
+  // STAGE 3: THINK DEEPER
+  // ============================================================
+  renderStage3() {
+    if (!this.isStageUnlocked(3)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Practice First</div>
+          <p class="placeholder-detail">Finish all of Practice before unlocking Think Deeper.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    const s = this.data.stage_3_think;
+    const s3Stars = this.computeStage3Stars();
+
+    return `
+      <div class="stage-header">
+        <h2 class="stage-title">${this.escapeHtml(s.title)}</h2>
+        <p class="stage-description">${this.escapeHtml(s.description)} · <strong>⭐ ${s3Stars.earned} / ${s3Stars.total}</strong></p>
+      </div>
+      ${s.problems.map((p, i) => this.renderThinkProblem(p, i + 1)).join('')}
+      ${this.renderStageNav()}
+    `;
+  },
+
+  renderThinkProblem(p, num) {
+    const sub = this.state.thinkSubmissions[p.id] || {};
+    const isSubmitted = !!sub.submitted;
+    const userAnswer = sub.value || '';
+    const hasCriteria = p.self_check_criteria && p.self_check_criteria.length > 0;
+    const starsEarned = isSubmitted && hasCriteria ? (sub.selfChecks || []).length : 0;
+    const starsMax = hasCriteria ? p.self_check_criteria.length : 0;
+
+    return `
+      <div class="think-card ${isSubmitted ? 'submitted' : ''}" data-think-id="${this.escapeAttr(p.id)}">
+        <div>
+          <span class="question-number">${num}</span>
+          ${p.category ? `<span class="question-category">${this.escapeHtml(p.category)}</span>` : ''}
+          ${hasCriteria ? `<span class="marks-tag">⭐ ${starsEarned} / ${starsMax}</span>` : ''}
+          ${isSubmitted ? `<span class="submitted-tag">✓ Submitted</span>` : ''}
+        </div>
+        ${p.scenario ? `<div class="scenario-box">${this.escapeHtml(p.scenario)}</div>` : ''}
+        <p class="question-text">${this.escapeHtml(p.question)}</p>
+        <textarea
+          class="text-input"
+          rows="5"
+          placeholder="Write your answer here..."
+          data-think-input="${this.escapeAttr(p.id)}"
+          ${isSubmitted ? 'readonly' : ''}>${this.escapeHtml(userAnswer)}</textarea>
+        <div class="question-actions">
+          ${!isSubmitted
+            ? `<button class="btn btn-success" data-think-submit="${this.escapeAttr(p.id)}">✓ Submit Answer</button>`
+            : `<button class="btn btn-secondary" data-think-edit="${this.escapeAttr(p.id)}">✎ Edit Answer</button>`}
+        </div>
+        ${isSubmitted ? `
+          <div class="model-answer-box">
+            <span class="feedback-label">Model answer</span>
+            <p class="answer-text">${this.escapeHtml(p.model_answer)}</p>
+            ${p.explanation ? `
+              <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--paper-dark);">
+                <span class="feedback-label" style="color: var(--leaf);">Why this works</span>
+                <p class="answer-text">${this.escapeHtml(p.explanation)}</p>
+              </div>
+            ` : ''}
+          </div>
+          ${hasCriteria ? `
+            <div class="self-check-box">
+              <div class="self-check-title">⭐ Self-Check — Rate Your Answer</div>
+              ${p.self_check_criteria.map((c, ci) => {
+                const checks = sub.selfChecks || [];
+                const isChecked = checks.includes(ci);
+                return `<div class="self-check-item" data-self-check="${this.escapeAttr(p.id)}" data-check-idx="${ci}">
+                  <span class="self-check-tick ${isChecked ? 'checked' : ''}">${isChecked ? '✓' : ''}</span>
+                  <span class="self-check-label">${this.escapeHtml(c)}</span>
+                </div>`;
+              }).join('')}
+              <div class="self-check-stars">
+                ⭐ ${starsEarned} / ${starsMax} checks passed
+              </div>
+            </div>
+          ` : ''}
+        ` : ''}
+      </div>
+    `;
+  },
+
+  countWords(s) {
+    if (!s || !s.trim()) return 0;
+    return s.trim().split(/\s+/).length;
+  },
+
+  wordCounterClass(count, limit) {
+    if (!limit) return '';
+    const m = limit.match(/(\d+)\s*[-–]\s*(\d+)/);
+    if (!m) return '';
+    const min = parseInt(m[1], 10), max = parseInt(m[2], 10);
+    if (count >= min && count <= max) return 'in-range';
+    if (count > max) return 'over';
+    return '';
+  },
+
+  // ============================================================
+  // STAGE 4: TEST
+  // ============================================================
+  renderStage4() {
+    if (!this.isStageUnlocked(4)) {
+      return `
+        <div class="placeholder-card">
+          <div class="placeholder-icon">🔒</div>
+          <div class="placeholder-title">Complete Think Deeper First</div>
+          <p class="placeholder-detail">Finish all five Think Deeper questions before taking the test.</p>
+        </div>
+        ${this.renderStageNav()}
+      `;
+    }
+    if (this.state.testSubmitted) return this.renderResults();
+    if (this.state.testStartTime === null) return this.renderTestIntro();
+    return this.renderTestActive();
+  },
+
+  renderTestIntro() {
+    const s = this.data.stage_4_test;
+    const minutes = Math.floor((s.duration_seconds || 2400) / 60);
+    const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+
+    return `
+      <div class="test-intro">
+        <div class="test-intro-icon">🏆</div>
+        <h2>${this.escapeHtml(s.title)}</h2>
+        <p class="test-intro-subtitle">${this.escapeHtml(s.subtitle || '')}</p>
+        <div class="test-stats">
+          <div class="test-stat">
+            <div class="test-stat-num">${totalQuestions}</div>
+            <div class="test-stat-label">Questions</div>
+          </div>
+          <div class="test-stat">
+            <div class="test-stat-num">${s.total_marks}</div>
+            <div class="test-stat-label">Marks</div>
+          </div>
+          <div class="test-stat">
+            <div class="test-stat-num">${minutes}</div>
+            <div class="test-stat-label">Minutes</div>
+          </div>
+        </div>
+        <div class="test-sections-preview">
+          ${s.sections.map(sec => `
+            <div class="test-section-preview">
+              <strong>${this.escapeHtml(sec.title)}</strong> · ${sec.marks} marks · ${sec.questions.length} questions
+            </div>
+          `).join('')}
+        </div>
+        <button class="test-start-btn" data-start-test="1">Start Test →</button>
+      </div>
+    `;
+  },
+
+  renderTestActive() {
+    const s = this.data.stage_4_test;
+    const elapsed = Math.floor((Date.now() - this.state.testStartTime) / 1000);
+    const remaining = Math.max(0, (s.duration_seconds || 2400) - elapsed);
+    const mins = Math.floor(remaining / 60);
+    const secs = remaining % 60;
+    let timerClass = '';
+    if (remaining < 60) timerClass = 'urgent';
+    else if (remaining < 300) timerClass = 'warning';
+
+    if (remaining === 0 && !this.state.testTimeUp) {
+      this.state.testTimeUp = true;
+      setTimeout(() => this.submitTest(), 100);
+    }
+
+    const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+    const answeredCount = Object.keys(this.state.testAnswers).filter(k => {
+      const v = this.state.testAnswers[k];
+      return v && v.value !== undefined && String(v.value).trim() !== '';
+    }).length;
+
+    return `
+      <div class="timer-bar">
+        <div class="timer-display ${timerClass}" id="timer-display">${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}</div>
+        <div class="timer-progress" id="timer-progress">${answeredCount} / ${totalQuestions} answered</div>
+      </div>
+      ${s.sections.map((sec, sidx) => this.renderTestSection(sec, sidx + 1)).join('')}
+      <div class="test-submit-zone">
+        <p style="margin-bottom: 12px; color: var(--ink-soft); font-size: 14px;">When you're done, submit your test.</p>
+        <button class="btn btn-primary test-submit-btn" data-submit-test="1">Submit Test ✓</button>
+      </div>
+    `;
+  },
+
+  renderTestSection(section, sidx) {
+    return `
+      <div class="test-section">
+        <div class="test-section-header">
+          <h3>${this.escapeHtml(section.title)}</h3>
+          <span class="test-section-marks">${section.marks} marks</span>
+        </div>
+        ${section.instructions ? `<p class="test-section-instructions">${this.escapeHtml(section.instructions)}</p>` : ''}
+        ${section.passage ? this.renderTestPassage(section.passage) : ''}
+        ${section.questions.map((q, i) => this.renderTestQuestion(q, sidx, i + 1)).join('')}
+      </div>
+    `;
+  },
+
+  renderTestPassage(passage) {
+    return `
+      <div class="test-passage">
+        <div class="test-passage-title">${this.escapeHtml(passage.title)}</div>
+        ${passage.author ? `<div class="test-passage-author">${this.escapeHtml(passage.author)}</div>` : ''}
+        <div class="test-passage-text">${this.escapeHtml(passage.text)}</div>
+        ${passage.is_ai_generated ? `<div class="test-passage-note">📝 ${this.escapeHtml(passage.review_note || 'AI-generated passage — parent please review.')}</div>` : ''}
+      </div>
+    `;
+  },
+
+  renderTestQuestion(q, sidx, qnum) {
+    const ans = this.state.testAnswers[q.id] || {};
+    const value = ans.value !== undefined ? String(ans.value) : '';
+
+    let inputHtml = '';
+    if (q.type === 'mcq') {
+      inputHtml = `
+        <ul class="options-list">
+          ${q.options.map((opt, i) => {
+            const letter = String.fromCharCode(65 + i);
+            const selected = ans.value === letter;
+            return `<li><button class="option-btn ${selected ? 'test-selected' : ''}" data-test-mcq="${this.escapeAttr(q.id)}" data-value="${this.escapeAttr(letter)}">
+              <span class="option-letter">${letter}</span><span>${this.escapeHtml(opt)}</span>
+            </button></li>`;
+          }).join('')}
+        </ul>
+      `;
+    } else if (q.type === 'fill_blank') {
+      inputHtml = `<input type="text" class="text-input" data-test-input="${this.escapeAttr(q.id)}" value="${this.escapeAttr(value)}" placeholder="Type your answer...">`;
+    } else if (q.type === 'short_answer' || q.type === 'subjective') {
+      const wlimit = q.word_limit || '';
+      const wc = this.countWords(value);
+      const wccls = this.wordCounterClass(wc, wlimit);
+      inputHtml = `
+        ${wlimit ? `<div class="word-limit-tag">📝 Word limit: ${this.escapeHtml(wlimit)}</div>` : ''}
+        <textarea class="text-input" rows="${q.type === 'subjective' ? 6 : 4}" data-test-input="${this.escapeAttr(q.id)}" placeholder="Write your answer here...">${this.escapeHtml(value)}</textarea>
+        <div class="word-counter ${wccls}" data-counter-for="${this.escapeAttr(q.id)}">
+          ${wc} word${wc === 1 ? '' : 's'}${wlimit ? ` · target: ${this.escapeHtml(wlimit)}` : ''}
+        </div>
+      `;
+    }
+
+    return `
+      <div class="test-question">
+        <div class="test-q-header">
+          <span class="test-q-num">Q${qnum}</span>
+          <span class="test-q-type">${q.type.replace('_', ' ').toUpperCase()}</span>
+          <span class="marks-tag">${q.marks} mark${q.marks > 1 ? 's' : ''}</span>
+        </div>
+        <p class="question-text">${this.escapeHtml(q.question)}</p>
+        ${inputHtml}
+      </div>
+    `;
+  },
+
+  startTest() {
+    this.state.testStartTime = Date.now();
+    this.state.testAnswers = {};
+    this.state.testTimeUp = false;
+    this.state.testSubmitted = false;
+    this.startTimer();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  captureTestInputs() {
+    document.querySelectorAll('[data-test-input]').forEach(el => {
+      const qid = el.dataset.testInput;
+      this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value: el.value };
+    });
+  },
+
+  submitTest() {
+    this.captureTestInputs();
+    this.stopTimer();
+    this.state.testSubmitted = true;
+    this.saveProgress();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  retakeTest() {
+    if (!confirm('Retake the test? Your previous test answers will be cleared. (Other progress in Stages 1-3 stays.)')) return;
+    this.state.testStartTime = null;
+    this.state.testAnswers = {};
+    this.state.testTimeUp = false;
+    this.state.testSubmitted = false;
+    this.saveProgress();
+    this.render();
+    window.scrollTo(0, 0);
+  },
+
+  // ============================================================
+  // TIMER
+  // ============================================================
+  timerInterval: null,
+  startTimer() {
+    this.stopTimer();
+    this.timerInterval = setInterval(() => {
+      if (this.state.testSubmitted || this.state.testStartTime === null) {
+        this.stopTimer();
+        return;
+      }
+      const s = this.data.stage_4_test;
+      const elapsed = Math.floor((Date.now() - this.state.testStartTime) / 1000);
+      const remaining = Math.max(0, (s.duration_seconds || 2400) - elapsed);
+      const mins = Math.floor(remaining / 60);
+      const secs = remaining % 60;
+      const display = document.getElementById('timer-display');
+      if (display) {
+        display.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`;
+        display.className = 'timer-display ' + (remaining < 60 ? 'urgent' : (remaining < 300 ? 'warning' : ''));
+      }
+      const progress = document.getElementById('timer-progress');
+      if (progress) {
+        const totalQuestions = s.sections.reduce((sum, sec) => sum + sec.questions.length, 0);
+        // Capture current input values to keep "answered count" live without re-rendering
+        document.querySelectorAll('[data-test-input]').forEach(el => {
+          const qid = el.dataset.testInput;
+          this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value: el.value };
+        });
+        const answered = Object.keys(this.state.testAnswers).filter(k => {
+          const v = this.state.testAnswers[k];
+          return v && v.value !== undefined && String(v.value).trim() !== '';
+        }).length;
+        progress.textContent = `${answered} / ${totalQuestions} answered`;
+      }
+      if (remaining === 0 && !this.state.testTimeUp) {
+        this.state.testTimeUp = true;
+        this.stopTimer();
+        this.submitTest();
+      }
+    }, 1000);
+  },
+
+  stopTimer() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+      this.timerInterval = null;
+    }
+  },
+
+  // ============================================================
+  // RESULTS / SCORING
+  // ============================================================
+  computeStageScores() {
+    // Stage 1: 25 marks total. Use branch.marks weights × completion fraction within each branch.
+    const s1 = this.data.stage_1_learn;
+    let s1Score = 0;
+    s1.branches.forEach(b => {
+      if (b.type === 'story_panels') {
+        const totalChecks = b.panels.filter(p => p.comprehension_check).length;
+        if (totalChecks === 0) {
+          if (this.isBranchComplete(b)) s1Score += b.marks;
+        } else {
+          const correctChecks = b.panels.filter(p => {
+            if (!p.comprehension_check) return false;
+            const a = this.state.panelChecks[p.id];
+            return a && a.selected === p.comprehension_check.correct;
+          }).length;
+          s1Score += Math.round((correctChecks / totalChecks) * b.marks);
+        }
+      } else if (b.type === 'vocabulary_cards') {
+        const total = b.cards.length;
+        const correctSpots = b.cards.filter(c => {
+          const a = this.state.spotItAnswers[c.id];
+          return a && a.correct;
+        }).length;
+        s1Score += total > 0 ? Math.round((correctSpots / total) * b.marks) : 0;
+      } else if (b.type === 'concept_teaching') {
+        const totalChecks = b.cards.filter(c => c.check).length;
+        if (totalChecks === 0) {
+          if (this.isBranchComplete(b)) s1Score += b.marks;
+        } else {
+          const correctChecks = b.cards.filter(c => {
+            if (!c.check) return false;
+            const a = this.state.panelChecks[c.id];
+            return a && a.selected === c.check.correct;
+          }).length;
+          s1Score += Math.round((correctChecks / totalChecks) * b.marks);
+        }
+      }
+    });
+
+    // Stage 2: 25 marks. Sum of (correct/total) × section.marks across sections.
+    const s2 = this.data.stage_2_practice;
+    let s2Score = 0;
+    s2.sections.forEach(sec => {
+      const total = sec.questions.length;
+      if (total === 0) return;
+      const correct = sec.questions.filter(q => {
+        const a = this.state.practiceAnswers[q.id];
+        return a && a.selected === q.correct;
+      }).length;
+      s2Score += Math.round((correct / total) * sec.marks);
+    });
+
+    // Stage 3: 25 marks. Based on self_check_criteria ticks.
+    const s3 = this.data.stage_3_think;
+    let s3Score = 0;
+    const s3Problems = s3.problems;
+    const hasSelfChecks = s3Problems.some(p => p.self_check_criteria && p.self_check_criteria.length > 0);
+    if (hasSelfChecks) {
+      let totalStars = 0;
+      let maxStars = 0;
+      s3Problems.forEach(p => {
+        const sub = this.state.thinkSubmissions[p.id] || {};
+        const criteria = p.self_check_criteria || [];
+        maxStars += criteria.length;
+        if (sub.submitted) {
+          totalStars += (sub.selfChecks || []).length;
+        }
+      });
+      s3Score = maxStars > 0 ? Math.round((totalStars / maxStars) * 25) : 0;
+    } else {
+      const submittedCount = s3Problems.filter(p => this.state.thinkSubmissions[p.id] && this.state.thinkSubmissions[p.id].submitted).length;
+      s3Score = Math.round((submittedCount / s3Problems.length) * 25);
+    }
+
+    // Stage 4: scale to 25.
+    const s4 = this.data.stage_4_test;
+    const breakdown = this.gradeTestQuestions();
+    const autoScore = breakdown.reduce((sum, b) => sum + b.marks_awarded, 0);
+    const manualPotential = breakdown.filter(b => b.needs_manual).reduce((sum, b) => sum + b.q.marks, 0);
+    // Optimistic for display
+    const optimisticTotal = autoScore + manualPotential;
+    const s4Max = s4.total_marks || 25;
+    const s4Score = Math.round((optimisticTotal / s4Max) * 25);
+
+    return {
+      stage1: { score: s1Score, max: 25 },
+      stage2: { score: s2Score, max: 25 },
+      stage3: { score: s3Score, max: 25 },
+      stage4: { score: s4Score, max: 25, manualMarks: manualPotential, breakdown, rawAutoScore: autoScore, rawTotal: s4Max },
+      grandTotal: s1Score + s2Score + s3Score + s4Score,
+    };
+  },
+
+  gradeTestQuestions() {
+    const s = this.data.stage_4_test;
+    const out = [];
+    s.sections.forEach(sec => {
+      sec.questions.forEach(q => {
+        const ans = this.state.testAnswers[q.id] || {};
+        const userAnswer = (ans.value !== undefined ? String(ans.value) : '').trim();
+
+        if (q.type === 'mcq') {
+          const correct = userAnswer.toLowerCase() === String(q.correct_answer || '').toLowerCase();
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: q.correct_answer || '',
+            is_correct: correct,
+            marks_awarded: correct ? q.marks : 0,
+            needs_manual: false,
+          });
+        } else if (q.type === 'fill_blank') {
+          const norm = (s) => s.toLowerCase().trim().replace(/[.,;:!?'"]/g, '').replace(/\s+/g, ' ');
+          const correct = norm(userAnswer) === norm(String(q.correct_answer || ''));
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: q.correct_answer || '',
+            is_correct: correct,
+            marks_awarded: correct ? q.marks : 0,
+            needs_manual: false,
+          });
+        } else {
+          // short_answer or subjective — needs manual grading
+          out.push({
+            q, section: sec, user_answer: userAnswer,
+            correct_display: '(See model answer)',
+            is_correct: null,
+            marks_awarded: 0,
+            needs_manual: true,
+          });
+        }
+      });
+    });
+    return out;
+  },
+
+  renderResults() {
+    const scores = this.computeStageScores();
+    const s4 = this.data.stage_4_test;
+    const s4Max = s4.total_marks || 20;
+    const breakdown = scores.stage4.breakdown;
+    const autoScore = scores.stage4.rawAutoScore;
+    const manualMarks = scores.stage4.manualMarks;
+    // Manual marks state — parent can adjust
+    const manualState = this.state.manualMarksAwarded || {};
+    let manualAwarded = 0;
+    breakdown.filter(b => b.needs_manual).forEach(b => {
+      manualAwarded += (manualState[b.q.id] !== undefined ? manualState[b.q.id] : 0);
+    });
+    const testScore = autoScore + manualAwarded;
+
+    // Badge and message from score_tiers in JSON
+    const tiers = s4.score_tiers || [];
+    let tierMsg = 'Keep practising!';
+    let tierEmoji = '🌱';
+    for (const tier of tiers) {
+      if (testScore >= tier.min && testScore <= tier.max) { tierMsg = tier.message; break; }
+    }
+    if (testScore >= s4Max * 0.95) tierEmoji = '🏆';
+    else if (testScore >= s4Max * 0.8) tierEmoji = '⭐';
+    else if (testScore >= s4Max * 0.6) tierEmoji = '✨';
+    else tierEmoji = '🌱';
+
+    const quotes = this.data.motivational_quotes || ["Every champion was once a beginner."];
+    const quote = quotes[Math.floor(Math.random() * quotes.length)];
+    const confetti = testScore >= s4Max * 0.8 ? this.generateConfetti() : '';
+
+    // Stars for stages 1-3
+    const s1Stars = this.computeStage1Stars();
+    const s2Stars = this.computeStage2Stars();
+    const s3Stars = this.computeStage3Stars();
+
+    return `
+      <div class="results-screen">
+        <div class="results-hero">
+          ${confetti}
+          <div class="badge-circle ${testScore < s4Max * 0.6 ? 'no-badge' : ''}">
+            <span class="badge-emoji">${tierEmoji}</span>
+          </div>
+          <h2 class="badge-name">${this.escapeHtml(tierMsg)}</h2>
+          <div class="results-percentage">
+            <div class="percentage-num">${testScore}/${s4Max}</div>
+            <div class="percentage-label">Test Score</div>
+          </div>
+        </div>
+
+        <div class="motivational-quote">${this.escapeHtml(quote)}</div>
+
+        <div class="section-scores">
+          <h3>How You Did In Each Section</h3>
+          <div class="scores-table">
+            ${this.renderStarCell('📖', 'Learn', s1Stars.earned, s1Stars.total)}
+            ${this.renderStarCell('✏️', 'Practice', s2Stars.earned, s2Stars.total)}
+            ${this.renderStarCell('💭', 'Think', s3Stars.earned, s3Stars.total)}
+            ${this.renderMarksCell('🏆', 'Test', testScore, s4Max)}
+          </div>
+        </div>
+
+        <div class="reattempt-card">
+          <h4>Think you can do better? 🎯</h4>
+          <p>Take the test again — try to beat your score!</p>
+          <button class="reattempt-btn" data-retake-test="1">↻ Retake Test</button>
+        </div>
+
+        <div class="results-detail">
+          <h4>Test — Your Answers Reviewed</h4>
+          ${breakdown.map((b, i) => {
+            const qType = b.q.type || '';
+            const optionLetters = ['A','B','C','D','E','F'];
+            let userDisplay = b.user_answer || '(not answered)';
+            let correctDisplay = b.correct_display || '';
+
+            // For MCQs show option letter + text
+            if (qType === 'mcq' && b.q.options) {
+              const userIdx = optionLetters.indexOf(b.user_answer.toUpperCase());
+              if (userIdx >= 0 && b.q.options[userIdx]) {
+                userDisplay = b.user_answer.toUpperCase() + ': ' + b.q.options[userIdx];
+              }
+              const correctIdx = optionLetters.indexOf((b.q.correct_answer || '').toUpperCase());
+              if (correctIdx >= 0 && b.q.options[correctIdx]) {
+                correctDisplay = b.q.correct_answer.toUpperCase() + ': ' + b.q.options[correctIdx];
+              }
+            }
+
+            return `
+            <div class="review-item">
+              <div class="review-q">
+                <strong>Q${i+1}.</strong> <em>${this.escapeHtml(b.section.title)}</em><br>
+                ${this.escapeHtml(b.q.question)}
+              </div>
+              <div class="review-content">
+                ${b.needs_manual ? `
+                  <div class="review-row"><strong>Your answer:</strong> "${this.escapeHtml(b.user_answer || '(not answered)')}"</div>
+                  ${b.q.model_answer ? `<div class="review-row"><strong>Model:</strong> ${this.escapeHtml(b.q.model_answer)}</div>` : ''}
+                  ${b.q.marking_guide ? `<div class="review-row" style="font-style:italic;color:var(--ink-soft);font-size:13px;"><strong>For parent:</strong> ${this.escapeHtml(b.q.marking_guide)}</div>` : ''}
+                  <div class="review-result manual" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+                    <span>Marks (out of ${b.q.marks}):</span>
+                    <button class="btn btn-secondary" style="padding:4px 10px;min-width:32px;" data-manual-marks-dec="${this.escapeAttr(b.q.id)}">−</button>
+                    <strong style="font-size:18px;min-width:24px;text-align:center;">${manualState[b.q.id] !== undefined ? manualState[b.q.id] : 0}</strong>
+                    <button class="btn btn-secondary" style="padding:4px 10px;min-width:32px;" data-manual-marks-inc="${this.escapeAttr(b.q.id)}">+</button>
+                  </div>
+                ` : `
+                  <div class="review-row"><strong>Your answer:</strong> ${this.escapeHtml(userDisplay)}</div>
+                  <div class="review-row"><strong>Correct:</strong> ${this.escapeHtml(correctDisplay)}</div>
+                  <div class="review-result ${b.is_correct ? 'correct' : 'incorrect'}">${b.is_correct ? `✓ +${b.marks_awarded}` : `✗ 0 / ${b.q.marks}`}</div>
+                `}
+              </div>
+            </div>`;
+          }).join('')}
+        </div>
+
+        <div class="results-actions">
+          <button class="btn btn-secondary" data-back-home="1">← Back to Stages</button>
+        </div>
+      </div>
+    `;
+  },
+
+  computeStage1Stars() {
+    const s1 = this.data.stage_1_learn;
+    let earned = 0, total = 0;
+    s1.branches.forEach(b => {
+      if (b.type === 'concept_teaching' && b.cards) {
+        b.cards.forEach(c => {
+          if (c.check) {
+            total++;
+            const a = this.state.panelChecks[c.id];
+            if (a && a.selected === c.check.correct) earned++;
+          }
+        });
+      } else if (b.type === 'story_panels' && b.panels) {
+        b.panels.forEach(p => {
+          if (p.comprehension_check) {
+            total++;
+            const a = this.state.panelChecks[p.id];
+            if (a && a.selected === p.comprehension_check.correct) earned++;
+          }
+        });
+      } else if (b.type === 'vocabulary_cards' && b.cards) {
+        b.cards.forEach(c => {
+          total++;
+          const a = this.state.spotItAnswers[c.id];
+          if (a && a.correct) earned++;
+        });
+      }
+    });
+    return { earned, total };
+  },
+
+  computeStage2Stars() {
+    const s2 = this.data.stage_2_practice;
+    let earned = 0, total = 0;
+    s2.sections.forEach(sec => {
+      sec.questions.forEach(q => {
+        total++;
+        const a = this.state.practiceAnswers[q.id];
+        if (a && a.selected === q.correct) earned++;
+      });
+    });
+    return { earned, total };
+  },
+
+  computeStage3Stars() {
+    const s3 = this.data.stage_3_think;
+    let earned = 0, total = 0;
+    s3.problems.forEach(p => {
+      if (p.self_check_criteria) {
+        total += p.self_check_criteria.length;
+        const sub = this.state.thinkSubmissions[p.id] || {};
+        earned += (sub.selfChecks || []).length;
+      }
+    });
+    return { earned, total };
+  },
+
+  renderStarCell(icon, label, earned, total) {
+    const pct = total > 0 ? (earned / total) * 100 : 0;
+    let cls = '', tag = '';
+    if (pct >= 80) { cls = 'strong'; tag = '<span class="score-cell-tag strong-tag">Strong</span>'; }
+    else if (pct < 50) { cls = 'improvement'; tag = '<span class="score-cell-tag improve-tag">Practice More</span>'; }
+    else { tag = '<span class="score-cell-tag neutral-tag">Good</span>'; }
+    return `
+      <div class="score-cell ${cls}">
+        <div class="score-cell-icon">${icon}</div>
+        <div class="score-cell-label">${label}</div>
+        <div class="score-cell-num">${earned} ⭐</div>
+        <div class="score-cell-out-of">out of ${total}</div>
+        ${tag}
+      </div>
+    `;
+  },
+
+  renderMarksCell(icon, label, score, max) {
+    const pct = max > 0 ? (score / max) * 100 : 0;
+    let cls = '', tag = '';
+    if (pct >= 80) { cls = 'strong'; tag = '<span class="score-cell-tag strong-tag">Strong</span>'; }
+    else if (pct < 50) { cls = 'improvement'; tag = '<span class="score-cell-tag improve-tag">Practice More</span>'; }
+    else { tag = '<span class="score-cell-tag neutral-tag">Good</span>'; }
+    return `
+      <div class="score-cell ${cls}">
+        <div class="score-cell-icon">${icon}</div>
+        <div class="score-cell-label">${label}</div>
+        <div class="score-cell-num">${score}</div>
+        <div class="score-cell-out-of">out of ${max}</div>
+        ${tag}
+      </div>
+    `;
+  },
+
+  generateConfetti() {
+    const colors = ['#E87722', '#F4A82C', '#D4A53A', '#4A7C59', '#5B8DB8', '#B8385E', '#FFFFFF'];
+    let html = '';
+    for (let i = 0; i < 30; i++) {
+      const left = Math.random() * 100;
+      const delay = Math.random() * 3;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const rotate = Math.random() * 360;
+      html += `<div class="confetti-piece" style="left:${left}%;background:${color};animation-delay:${delay}s;transform:rotate(${rotate}deg);"></div>`;
+    }
+    return html;
+  },
+
+  renderStageNav() {
+    const canPrev = this.currentStage > 1;
+    const canNext = this.currentStage < 4 && this.isStageUnlocked(this.currentStage + 1);
+    const stageLabels = ['', 'Learn', 'Practice', 'Think', 'Test'];
+    return `
+      <div class="stage-nav">
+        ${canPrev ? `<button class="btn btn-secondary" data-stage-nav="prev">← Back to ${stageLabels[this.currentStage - 1]}</button>` : '<div></div>'}
+        ${canNext ? `<button class="btn btn-primary" data-stage-nav="next">Next: ${stageLabels[this.currentStage + 1]} →</button>` : (this.currentStage < 4 ? `<button class="btn btn-primary" disabled title="Complete current stage first">Next: ${stageLabels[this.currentStage + 1]} →</button>` : '<div></div>')}
+      </div>
+    `;
+  },
+
+  bindEvents() {
+    // Use document.body so the listener survives across renders.
+    // Called ONCE in init().
+    document.body.addEventListener('click', (e) => {
+      const t = e.target;
+
+      if (t.dataset && t.dataset.closeModal) { this.state.spotItModal = null; this.render(); return; }
+      if (t.classList && t.classList.contains('highlight-word')) { this.showWordTooltip(t); return; }
+
+      const target = t.closest('[data-stage], [data-enter-branch], [data-back-to-branches], [data-panel-nav], [data-panel-check], [data-flip-card], [data-open-spot-it], [data-spot-answer], [data-enter-section], [data-back-to-sections], [data-practice-answer], [data-show-hint], [data-stage-nav], [data-vocab-group], [data-reset-progress], [data-jump-to-panel], [data-think-submit], [data-think-edit], [data-start-test], [data-submit-test], [data-retake-test], [data-back-home], [data-test-mcq], [data-self-check], [data-manual-marks-inc], [data-manual-marks-dec], [data-open-deep-dive], [data-close-deep-dive], [data-dd-topic]');
+      if (!target) return;
+
+      if (target.dataset.resetProgress) {
+        this.resetProgress();
+        return;
+      }
+      if (target.dataset.jumpToPanel !== undefined) {
+        const idx = parseInt(target.dataset.jumpToPanel, 10);
+        if (!isNaN(idx)) {
+          this.currentPanelIdx = idx;
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      // Deep Dive navigation
+      if (target.dataset.openDeepDive !== undefined) {
+        this.previousStage = this.currentStage;
+        this.currentStage = 0;
+        this.deepDiveTopicIdx = 0;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.closeDeepDive !== undefined) {
+        this.currentStage = this.previousStage || 1;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.ddTopic !== undefined) {
+        const idx = parseInt(target.dataset.ddTopic, 10);
+        const dd = this.data.stage_0_deep_dive;
+        if (dd && idx >= 0 && idx < dd.topics.length) {
+          this.deepDiveTopicIdx = idx;
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      if (target.dataset.stage) {
+        const num = parseInt(target.dataset.stage, 10);
+        if (this.isStageUnlocked(num) || num === this.currentStage) {
+          this.currentStage = num;
+          this.currentBranch = null;
+          this.currentSection = null;
+          this.saveProgress();
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+      if (target.dataset.enterBranch) {
+        this.currentBranch = target.dataset.enterBranch;
+        this.currentPanelIdx = 0;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.backToBranches) {
+        this.currentBranch = null;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.panelNav) {
+        const branch = this.data.stage_1_learn.branches.find(b => b.id === this.currentBranch);
+        const items = branch.panels || branch.cards || [];
+        if (target.dataset.panelNav === 'prev' && this.currentPanelIdx > 0) this.currentPanelIdx--;
+        else if (target.dataset.panelNav === 'next' && this.currentPanelIdx < items.length - 1) this.currentPanelIdx++;
+        else if (target.dataset.panelNav === 'finish-branch') { this.currentBranch = null; this.saveProgress(); }
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.panelCheck) {
+        const panelId = target.dataset.panelCheck;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.panelChecks[panelId] && this.state.panelChecks[panelId].selected !== undefined) return;
+        this.state.panelChecks[panelId] = { ...(this.state.panelChecks[panelId] || {}), selected: opt };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.flipCard) {
+        if (e.target.closest('[data-open-spot-it]')) return;
+        const id = target.dataset.flipCard;
+        this.state.cardFlips[id] = !this.state.cardFlips[id];
+        // Toggle the class directly on the live element so CSS transition animates.
+        // No full re-render — that would destroy the element and skip the animation.
+        target.classList.toggle('flipped');
+        this.saveProgress();
+        return;
+      }
+      if (target.dataset.vocabGroup) {
+        this.currentVocabGroup = target.dataset.vocabGroup;
+        this.render();
+        return;
+      }
+      if (target.dataset.openSpotIt) {
+        e.stopPropagation();
+        this.state.spotItModal = target.dataset.openSpotIt;
+        this.render();
+        return;
+      }
+      if (target.dataset.spotAnswer) {
+        const id = target.dataset.spotAnswer;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.spotItAnswers[id] !== undefined) return;
+        let card = null;
+        for (const branch of this.data.stage_1_learn.branches) {
+          if (branch.cards) { card = branch.cards.find(c => c.id === id); if (card) break; }
+        }
+        if (!card) return;
+        this.state.spotItAnswers[id] = { selected: opt, correct: opt === card.spot_it.correct };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.enterSection) {
+        this.currentSection = target.dataset.enterSection;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.backToSections) {
+        this.currentSection = null;
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.practiceAnswer) {
+        const qid = target.dataset.practiceAnswer;
+        const opt = parseInt(target.dataset.opt, 10);
+        if (this.state.practiceAnswers[qid] && this.state.practiceAnswers[qid].selected !== undefined) return;
+        this.state.practiceAnswers[qid] = { ...(this.state.practiceAnswers[qid] || {}), selected: opt };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      if (target.dataset.showHint) {
+        const qid = target.dataset.showHint;
+        this.state.practiceAnswers[qid] = { ...(this.state.practiceAnswers[qid] || {}), showHint: true };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — submit a Think problem
+      if (target.dataset.thinkSubmit) {
+        const pid = target.dataset.thinkSubmit;
+        const ta = document.querySelector(`[data-think-input="${CSS.escape(pid)}"]`);
+        const value = ta ? ta.value.trim() : '';
+        if (!value) {
+          alert('Please write your answer first before submitting.');
+          return;
+        }
+        this.state.thinkSubmissions[pid] = { value, submitted: true };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — edit (un-submit)
+      if (target.dataset.thinkEdit) {
+        const pid = target.dataset.thinkEdit;
+        const existing = this.state.thinkSubmissions[pid] || {};
+        this.state.thinkSubmissions[pid] = { ...existing, submitted: false };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Stage 3 — self-check criteria toggle
+      if (target.dataset.selfCheck) {
+        const pid = target.dataset.selfCheck;
+        const ci = parseInt(target.dataset.checkIdx, 10);
+        const existing = this.state.thinkSubmissions[pid] || {};
+        const checks = [...(existing.selfChecks || [])];
+        const idx = checks.indexOf(ci);
+        if (idx >= 0) checks.splice(idx, 1); else checks.push(ci);
+        this.state.thinkSubmissions[pid] = { ...existing, selfChecks: checks };
+        this.saveProgress();
+        this.render();
+        return;
+      }
+      // Results — manual marks adjustment
+      if (target.dataset.manualMarksInc) {
+        const qid = target.dataset.manualMarksInc;
+        if (!this.state.manualMarksAwarded) this.state.manualMarksAwarded = {};
+        const q = this.findTestQuestion(qid);
+        const max = q ? q.marks : 5;
+        const current = this.state.manualMarksAwarded[qid] || 0;
+        if (current < max) { this.state.manualMarksAwarded[qid] = current + 1; this.saveProgress(); this.render(); }
+        return;
+      }
+      if (target.dataset.manualMarksDec) {
+        const qid = target.dataset.manualMarksDec;
+        if (!this.state.manualMarksAwarded) this.state.manualMarksAwarded = {};
+        const current = this.state.manualMarksAwarded[qid] || 0;
+        if (current > 0) { this.state.manualMarksAwarded[qid] = current - 1; this.saveProgress(); this.render(); }
+        return;
+      }
+      // Stage 4 — start the test
+      if (target.dataset.startTest) {
+        this.startTest();
+        return;
+      }
+      // Stage 4 — MCQ click
+      if (target.dataset.testMcq) {
+        // Capture text inputs first so we don't lose typed values on re-render
+        this.captureTestInputs();
+        const qid = target.dataset.testMcq;
+        const value = target.dataset.value;
+        this.state.testAnswers[qid] = { value };
+        this.render();
+        return;
+      }
+      // Stage 4 — submit
+      if (target.dataset.submitTest) {
+        if (!confirm('Submit your test? You will not be able to change your answers after this.')) return;
+        this.submitTest();
+        return;
+      }
+      // Results — retake test
+      if (target.dataset.retakeTest) {
+        this.retakeTest();
+        return;
+      }
+      // Results — back home
+      if (target.dataset.backHome) {
+        this.currentStage = 1;
+        this.saveProgress();
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.stageNav === 'prev') {
+        this.currentStage = Math.max(1, this.currentStage - 1);
+        this.currentBranch = null; this.currentSection = null;
+        this.stopTimer();
+        this.saveProgress();
+        this.render();
+        window.scrollTo(0, 0);
+        return;
+      }
+      if (target.dataset.stageNav === 'next') {
+        if (this.isStageUnlocked(this.currentStage + 1)) {
+          this.currentStage = Math.min(4, this.currentStage + 1);
+          this.currentBranch = null; this.currentSection = null;
+          this.stopTimer();
+          this.saveProgress();
+          this.render();
+          window.scrollTo(0, 0);
+        }
+        return;
+      }
+    });
+
+    // Input listener for Think textareas + Test text inputs — live word count, save state
+    document.body.addEventListener('input', (e) => {
+      const t = e.target;
+      // Stage 3 — Think problems
+      if (t.dataset && t.dataset.thinkInput) {
+        const pid = t.dataset.thinkInput;
+        const value = t.value;
+        const existing = this.state.thinkSubmissions[pid] || {};
+        this.state.thinkSubmissions[pid] = { ...existing, value, submitted: false };
+        // Update word counter directly without re-render (preserves cursor)
+        const counter = document.querySelector(`[data-counter-for="${CSS.escape(pid)}"]`);
+        if (counter) {
+          const wc = this.countWords(value);
+          // Find the original problem to read word_limit
+          const problem = this.data.stage_3_think.problems.find(p => p.id === pid);
+          const limit = problem ? problem.word_limit : '';
+          counter.textContent = `${wc} word${wc === 1 ? '' : 's'}${limit ? ` · target: ${limit}` : ''}`;
+          counter.className = 'word-counter ' + this.wordCounterClass(wc, limit);
+        }
+        return;
+      }
+      // Stage 4 — Test text inputs
+      if (t.dataset && t.dataset.testInput) {
+        const qid = t.dataset.testInput;
+        const value = t.value;
+        this.state.testAnswers[qid] = { ...(this.state.testAnswers[qid] || {}), value };
+        // Update word counter for short_answer / subjective
+        const counter = document.querySelector(`[data-counter-for="${CSS.escape(qid)}"]`);
+        if (counter) {
+          const wc = this.countWords(value);
+          let limit = '';
+          // Find the question for word_limit
+          for (const sec of this.data.stage_4_test.sections) {
+            const q = sec.questions.find(q => q.id === qid);
+            if (q) { limit = q.word_limit || ''; break; }
+          }
+          counter.textContent = `${wc} word${wc === 1 ? '' : 's'}${limit ? ` · target: ${limit}` : ''}`;
+          counter.className = 'word-counter ' + this.wordCounterClass(wc, limit);
+        }
+        return;
+      }
+    });
+  },
+
+  showWordTooltip(el) {
+    document.querySelectorAll('.word-tooltip').forEach(t => t.remove());
+    const panelId = el.dataset.panelId;
+    const idx = parseInt(el.dataset.wordIdx, 10);
+    const branch = this.data.stage_1_learn.branches.find(b => b.id === this.currentBranch);
+    if (!branch) return;
+    const panel = branch.panels.find(p => p.id === panelId);
+    if (!panel || !panel.highlighted_words || !panel.highlighted_words[idx]) return;
+    const tip = document.createElement('span');
+    tip.className = 'word-tooltip';
+    tip.textContent = panel.highlighted_words[idx].meaning;
+    el.appendChild(tip);
+    setTimeout(() => tip.remove(), 3000);
+  },
+
+  escapeHtml(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  },
+
+  findTestQuestion(qid) {
+    if (!this.data.stage_4_test) return null;
+    for (const sec of this.data.stage_4_test.sections) {
+      const q = sec.questions.find(q => q.id === qid);
+      if (q) return q;
+    }
+    return null;
+  },
+  escapeAttr(s) {
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => App.init());
+</script>
+
+</body>
+</html>
